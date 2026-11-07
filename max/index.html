@@ -61,8 +61,11 @@ const $ = id => document.getElementById(id);
 /* ---------- Ton ---------- */
 let ac = null;
 function audioInit(){
-  try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); ac.resume(); }catch(e){}
-  try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); }catch(e){}
+  // iPhone: Ton auch bei Stummschalter abspielen (Safari 17+), sonst bleibt Web Audio stumm
+  try{ if(navigator.audioSession) navigator.audioSession.type = 'playback'; }catch(e){}
+  try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); if(ac.state!=='running') ac.resume(); }catch(e){}
+  try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); speechSynthesis.getVoices(); }catch(e){}
+  if(!voiceBuf) loadVoice();
 }
 function tone(f, t0, dur, type='triangle', vol=.18){
   if(!ac) return;
@@ -87,10 +90,30 @@ function birthdaySong(){
   for(const [n,d] of s){ tone(N[n], t, d*b*1.1, 'triangle', .16); tone(N[n]/2, t, d*b*1.1, 'sine', .08); t += d*b; }
   return t;
 }
+// Eigene Sprachaufnahme (stimme.m4a neben index.html) hat Vorrang vor der Computerstimme
+let voiceBuf = null;
+async function loadVoice(){
+  try{
+    const r = await fetch('stimme.m4a', {cache:'no-cache'});
+    if(r.ok && ac) voiceBuf = await ac.decodeAudioData(await r.arrayBuffer());
+  }catch(e){}
+}
+function pickMaleVoice(){
+  const vs = speechSynthesis.getVoices().filter(v => /^de/i.test(v.lang));
+  const male = /Markus|Yannick|Martin|Viktor|Stefan|Hans|Conrad|Florian|Killian|Ralf|Male|Mann/i;
+  const novelty = /Eddy|Reed|Rocko|Grandpa|Albert|Bad|Bahh|Bells|Boing|Bubbles|Cellos|Wobble|Zarvox|Trinoids|Whisper|Jester|Organ|Superstar|Ralph|Fred|Junior/i;
+  return vs.find(v => male.test(v.name) && !novelty.test(v.name) && /premium|enhanced|erweitert/i.test(v.name))
+      || vs.find(v => male.test(v.name) && !novelty.test(v.name))
+      || null;
+}
 function say(text){
+  if(voiceBuf && ac){ const s = ac.createBufferSource(); s.buffer = voiceBuf; s.connect(ac.destination); s.start(); return; }
   try{
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'de-DE'; u.pitch = .3; u.rate = .85; u.volume = 1;
+    u.lang = 'de-DE';
+    const v = pickMaleVoice(); if(v) u.voice = v;
+    // natürlich klingen lassen: nur leicht tiefer und ruhiger, nicht verzerren
+    u.pitch = v ? .85 : .75; u.rate = .88; u.volume = 1;
     speechSynthesis.speak(u);
   }catch(e){}
 }
@@ -120,6 +143,8 @@ function setTargetFromEvent(ev){
 addEventListener('pointermove', setTargetFromEvent, {passive:true});
 addEventListener('touchmove', setTargetFromEvent, {passive:true});
 addEventListener('pointerdown', ev => {
+  // Kamera-Start unterbricht auf dem iPhone oft den Ton -> bei jedem Tippen wieder einschalten
+  if(ac && ac.state!=='running'){ try{ if(navigator.audioSession) navigator.audioSession.type='playback'; ac.resume(); }catch(e){} }
   setTargetFromEvent(ev);
   if($('start').style.display !== 'none' || $('loading').style.display !== 'none') return;
   if(mode==='ar' && !visible) return;
@@ -132,7 +157,7 @@ function finish(){
   state = 'end'; endAt = performance.now();
   for(let i=0;i<160;i++) confetti.push({x:Math.random()*W, y:-Math.random()*H*.6, vx:(Math.random()-.5)*60, vy:80+Math.random()*120, r:Math.random()*6.28, c:['#1d6fd0','#ffffff','#f2c94c','#c0392b'][i%4]});
   const t = birthdaySong();
-  setTimeout(()=>say('Ois Guade zum Geburtstag, Max! Prost!'), t*1000+200);
+  setTimeout(()=>say('Alles Gute zum Geburtstag, Max. Prost!'), t*1000+300);
 }
 
 function update(dt){
@@ -250,14 +275,23 @@ $('btnAR').onclick = async () => {
   const bar = $('loadBar'), txt = $('loadText');
   try{
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nocam');
-    await cardImg.decode().catch(()=>{});
-    txt.textContent = 'Lerne deine Karte kennen …';
-    const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
-    const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
-    const compiler = new Compiler();
-    await compiler.compileImageTargets([cardImg], p => { bar.style.width = Math.round(p*0.8)+'%'; });
-    const data = await compiler.exportData();
-    const url = URL.createObjectURL(new Blob([data]));
+    let url = null;
+    // 1. vorab gelernte Karte laden (schnell)
+    try{
+      txt.textContent = 'Karte wird geladen …'; bar.style.width = '30%';
+      const r = await fetch('targets.mind', {cache:'no-cache'});
+      if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()]));
+    }catch(e){ console.warn('targets.mind', e); }
+    // 2. Notfall: Karte im Browser lernen (langsam)
+    if(!url){
+      await cardImg.decode().catch(()=>{});
+      txt.textContent = 'Lerne deine Karte kennen …';
+      const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
+      const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
+      const compiler = new Compiler();
+      await compiler.compileImageTargets([cardImg], p => { bar.style.width = Math.round(p*0.8)+'%'; });
+      url = URL.createObjectURL(new Blob([await compiler.exportData()]));
+    }
     txt.textContent = 'Kamera wird gestartet …'; bar.style.width='90%';
     const THREE = await import('three');
     const { MindARThree } = await import('mindar-image-three');
