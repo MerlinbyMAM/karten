@@ -129,7 +129,7 @@ async function say(text){
 }
 
 /* ---------- Spiel ---------- */
-const GAME_TIME = 30;
+const GAME_TIME = (location.hash==='#kurztest')?3:30;
 let mode = 'ar', state = 'ready', visible = false;
 let score = 0, timeLeft = GAME_TIME, items = [], popups = [], confetti = [];
 let mugX = W/2, targetX = W/2, spawnT = 0, last = performance.now(), wobble = 0;
@@ -159,7 +159,14 @@ addEventListener('pointerdown', ev => {
   if($('start').style.display !== 'none' || $('loading').style.display !== 'none') return;
   if(mode==='ar' && !visible) return;
   if(state==='ready') reset();
-  else if(state==='end' && performance.now()-endAt > 1500) reset();
+  else if(state==='end' && performance.now()-endAt > 1500){
+    // neue Runde: Sprachausgabe stoppen und den Ton frisch starten.
+    // Nach der Stimme hängt der iPhone-Ton sonst im Zustand "unterbrochen" fest.
+    try{ speechSynthesis.cancel(); }catch(e){}
+    try{ if(ac) ac.close(); }catch(e){}
+    ac = null; audioInit();
+    reset();
+  }
 });
 
 let endAt = 0;
