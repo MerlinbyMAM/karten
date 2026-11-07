@@ -61,8 +61,6 @@ const $ = id => document.getElementById(id);
 /* ---------- Ton ---------- */
 let ac = null;
 function audioInit(){
-  // iPhone: Ton auch bei Stummschalter abspielen (Safari 17+), sonst bleibt Web Audio stumm
-  try{ if(navigator.audioSession) navigator.audioSession.type = 'playback'; }catch(e){}
   try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); if(ac.state!=='running') ac.resume(); }catch(e){}
   try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); speechSynthesis.getVoices(); }catch(e){}
   if(!voiceBuf) loadVoice();
@@ -156,7 +154,7 @@ addEventListener('pointermove', setTargetFromEvent, {passive:true});
 addEventListener('touchmove', setTargetFromEvent, {passive:true});
 addEventListener('pointerdown', ev => {
   // Kamera-Start unterbricht auf dem iPhone oft den Ton -> bei jedem Tippen wieder einschalten
-  if(ac && ac.state!=='running'){ try{ if(navigator.audioSession) navigator.audioSession.type='playback'; ac.resume(); }catch(e){} }
+  if(ac && ac.state!=='running'){ try{ ac.resume(); }catch(e){} }
   setTargetFromEvent(ev);
   if($('start').style.display !== 'none' || $('loading').style.display !== 'none') return;
   if(mode==='ar' && !visible) return;
