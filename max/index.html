@@ -58,12 +58,24 @@ const g = game.getContext('2d');
 const cardImg = new Image(); cardImg.src = CARD;
 const $ = id => document.getElementById(id);
 
-/* ---------- Ton ---------- */
+/* ---------- Ton ----------
+   Alles läuft über EINEN Audio-Kanal (Web Audio), der die ganze Zeit offen bleibt.
+   Keine Sprachausgabe des Handys mehr: die ist auf dem iPhone unzuverlässig, kommt verspätet
+   (z. B. mitten in der nächsten Runde) und schaltet dabei den Spielton ab.
+   Jeder Ton wird gemerkt, damit bei einer neuen Runde alles Alte sofort gestoppt wird. */
 let ac = null;
+let activeNodes = [];
 function audioInit(){
   try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); if(ac.state!=='running') ac.resume(); }catch(e){}
-  try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); speechSynthesis.getVoices(); }catch(e){}
-  if(!voiceBuf) loadVoice();
+  if(!voiceBuf && !voiceTried) loadVoice();
+}
+function track(node){
+  activeNodes.push(node);
+  node.onended = () => { activeNodes = activeNodes.filter(n => n !== node); };
+}
+function stopAllSound(){
+  for(const n of activeNodes){ try{ n.onended = null; n.stop(); }catch(e){} }
+  activeNodes = [];
 }
 function tone(f, t0, dur, type='triangle', vol=.18){
   if(!ac) return;
@@ -74,6 +86,7 @@ function tone(f, t0, dur, type='triangle', vol=.18){
   v.gain.exponentialRampToValueAtTime(.001, ac.currentTime+t0+dur);
   o.connect(v); v.connect(ac.destination);
   o.start(ac.currentTime+t0); o.stop(ac.currentTime+t0+dur+.05);
+  track(o);
 }
 const sfxGood = (big) => { tone(660,0,.12); tone(big?1320:990,.08,.18); };
 const sfxBad = () => { tone(140,0,.35,'square',.12); };
@@ -88,44 +101,19 @@ function birthdaySong(){
   for(const [n,d] of s){ tone(N[n], t, d*b*1.1, 'triangle', .16); tone(N[n]/2, t, d*b*1.1, 'sine', .08); t += d*b; }
   return t;
 }
-// Eigene Sprachaufnahme (stimme.m4a neben index.html) hat Vorrang vor der Computerstimme
-let voiceBuf = null;
+// Optionale Sprachaufnahme (stimme.m4a neben index.html), läuft im selben Audio-Kanal
+let voiceBuf = null, voiceTried = false;
 async function loadVoice(){
+  voiceTried = true;
   try{
     const r = await fetch('stimme.m4a', {cache:'no-cache'});
     if(r.ok && ac) voiceBuf = await ac.decodeAudioData(await r.arrayBuffer());
   }catch(e){}
 }
-function pickMaleVoice(){
-  const vs = speechSynthesis.getVoices().filter(v => /^de/i.test(v.lang));
-  const male = /Markus|Yannick|Martin|Viktor|Stefan|Hans|Conrad|Florian|Killian|Ralf|Male|Mann/i;
-  const novelty = /Eddy|Reed|Rocko|Grandpa|Albert|Bad|Bahh|Bells|Boing|Bubbles|Cellos|Wobble|Zarvox|Trinoids|Whisper|Jester|Organ|Superstar|Ralph|Fred|Junior/i;
-  return vs.find(v => male.test(v.name) && !novelty.test(v.name) && /premium|enhanced|erweitert/i.test(v.name))
-      || vs.find(v => male.test(v.name) && !novelty.test(v.name))
-      || null;
-}
-// spricht mit einer Stimme; meldet false, wenn sie nach 1,8 s nicht losgelegt hat
-function speakWith(text, voice, pitch){
-  return new Promise(res => {
-    try{
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'de-DE'; if(voice) u.voice = voice;
-      u.pitch = pitch; u.rate = .9; u.volume = 1;
-      let started = false;
-      u.onstart = () => { started = true; };
-      u.onend = () => res(true);
-      u.onerror = () => res(started);
-      speechSynthesis.speak(u);
-      setTimeout(() => { if(!started){ try{ speechSynthesis.cancel(); }catch(e){} res(false); } }, 1800);
-    }catch(e){ res(false); }
-  });
-}
-async function say(text){
-  if(voiceBuf && ac){ const s = ac.createBufferSource(); s.buffer = voiceBuf; s.connect(ac.destination); s.start(); return; }
-  const v = pickMaleVoice();
-  // 1. ruhige Männerstimme, nur leicht tiefer; 2. Notfall: Standardstimme des Handys
-  if(v && await speakWith(text, v, .9)) return;
-  await speakWith(text, null, .85);
+function playVoiceAt(t0){
+  if(!voiceBuf || !ac) return;
+  const s = ac.createBufferSource(); s.buffer = voiceBuf; s.connect(ac.destination);
+  s.start(ac.currentTime + t0); track(s);
 }
 
 /* ---------- Spiel ---------- */
@@ -154,13 +142,9 @@ addEventListener('pointermove', setTargetFromEvent, {passive:true});
 addEventListener('touchmove', setTargetFromEvent, {passive:true});
 // iPhone erlaubt das Einschalten von Ton nur bei "Finger loslassen"/Klick, NICHT beim Aufsetzen (pointerdown).
 // Deshalb wird der Ton hier – beim Loslassen – bei Bedarf komplett neu gestartet.
-let audioRefresh = false;
 function unlockAudio(){
-  if(audioRefresh || (ac && ac.state !== 'running')){
-    audioRefresh = false;
-    try{ if(ac) ac.close(); }catch(e){}
-    ac = null; audioInit();
-  }
+  if(!ac) return;
+  if(ac.state !== 'running'){ try{ ac.resume(); }catch(e){} }
 }
 addEventListener('touchend', unlockAudio, {passive:true});
 addEventListener('click', unlockAudio);
@@ -174,8 +158,7 @@ addEventListener('pointerdown', ev => {
   else if(state==='end' && performance.now()-endAt > 1500){
     // neue Runde: Sprachausgabe stoppen und den Ton frisch starten.
     // Nach der Stimme hängt der iPhone-Ton sonst im Zustand "unterbrochen" fest.
-    try{ speechSynthesis.cancel(); }catch(e){}
-    audioRefresh = true;   // Ton wird beim Loslassen des Fingers neu gestartet (siehe unlockAudio)
+    stopAllSound();        // Lied/Stimme der alten Runde sofort beenden
     reset();
   }
 });
@@ -185,7 +168,7 @@ function finish(){
   state = 'end'; endAt = performance.now();
   for(let i=0;i<160;i++) confetti.push({x:Math.random()*W, y:-Math.random()*H*.6, vx:(Math.random()-.5)*60, vy:80+Math.random()*120, r:Math.random()*6.28, c:['#1d6fd0','#ffffff','#f2c94c','#c0392b'][i%4]});
   const t = birthdaySong();
-  setTimeout(()=>say('Alles Gute zum Geburtstag, Max. Prost!'), t*1000+300);
+  playVoiceAt(t + .3);
 }
 
 function update(dt){
