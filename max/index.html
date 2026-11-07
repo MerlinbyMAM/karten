@@ -106,16 +106,28 @@ function pickMaleVoice(){
       || vs.find(v => male.test(v.name) && !novelty.test(v.name))
       || null;
 }
-function say(text){
+// spricht mit einer Stimme; meldet false, wenn sie nach 1,8 s nicht losgelegt hat
+function speakWith(text, voice, pitch){
+  return new Promise(res => {
+    try{
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'de-DE'; if(voice) u.voice = voice;
+      u.pitch = pitch; u.rate = .9; u.volume = 1;
+      let started = false;
+      u.onstart = () => { started = true; };
+      u.onend = () => res(true);
+      u.onerror = () => res(started);
+      speechSynthesis.speak(u);
+      setTimeout(() => { if(!started){ try{ speechSynthesis.cancel(); }catch(e){} res(false); } }, 1800);
+    }catch(e){ res(false); }
+  });
+}
+async function say(text){
   if(voiceBuf && ac){ const s = ac.createBufferSource(); s.buffer = voiceBuf; s.connect(ac.destination); s.start(); return; }
-  try{
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'de-DE';
-    const v = pickMaleVoice(); if(v) u.voice = v;
-    // natürlich klingen lassen: nur leicht tiefer und ruhiger, nicht verzerren
-    u.pitch = v ? .85 : .75; u.rate = .88; u.volume = 1;
-    speechSynthesis.speak(u);
-  }catch(e){}
+  const v = pickMaleVoice();
+  // 1. ruhige Männerstimme, nur leicht tiefer; 2. Notfall: Standardstimme des Handys
+  if(v && await speakWith(text, v, .9)) return;
+  await speakWith(text, null, .85);
 }
 
 /* ---------- Spiel ---------- */
