@@ -67,7 +67,6 @@ let ac = null;
 let activeNodes = [];
 function audioInit(){
   try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); if(ac.state!=='running') ac.resume(); }catch(e){}
-  if(!voiceBuf && !voiceTried) loadVoice();
 }
 function track(node){
   activeNodes.push(node);
@@ -101,23 +100,8 @@ function birthdaySong(){
   for(const [n,d] of s){ tone(N[n], t, d*b*1.1, 'triangle', .16); tone(N[n]/2, t, d*b*1.1, 'sine', .08); t += d*b; }
   return t;
 }
-// Optionale Sprachaufnahme (stimme.m4a neben index.html), läuft im selben Audio-Kanal
-let voiceBuf = null, voiceTried = false;
-async function loadVoice(){
-  voiceTried = true;
-  try{
-    const r = await fetch('stimme.m4a', {cache:'no-cache'});
-    if(r.ok && ac) voiceBuf = await ac.decodeAudioData(await r.arrayBuffer());
-  }catch(e){}
-}
-function playVoiceAt(t0){
-  if(!voiceBuf || !ac) return;
-  const s = ac.createBufferSource(); s.buffer = voiceBuf; s.connect(ac.destination);
-  s.start(ac.currentTime + t0); track(s);
-}
-
 /* ---------- Spiel ---------- */
-const GAME_TIME = (location.hash==='#kurztest')?3:30;
+const GAME_TIME = (location.hash==='#kurztest')?3:20;
 let mode = 'ar', state = 'ready', visible = false;
 let score = 0, timeLeft = GAME_TIME, items = [], popups = [], confetti = [];
 let mugX = W/2, targetX = W/2, spawnT = 0, last = performance.now(), wobble = 0;
@@ -167,8 +151,7 @@ let endAt = 0;
 function finish(){
   state = 'end'; endAt = performance.now();
   for(let i=0;i<160;i++) confetti.push({x:Math.random()*W, y:-Math.random()*H*.6, vx:(Math.random()-.5)*60, vy:80+Math.random()*120, r:Math.random()*6.28, c:['#1d6fd0','#ffffff','#f2c94c','#c0392b'][i%4]});
-  const t = birthdaySong();
-  playVoiceAt(t + .3);
+  birthdaySong();
 }
 
 function update(dt){
@@ -259,7 +242,7 @@ function draw(){
     g.restore();
     g.fillStyle='#fff'; g.font='34px Georgia'; g.fillText('zum Geburtstag 🎉',W/2,370);
     g.font='bold 44px Georgia'; g.fillText(score+' Punkte – Prost! 🍻',W/2,470);
-    g.font='26px Georgia'; g.fillText(score>=40?'Wiesn-Profi! 🏆': score>=20?'Respekt, a echter Münchner!':'Do geht no wos! 😉', W/2, 535);
+    g.font='26px Georgia'; g.fillText(score>=28?'Wiesn-Profi! 🏆': score>=14?'Respekt, a echter Münchner!':'Do geht no wos! 😉', W/2, 535);
     if(performance.now()-endAt>1500){ g.fillStyle='#f2c94c'; g.font='28px Georgia'; g.fillText('Tippen für noch a Runde', W/2, 640); }
   }
 }
