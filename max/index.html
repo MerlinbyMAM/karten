@@ -152,6 +152,18 @@ function setTargetFromEvent(ev){
 }
 addEventListener('pointermove', setTargetFromEvent, {passive:true});
 addEventListener('touchmove', setTargetFromEvent, {passive:true});
+// iPhone erlaubt das Einschalten von Ton nur bei "Finger loslassen"/Klick, NICHT beim Aufsetzen (pointerdown).
+// Deshalb wird der Ton hier – beim Loslassen – bei Bedarf komplett neu gestartet.
+let audioRefresh = false;
+function unlockAudio(){
+  if(audioRefresh || (ac && ac.state !== 'running')){
+    audioRefresh = false;
+    try{ if(ac) ac.close(); }catch(e){}
+    ac = null; audioInit();
+  }
+}
+addEventListener('touchend', unlockAudio, {passive:true});
+addEventListener('click', unlockAudio);
 addEventListener('pointerdown', ev => {
   // Kamera-Start unterbricht auf dem iPhone oft den Ton -> bei jedem Tippen wieder einschalten
   if(ac && ac.state!=='running'){ try{ ac.resume(); }catch(e){} }
@@ -163,8 +175,7 @@ addEventListener('pointerdown', ev => {
     // neue Runde: Sprachausgabe stoppen und den Ton frisch starten.
     // Nach der Stimme hängt der iPhone-Ton sonst im Zustand "unterbrochen" fest.
     try{ speechSynthesis.cancel(); }catch(e){}
-    try{ if(ac) ac.close(); }catch(e){}
-    ac = null; audioInit();
+    audioRefresh = true;   // Ton wird beim Loslassen des Fingers neu gestartet (siehe unlockAudio)
     reset();
   }
 });
