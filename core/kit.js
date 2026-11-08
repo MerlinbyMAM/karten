@@ -5,9 +5,13 @@ import { t, confetti, drawConfetti, bigText, rnd } from './card.js';
 
 /* ---------- Gruß aus ?name= / ?text= ---------- */
 export function greeting(card){
-  const q = new URLSearchParams(location.search), n = (q.get('name') || '').trim();
-  return q.get('text') || (n ? t(card + '.msgN', { name: n }) : t(card + '.msg'));
+  const q = new URLSearchParams(location.search), n = (q.get('name') || '').trim(), a = alter();
+  if(q.get('text')) return q.get('text');
+  if(a) return n ? t('geb.msgNA', { name: n, alter: a }) : t('geb.msgA', { alter: a });
+  return n ? t(card + '.msgN', { name: n }) : t(card + '.msg');
 }
+// personalisiertes Alter (?alter=47) – leer, wenn nicht angegeben
+export const alter = () => { const v = parseInt(new URLSearchParams(location.search).get('alter') || '', 10); return v > 0 && v < 130 ? v : 0; };
 export const nameParam = () => (new URLSearchParams(location.search).get('name') || '').trim();
 
 /* ---------- Partikel und schwebende Texte ---------- */
