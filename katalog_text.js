@@ -10,6 +10,7 @@ de: {
   F: { firma: ['Firma (auf Banner und Pokal)', 'z. B. Muster Fuhrpark GmbH'], datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
        datum: ['Datum', 'z. B. 12. Juni 2026'], geburt: ['Geburtsdatum', 'z. B. 3. März 2026'], gewicht: ['Gewicht', 'z. B. 3250 g'], groesse: ['Größe', 'z. B. 51 cm'], gruss: ['Gruß', 'z. B. Frohes neues Jahr'], preise: ['Preise (bis 8, mit | trennen)', 'Kino|Pizza|Massage|Ausflug'], meldung: ['Die Meldung', 'Augenzeugen berichten von Kuchen, Kerzen …'] },
   CARDS: {
+    achtzehn: ['18. Geburtstag', 'Endlich 18!', 'Sektflasche und vier leere Gläser im Partylicht. Beim Scannen wird die gedruckte Flasche geschüttelt bis der Korken knallt – dann die gedruckten Gläser randvoll füllen, aber nicht überlaufen lassen.'],
     besserung: ['Gute Besserung', 'Teddy-Pflege', 'Ein kranker Teddy im Bett, rundherum Tee, Honig, Wärmflasche und Tulpen. Beim Scannen lassen sich die gedruckten Sachen zum Teddy ziehen – bis er wieder lächelt.'],
     danke: ['Danke', 'Danke-Strauß', 'Der gedruckte Blumenstrauß wirbelt beim Scannen durcheinander – Teile tauschen, bis er wieder vollständig ist; dann erscheint das persönliche Dankeschön.'],
     trauer: ['Trauer / Anteilnahme', 'Lichter der Erinnerung', '„Aufrichtige Anteilnahme“ über einem stillen See mit Schwimmkerzen. Beim Scannen steigt das Licht jeder gedruckten Kerze als Laterne auf und wird zum Stern – ohne Punkte, ohne Zeitdruck.'],
@@ -45,6 +46,7 @@ en: {
   F: { firma: ['Company (on banners and trophy)', 'e.g. Sample Fleet Ltd'], datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
        datum: ['Date', 'e.g. 12 June 2026'], geburt: ['Date of birth', 'e.g. 3 March 2026'], gewicht: ['Weight', 'e.g. 3250 g'], groesse: ['Length', 'e.g. 51 cm'], gruss: ['Greeting', 'e.g. Happy New Year'], preise: ['Prizes (up to 8, separated by |)', 'Cinema|Pizza|Massage|Day trip'], meldung: ['The news story', 'Eyewitnesses report cake, candles …'] },
   CARDS: {
+    achtzehn: ['18th birthday', 'Finally 18!', 'A bottle of bubbly and four empty glasses in party light. When scanned, shake the printed bottle until the cork pops – then fill the printed glasses to the brim without overflowing.'],
     besserung: ['Get well', 'Teddy Care', 'A sick teddy in bed, surrounded by tea, honey, a hot-water bottle and tulips. When scanned, drag the printed items to the teddy until he smiles again.'],
     danke: ['Thank you', 'Thank-You Bouquet', 'The printed bouquet jumbles up when scanned – swap the pieces until it is whole again, then a personal thank-you appears.'],
     trauer: ['Sympathy', 'Lights of Remembrance', 'A quiet lake with floating candles. When scanned, the light of each printed candle rises as a lantern and becomes a star – no score, no timer.'],
@@ -80,6 +82,7 @@ fr: {
   F: { firma: ['Entreprise (sur les banderoles et le trophée)', 'p. ex. Flotte Exemple SARL'], datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
        datum: ['Date', 'p. ex. 12 juin 2026'], geburt: ['Date de naissance', 'p. ex. 3 mars 2026'], gewicht: ['Poids', 'p. ex. 3250 g'], groesse: ['Taille', 'p. ex. 51 cm'], gruss: ['Vœux', 'p. ex. Bonne année'], preise: ['Lots (jusqu\'à 8, séparés par |)', 'Cinéma|Pizza|Massage|Excursion'], meldung: ['La nouvelle', 'Des témoins parlent de gâteau, de bougies …'] },
   CARDS: {
+    achtzehn: ['18 ans', 'Enfin 18 ans !', 'Une bouteille et quatre verres vides sous les lumières de fête. Au scan, secoue la bouteille imprimée jusqu\'à ce que le bouchon saute – puis remplis les verres imprimés à ras bord sans déborder.'],
     besserung: ['Bon rétablissement', 'Soigner le nounours', 'Un nounours malade au lit, entouré de thé, miel, bouillotte et tulipes. Au scan, fais glisser les objets imprimés jusqu\'à lui pour qu\'il sourie à nouveau.'],
     danke: ['Merci', 'Bouquet de remerciement', 'Le bouquet imprimé se mélange au scan – échanger les morceaux jusqu\'à le reconstituer, puis un merci personnel apparaît.'],
     trauer: ['Condoléances', 'Lumières du souvenir', 'Un lac paisible avec des bougies flottantes. Au scan, la lumière de chaque bougie imprimée s\'élève en lanterne et devient étoile – sans score ni chrono.'],
@@ -115,6 +118,7 @@ it: {
   F: { firma: ['Azienda (su striscioni e coppa)', 'es. Flotta Esempio srl'], datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
        datum: ['Data', 'es. 12 giugno 2026'], geburt: ['Data di nascita', 'es. 3 marzo 2026'], gewicht: ['Peso', 'es. 3250 g'], groesse: ['Lunghezza', 'es. 51 cm'], gruss: ['Augurio', 'es. Buon anno'], preise: ['Premi (fino a 8, separati da |)', 'Cinema|Pizza|Massaggio|Gita'], meldung: ['La notizia', 'Testimoni parlano di torta, candeline …'] },
   CARDS: {
+    achtzehn: ['18 anni', 'Finalmente 18!', 'Una bottiglia e quattro bicchieri vuoti tra le luci della festa. Alla scansione scuoti la bottiglia stampata finché il tappo salta – poi riempi i bicchieri stampati fino all\'orlo senza traboccare.'],
     besserung: ['Guarigione', 'Cure per l\'orsetto', 'Un orsetto malato a letto, circondato da tè, miele, borsa dell\'acqua calda e tulipani. Alla scansione trascina gli oggetti stampati fino a lui finché sorride.'],
     danke: ['Grazie', 'Bouquet del grazie', 'Il bouquet stampato si mescola alla scansione – scambiare i pezzi fino a ricomporlo, poi appare un grazie personale.'],
     trauer: ['Condoglianze', 'Luci del ricordo', 'Un lago tranquillo con candele galleggianti. Alla scansione la luce di ogni candela stampata sale come lanterna e diventa stella – senza punti né tempo.'],
@@ -150,6 +154,7 @@ es: {
   F: { firma: ['Empresa (en pancartas y trofeo)', 'p. ej. Flota Ejemplo S.L.'], datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
        datum: ['Fecha', 'p. ej. 12 de junio de 2026'], geburt: ['Fecha de nacimiento', 'p. ej. 3 de marzo de 2026'], gewicht: ['Peso', 'p. ej. 3250 g'], groesse: ['Talla', 'p. ej. 51 cm'], gruss: ['Saludo', 'p. ej. Feliz Año Nuevo'], preise: ['Premios (hasta 8, separados por |)', 'Cine|Pizza|Masaje|Excursión'], meldung: ['La noticia', 'Testigos hablan de tarta, velas …'] },
   CARDS: {
+    achtzehn: ['18 años', '¡Por fin 18!', 'Una botella y cuatro copas vacías bajo luces de fiesta. Al escanear, agita la botella impresa hasta que salte el corcho – luego llena las copas impresas hasta el borde sin derramar.'],
     besserung: ['Recuperación', 'Cuidar al osito', 'Un osito enfermo en la cama, rodeado de té, miel, bolsa de agua caliente y tulipanes. Al escanear, arrastra los objetos impresos hasta él hasta que sonría.'],
     danke: ['Gracias', 'Ramo de gracias', 'El ramo impreso se desordena al escanear – intercambiar piezas hasta recomponerlo; luego aparece un agradecimiento personal.'],
     trauer: ['Condolencias', 'Luces del recuerdo', 'Un lago sereno con velas flotantes. Al escanear, la luz de cada vela impresa sube como farolillo y se vuelve estrella – sin puntos ni prisas.'],
@@ -185,6 +190,7 @@ nl: {
   F: { firma: ['Bedrijf (op spandoeken en beker)', 'bijv. Voorbeeld Wagenpark BV'], datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
        datum: ['Datum', 'bijv. 12 juni 2026'], geburt: ['Geboortedatum', 'bijv. 3 maart 2026'], gewicht: ['Gewicht', 'bijv. 3250 g'], groesse: ['Lengte', 'bijv. 51 cm'], gruss: ['Groet', 'bijv. Gelukkig nieuwjaar'], preise: ['Prijzen (max. 8, gescheiden door |)', 'Bioscoop|Pizza|Massage|Uitstapje'], meldung: ['Het bericht', 'Ooggetuigen melden taart, kaarsjes …'] },
   CARDS: {
+    achtzehn: ['18e verjaardag', 'Eindelijk 18!', 'Een fles bubbels en vier lege glazen in feestlicht. Bij het scannen schud je de gedrukte fles tot de kurk knalt – en vul je de gedrukte glazen tot de rand zonder over te lopen.'],
     besserung: ['Beterschap', 'Beertje verzorgen', 'Een ziek beertje in bed, met thee, honing, een kruik en tulpen. Bij het scannen sleep je de gedrukte spullen naar hem toe tot hij weer lacht.'],
     danke: ['Bedankt', 'Bedankt-boeket', 'Het gedrukte boeket raakt bij het scannen door elkaar – stukjes wisselen tot het heel is, dan verschijnt een persoonlijk bedankje.'],
     trauer: ['Rouw / Medeleven', 'Lichtjes van herinnering', 'Een stil meer met drijvende kaarsjes. Bij het scannen stijgt het licht van elk gedrukt kaarsje op als lantaarn en wordt een ster – zonder punten of tijdsdruk.'],
@@ -220,6 +226,7 @@ pl: {
   F: { firma: ['Firma (na banerach i pucharze)', 'np. Przykładowa Flota sp. z o.o.'], datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
        datum: ['Data', 'np. 12 czerwca 2026'], geburt: ['Data urodzenia', 'np. 3 marca 2026'], gewicht: ['Waga', 'np. 3250 g'], groesse: ['Wzrost', 'np. 51 cm'], gruss: ['Życzenia', 'np. Szczęśliwego Nowego Roku'], preise: ['Nagrody (do 8, oddzielone |)', 'Kino|Pizza|Masaż|Wycieczka'], meldung: ['Wiadomość dnia', 'Świadkowie donoszą o torcie, świeczkach …'] },
   CARDS: {
+    achtzehn: ['18. urodziny', 'Nareszcie 18!', 'Butelka i cztery puste kieliszki w imprezowym świetle. Po zeskanowaniu potrząsaj wydrukowaną butelką, aż korek wystrzeli – potem napełnij wydrukowane kieliszki po brzegi, nie przelewając.'],
     besserung: ['Powrót do zdrowia', 'Opieka nad misiem', 'Chory miś w łóżku, obok herbata, miód, termofor i tulipany. Po zeskanowaniu przeciągnij wydrukowane rzeczy do misia, aż znów się uśmiechnie.'],
     danke: ['Podziękowanie', 'Bukiet z podziękowaniem', 'Wydrukowany bukiet miesza się po zeskanowaniu – zamieniaj części, aż będzie cały; potem pojawia się osobiste podziękowanie.'],
     trauer: ['Kondolencje', 'Światła pamięci', 'Ciche jezioro z pływającymi świecami. Po zeskanowaniu światło każdej wydrukowanej świecy wznosi się jak lampion i staje się gwiazdą – bez punktów i pośpiechu.'],
@@ -255,6 +262,7 @@ tr: {
   F: { firma: ['Şirket (afişlerde ve kupada)', 'ör. Örnek Filo A.Ş.'], datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
        datum: ['Tarih', 'ör. 12 Haziran 2026'], geburt: ['Doğum tarihi', 'ör. 3 Mart 2026'], gewicht: ['Kilo', 'ör. 3250 g'], groesse: ['Boy', 'ör. 51 cm'], gruss: ['Tebrik', 'ör. Mutlu yıllar'], preise: ['Ödüller (en fazla 8, | ile ayır)', 'Sinema|Pizza|Masaj|Gezi'], meldung: ['Haber', 'Görgü tanıkları pastadan, mumlardan …'] },
   CARDS: {
+    achtzehn: ['18. yaş günü', 'Sonunda 18!', 'Parti ışıkları altında bir şişe ve dört boş kadeh. Tarayınca basılı şişeyi mantar patlayana kadar çalkala – sonra basılı kadehleri taşırmadan ağzına kadar doldur.'],
     besserung: ['Geçmiş olsun', 'Ayıcık bakımı', 'Yatakta hasta bir ayıcık; çevresinde çay, bal, sıcak su torbası ve laleler. Tarayınca basılı eşyaları ayıcığa sürükle, yeniden gülümsesin.'],
     danke: ['Teşekkür', 'Teşekkür buketi', 'Basılı buket tarayınca karışır – parçaları değiştirip tamamla; ardından kişisel bir teşekkür belirir.'],
     trauer: ['Taziye', 'Anı ışıkları', 'Yüzen mumlarla sakin bir göl. Tarayınca her basılı mumun ışığı fener gibi yükselip yıldıza dönüşür – puansız, acelesiz.'],
