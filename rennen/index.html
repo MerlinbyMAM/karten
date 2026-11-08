@@ -28,6 +28,15 @@
   #arHint{position:fixed;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom));display:none;flex-direction:column;align-items:center;gap:10px;z-index:4}
   #arHint div{background:rgba(11,37,51,.8);padding:8px 14px;border-radius:12px}
   #hudtip{display:none}
+  #pauseBtn{position:fixed;right:10px;top:62px;width:46px;height:46px;border-radius:50%;border:0;background:rgba(11,37,51,.65);color:#fff;font-size:20px;display:none;z-index:4}
+  #resList{width:min(420px,92vw);background:rgba(255,255,255,.1);border-radius:14px;padding:8px 10px;box-sizing:border-box}
+  .rh{font-weight:700;color:#ffd166;margin:6px 0 4px;font-size:15px}
+  .rr{display:flex;gap:8px;align-items:baseline;padding:5px 4px;border-bottom:1px solid rgba(255,255,255,.12);font-size:16px}
+  .rr span{width:26px;opacity:.8}.rr b{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rr i{font-style:normal;font-variant-numeric:tabular-nums}.rr small{opacity:.7;font-size:12px}
+  .rr.me{background:rgba(255,209,102,.22);border-radius:8px}
+  #scanVid{width:min(300px,80vw);height:min(300px,80vw);object-fit:cover;border-radius:16px;background:#000;border:3px solid #ffd166}
+  #joinCode{text-transform:uppercase;letter-spacing:4px;font:bold 24px monospace;width:180px}
+  .duo{display:flex;flex-direction:column;gap:10px;align-items:center;background:rgba(255,255,255,.08);padding:10px;border-radius:16px}
   #loading{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:6;background:rgba(11,37,51,.9)}
   #loadBarW{width:220px;height:10px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}#loadBar{height:100%;width:0;background:#ffd166}
 </style>
@@ -45,6 +54,7 @@
 <div id="arHint"><div id="arHintText"></div><button class="btn" id="arGo"></button></div>
 <div id="loading"><div id="loadText">…</div><div id="loadBarW"><div id="loadBar"></div></div></div>
 <div id="hudtip"></div>
+<button id="pauseBtn" aria-label="Pause">⏸</button>
 
 <!-- Start -->
 <div class="ov" id="start" style="display:flex">
@@ -68,7 +78,9 @@
     <button class="mode" data-mode="rally"><i>❄️</i><b data-t="m_rally"></b><span data-t="m_rally_d"></span></button>
     <button class="mode" data-mode="drag"><i>🚦</i><b data-t="m_drag"></b><span data-t="m_drag_d"></span></button>
   </div>
-  <button class="btn alt" id="btnDuel" data-t="duel"></button>
+  <div class="duo"><b data-t="duel"></b>
+    <button class="btn alt" id="btnHost" data-t="hostBtn"></button>
+    <button class="btn alt" id="btnJoin" data-t="joinBtn"></button></div>
   <p data-t="snowHint" style="font-size:13px;opacity:.75"></p>
 </div>
 
@@ -81,11 +93,30 @@
   <button class="btn ghost" id="lobbyBack" data-t="menu"></button>
 </div>
 
+<!-- Beitreten: QR scannen oder Code eintippen -->
+<div class="ov" id="joinOv">
+  <h1 data-t="scanTitle" style="font-size:28px"></h1>
+  <video id="scanVid" playsinline muted autoplay></video>
+  <p id="scanMsg"></p>
+  <p data-t="codeHint" style="opacity:.8"></p>
+  <input id="joinCode" maxlength="6" autocomplete="off" autocapitalize="characters">
+  <button class="btn" id="joinGo" data-t="joinGo"></button>
+  <button class="btn ghost" id="joinBack" data-t="menu"></button>
+</div>
+
+<!-- Pause -->
+<div class="ov" id="pauseOv" style="background:rgba(11,37,51,.85)">
+  <h1 data-t="pause"></h1>
+  <button class="btn" id="pResume" data-t="resume"></button>
+  <button class="btn alt" id="pRestart" data-t="restart"></button>
+  <button class="btn ghost" id="pMenu" data-t="menu"></button>
+</div>
+
 <!-- Ergebnis -->
 <div class="ov" id="res">
   <h1 id="resTitle"></h1>
   <canvas id="trophy"></canvas>
-  <p id="resTime"></p>
+  <div id="resList"></div>
   <button class="btn" id="again" data-t="again"></button>
   <button class="btn ghost" id="tomenu" data-t="menu"></button>
 </div>
@@ -101,7 +132,6 @@ $('pname').placeholder = tx('yourName');
 try{ $('pname').value = localStorage.getItem('mamrally_name') || Q.get('name') || ''; }catch(e){}
 $('pname').addEventListener('change', () => { try{ localStorage.setItem('mamrally_name', $('pname').value); }catch(e){} });
 if(FIRMA) $('firmaTag').textContent = tx('merry') + ' · ' + FIRMA;
-$('lobbyBack').onclick = () => location.href = location.pathname + '?lang=' + LANG + (FIRMA ? '&firma=' + encodeURIComponent(FIRMA) : '');
 const go = () => { $('start').style.display = 'none'; openMenu(); };
 $('btnFlat').onclick = go;
 if(Q.get('join') || Q.has('direkt')) go();
