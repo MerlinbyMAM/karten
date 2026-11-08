@@ -104,3 +104,13 @@ export function hint(g, text, ctxT, y = 470, until = 3.5){
   g.globalAlpha = Math.min(1, until - ctxT); bigText(g, text, 300, y, 40, '#fff', 'rgba(40,20,60,.85)'); g.globalAlpha = 1;
 }
 export { rnd, bigText };
+
+/* ---------- Spielschleier: legt sich beim Spielen weich über das gedruckte Hauptmotiv ---------- */
+// a = Deckkraft 0..1 (weich ein-/ausblenden), Bereich y0..y1, rgb = Farbton als "r,g,b"
+export function veil(g, a, y0 = 300, y1 = 820, rgb = '20,14,30'){
+  if(a <= 0) return;
+  const h = y1 - y0, gr = g.createLinearGradient(0, y0, 0, y1);
+  gr.addColorStop(0, `rgba(${rgb},0)`); gr.addColorStop(.12, `rgba(${rgb},${.62*a})`);
+  gr.addColorStop(.88, `rgba(${rgb},${.62*a})`); gr.addColorStop(1, `rgba(${rgb},0)`);
+  g.save(); g.fillStyle = gr; g.fillRect(0, y0, 600, h); g.restore();
+}

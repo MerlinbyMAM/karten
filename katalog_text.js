@@ -12,7 +12,7 @@ de: {
   CARDS: {
     danke: ['Danke', 'Danke-Memory', 'Ein Memory mit sechs Paaren hinter einem blühenden Blumenrahmen – am Ende erscheint das persönliche Dankeschön.'],
     trauer: ['Trauer / Anteilnahme', 'Lichter der Erinnerung', 'Eine stille Karte ohne Punkte und Zeitdruck: sieben Schwimmkerzen entzünden, deren Licht als Laterne aufsteigt und zu Sternen wird.'],
-    vatertag: ['Vatertag', 'Grillmeister für Papa', 'Sechs Würstchen auf dem Rost: im goldbraunen Moment wenden und servieren, bevor etwas verkohlt – Sommerabend-Grillfeeling zum Vatertag.'],
+    vatertag: ['Vatertag', 'Grillmeister für Papa', 'Der gedruckte Grill wird lebendig: Die Würstchen auf der Karte brutzeln live, werden im goldbraunen Moment gewendet und fliegen auf den gedruckten Teller.'],
     einhorn: ['Kindergeburtstag / Mädchen', 'Einhorn-Abenteuer', 'Ein kleines Einhorn galoppiert mit Regenbogenspur über die Zauberwiese – springen, Sterne und Cupcakes sammeln.'],
     papa: ['Geburtstag / Für Papa', 'Torwand für Papa', 'Torwandschießen wie im Sportstudio: sechs Schüsse per Wisch, drei unten, drei oben – mit Stadionjubel.'],
     mama: ['Geburtstag / Für Mama', 'Für Mama', 'Mit der goldenen Gießkanne Knospen zum Blühen bringen – bis der ganze Strauß blüht und ein Herz aus Blütenblättern aufsteigt.'],
@@ -46,7 +46,7 @@ en: {
   CARDS: {
     danke: ['Thank you', 'Thank-You Memory', 'A memory game with six pairs inside a blooming floral frame – a personal thank-you appears at the end.'],
     trauer: ['Sympathy', 'Lights of Remembrance', 'A quiet card with no score or timer: light seven floating candles whose glow rises as lanterns and turns into stars.'],
-    vatertag: ['Father\'s Day', 'Grill Master Dad', 'Six sausages on the grill: flip at the golden moment and serve before anything burns – summer-evening barbecue vibes for Father\'s Day.'],
+    vatertag: ['Father\'s Day', 'Grill Master Dad', 'The printed grill comes alive: the sausages on the card sizzle live, get flipped at the golden moment and fly onto the printed plate.'],
     einhorn: ['Kids\' birthday / Girls', 'Unicorn Adventure', 'A little unicorn gallops across the magic meadow with a rainbow trail – jump, collect stars and cupcakes.'],
     papa: ['Birthday / For Dad', 'Goal Wall for Dad', 'A classic goal-wall shootout: six swipe shots, three low and three high – with stadium cheers.'],
     mama: ['Birthday / For Mom', 'For Mom', 'Water the buds with a golden watering can – until the whole bouquet blooms and a heart of petals rises.'],
@@ -80,7 +80,7 @@ fr: {
   CARDS: {
     danke: ['Merci', 'Memory du merci', 'Un memory de six paires dans un cadre fleuri – un merci personnel apparaît à la fin.'],
     trauer: ['Condoléances', 'Lumières du souvenir', 'Une carte paisible, sans score ni chrono : allumer sept bougies flottantes dont la lumière s\'élève en lanternes et devient étoiles.'],
-    vatertag: ['Fête des pères', 'Papa roi du barbecue', 'Six saucisses sur le grill : retourner au moment doré et servir avant que ça brûle – ambiance barbecue d\'un soir d\'été.'],
+    vatertag: ['Fête des pères', 'Papa roi du barbecue', 'Le barbecue imprimé prend vie : les saucisses de la carte grésillent en direct, se retournent au moment doré et volent dans l’assiette imprimée.'],
     einhorn: ['Anniversaire enfant / Fille', 'L\'aventure de la licorne', 'Une petite licorne galope sur la prairie magique avec un arc-en-ciel – saute, ramasse étoiles et cupcakes.'],
     papa: ['Anniversaire / Pour Papa', 'Mur de tir pour Papa', 'Le défi du mur de tir : six tirs d\'un glissement, trois en bas, trois en haut – avec la clameur du stade.'],
     mama: ['Anniversaire / Pour Maman', 'Pour Maman', 'Fais éclore les boutons avec l\'arrosoir doré – jusqu\'à ce que tout le bouquet fleurisse et qu\'un cœur de pétales s\'envole.'],
@@ -114,7 +114,7 @@ it: {
   CARDS: {
     danke: ['Grazie', 'Memory del grazie', 'Un memory con sei coppie in una cornice fiorita – alla fine appare un grazie personale.'],
     trauer: ['Condoglianze', 'Luci del ricordo', 'Un biglietto silenzioso, senza punti né tempo: accendere sette candele galleggianti la cui luce sale come lanterne e diventa stelle.'],
-    vatertag: ['Festa del papà', 'Papà re della griglia', 'Sei salsicce sulla griglia: girarle al momento dorato e servirle prima che brucino – atmosfera da grigliata estiva.'],
+    vatertag: ['Festa del papà', 'Papà re della griglia', 'La griglia stampata prende vita: le salsicce sul biglietto sfrigolano dal vivo, si girano al momento dorato e volano nel piatto stampato.'],
     einhorn: ['Compleanno bambini / Bambina', 'L\'avventura dell\'unicorno', 'Un piccolo unicorno galoppa sul prato magico con una scia arcobaleno – salta, raccogli stelle e cupcake.'],
     papa: ['Compleanno / Per papà', 'Muro di tiro per papà', 'La sfida del muro di tiro: sei tiri con uno swipe, tre in basso e tre in alto – con il boato dello stadio.'],
     mama: ['Compleanno / Per la mamma', 'Per la mamma', 'Fai fiorire i boccioli con l\'annaffiatoio d\'oro – finché tutto il mazzo fiorisce e sale un cuore di petali.'],
@@ -148,7 +148,7 @@ es: {
   CARDS: {
     danke: ['Gracias', 'Memory de gracias', 'Un memory de seis parejas en un marco floral – al final aparece un agradecimiento personal.'],
     trauer: ['Condolencias', 'Luces del recuerdo', 'Una tarjeta serena, sin puntos ni prisas: encender siete velas flotantes cuya luz sube como farolillos y se vuelve estrellas.'],
-    vatertag: ['Día del Padre', 'Papá, rey de la parrilla', 'Seis salchichas en la parrilla: darles la vuelta en el momento dorado y servirlas antes de que se quemen – ambiente de barbacoa de verano.'],
+    vatertag: ['Día del Padre', 'Papá, rey de la parrilla', 'La parrilla impresa cobra vida: las salchichas de la tarjeta chisporrotean en vivo, se voltean en el momento dorado y vuelan al plato impreso.'],
     einhorn: ['Cumpleaños infantil / Niña', 'La aventura del unicornio', 'Un pequeño unicornio galopa por el prado mágico con estela de arcoíris – salta, recoge estrellas y cupcakes.'],
     papa: ['Cumpleaños / Para papá', 'Muro de tiro para papá', 'El clásico muro de tiro: seis disparos deslizando, tres abajo y tres arriba – con el rugido del estadio.'],
     mama: ['Cumpleaños / Para mamá', 'Para mamá', 'Haz florecer los capullos con la regadera dorada – hasta que todo el ramo florezca y suba un corazón de pétalos.'],
@@ -182,7 +182,7 @@ nl: {
   CARDS: {
     danke: ['Bedankt', 'Bedankt-memory', 'Een memory met zes paren in een bloeiende bloemenlijst – aan het eind verschijnt een persoonlijk bedankje.'],
     trauer: ['Rouw / Medeleven', 'Lichtjes van herinnering', 'Een stille kaart zonder punten of tijdsdruk: zeven drijvende kaarsjes aansteken waarvan het licht als lantaarn opstijgt en sterren wordt.'],
-    vatertag: ['Vaderdag', 'Grillmeester papa', 'Zes worstjes op de grill: keren op het gouden moment en serveren voor er iets verbrandt – zomerse barbecuesfeer.'],
+    vatertag: ['Vaderdag', 'Grillmeester papa', 'De gedrukte grill komt tot leven: de worstjes op de kaart sissen live, worden op het gouden moment gekeerd en vliegen op het gedrukte bord.'],
     einhorn: ['Kinderverjaardag / Meisje', 'Eenhoorn-avontuur', 'Een kleine eenhoorn galoppeert met regenboogspoor over de toverweide – spring, verzamel sterren en cupcakes.'],
     papa: ['Verjaardag / Voor papa', 'Doelmuur voor papa', 'Klassiek doelmuurschieten: zes schoten met een veeg, drie laag en drie hoog – met stadiongejuich.'],
     mama: ['Verjaardag / Voor mama', 'Voor mama', 'Laat de knoppen bloeien met de gouden gieter – tot het hele boeket bloeit en er een hart van blaadjes opstijgt.'],
@@ -216,7 +216,7 @@ pl: {
   CARDS: {
     danke: ['Podziękowanie', 'Memory z podziękowaniem', 'Memory z sześcioma parami w kwitnącej ramce – na koniec pojawia się osobiste podziękowanie.'],
     trauer: ['Kondolencje', 'Światła pamięci', 'Spokojna kartka bez punktów i pośpiechu: zapal siedem pływających świec, których światło wznosi się jak lampiony i zamienia w gwiazdy.'],
-    vatertag: ['Dzień Ojca', 'Tata – mistrz grilla', 'Sześć kiełbasek na ruszcie: odwrócić w złotym momencie i podać, zanim coś się przypali – klimat letniego grillowania.'],
+    vatertag: ['Dzień Ojca', 'Tata – mistrz grilla', 'Wydrukowany grill ożywa: kiełbaski z kartki skwierczą na żywo, obracasz je w złotym momencie, a one lecą na wydrukowany talerz.'],
     einhorn: ['Urodziny dziecka / Dziewczynka', 'Przygoda jednorożca', 'Mały jednorożec galopuje z tęczowym śladem po magicznej łące – skacz, zbieraj gwiazdki i babeczki.'],
     papa: ['Urodziny / Dla taty', 'Ściana strzelecka dla taty', 'Klasyczne strzały w ścianę: sześć strzałów przesunięciem, trzy dołem i trzy górą – z dopingiem stadionu.'],
     mama: ['Urodziny / Dla mamy', 'Dla mamy', 'Złotą konewką rozbudź pąki – aż zakwitnie cały bukiet i uniesie się serce z płatków.'],
@@ -250,7 +250,7 @@ tr: {
   CARDS: {
     danke: ['Teşekkür', 'Teşekkür hafıza oyunu', 'Çiçekli bir çerçevede altı çiftli hafıza oyunu – sonunda kişisel bir teşekkür belirir.'],
     trauer: ['Taziye', 'Anı ışıkları', 'Puansız, acelesiz sakin bir kart: yedi yüzen mumu yak, ışıkları fener gibi yükselip yıldıza dönüşsün.'],
-    vatertag: ['Babalar Günü', 'Mangal ustası baba', 'Izgarada altı sosis: altın anında çevir ve yanmadan servis et – yaz akşamı mangal keyfi.'],
+    vatertag: ['Babalar Günü', 'Mangal ustası baba', 'Basılı mangal canlanıyor: karttaki sosisler canlı cızırdar, altın anında çevrilir ve basılı tabağa uçar.'],
     einhorn: ['Çocuk doğum günü / Kız', 'Tek Boynuz Macerası', 'Küçük bir tek boynuzlu at gökkuşağı izinde sihirli çayırda koşuyor – zıpla, yıldız ve kek topla.'],
     papa: ['Doğum günü / Babama', 'Babama gol duvarı', 'Klasik gol duvarı: kaydırarak altı şut, üçü alta üçü üste – stadyum coşkusuyla.'],
     mama: ['Doğum günü / Anneme', 'Anneme', 'Altın kovayla tomurcukları açtır – tüm buket açıp yapraklardan bir kalp yükselene kadar.'],
