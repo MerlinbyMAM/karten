@@ -1,10 +1,11 @@
 // Luftballons: Ballons steigen aus der Karte auf – antippen zum Platzen lassen.
 // In einem steckt die Botschaft. 20 Sekunden, Punkte, am Ende Konfetti.
-import { startCard, confetti, drawConfetti, bigText, rnd } from '../core/card.js';
+import { startCard, t, confetti, drawConfetti, bigText, rnd } from '../core/card.js';
 
 const COLORS = ['#e8433f', '#f6c431', '#3b8fe0', '#43b85a', '#ef6fa7', '#9a6ff0', '#ff8a3d'];
 const GAME = 20;
-const msg = new URLSearchParams(location.search).get('text') || 'Alles Gute!';
+const QP = new URLSearchParams(location.search), QN = QP.get('name');
+const msg = QP.get('text') || (QN ? t('ballons.msgN', {name: QN}) : t('ballons.msg'));
 let balloons, pops, conf, score, time, state, spawn, endT;
 
 function balloon(){
@@ -30,7 +31,7 @@ function drawBalloon(g, b, t){
 function shade(hex, p){ const n = parseInt(hex.slice(1), 16); let r = (n>>16)+p, gg = ((n>>8)&255)+p, b = (n&255)+p; r=Math.max(0,Math.min(255,r)); gg=Math.max(0,Math.min(255,gg)); b=Math.max(0,Math.min(255,b)); return `rgb(${r},${gg},${b})`; }
 
 const scene = {
-  title: 'Hurra!', subtitle: 'Lass die Luftballons platzen – goldene zählen dreifach!', emoji: '🎈',
+  title: t('ballons.title'), subtitle: t('ballons.sub'), emoji: '🎈',
   accent: '#ffd34d', button: '#3b8fe0', bg: '#2d5f8f',
   init(ctx){ this.restart(ctx); },
   restart(ctx){ balloons = []; pops = []; conf = []; score = 0; time = GAME; state = 'play'; spawn = 0; endT = 0; },
@@ -75,13 +76,13 @@ const scene = {
     g.fillStyle = '#fff'; g.font = 'bold 30px Georgia'; g.textBaseline = 'middle';
     g.textAlign = 'left'; g.fillText('🎈 ' + score, 40, 178);
     g.textAlign = 'right'; g.fillText('⏱ ' + Math.ceil(time) + ' s', 560, 178);
-    if(state === 'play' && ctx.t < 3){ g.globalAlpha = Math.min(1, 3 - ctx.t); bigText(g, 'Tipp die Ballons an!', 300, 470, 46, '#fff', 'rgba(30,60,120,.85)'); g.globalAlpha = 1; }
+    if(state === 'play' && ctx.t < 3){ g.globalAlpha = Math.min(1, 3 - ctx.t); bigText(g, t('ballons.hint'), 300, 470, 46, '#fff', 'rgba(30,60,120,.85)'); g.globalAlpha = 1; }
     if(state === 'end'){
       g.fillStyle = `rgba(20,40,80,${Math.min(.45, endT*.4)})`; g.fillRect(0, 0, 600, 900);
       drawConfetti(g, conf, 1/60);
       const s = 1 + Math.sin(ctx.t*4)*.04;
       g.save(); g.translate(300, 420); g.scale(s, s); bigText(g, msg, 0, 0, msg.length > 14 ? 50 : 64, '#fff', 'rgba(30,60,120,.85)'); g.restore();
-      bigText(g, score + ' Ballons – super!', 300, 520, 38, '#ffd34d', 'rgba(30,60,120,.85)');
+      bigText(g, t('ballons.score', {n: score}), 300, 520, 38, '#ffd34d', 'rgba(30,60,120,.85)');
     }
   }
 };

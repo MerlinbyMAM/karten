@@ -57,7 +57,10 @@ button.alt{background:transparent;font-size:.95em;padding:10px 20px}
 </div>
 
 <script type="module">
-{ const n = new URLSearchParams(location.search).get('name'); if(n){ document.querySelector('#start h1').textContent = 'Für dich, ' + n + '!'; document.title = 'Für dich, ' + n + '!'; } }
+import { t } from '../core/i18n.js';
+{ const n = new URLSearchParams(location.search).get('name'), h = n ? t('kaetzchen.titleN', {name: n}) : t('kaetzchen.title'); document.querySelector('#start h1').textContent = h; document.title = h;
+  document.querySelector('#start h2').textContent = t('kaetzchen.sub'); document.getElementById('btnAR').textContent = t('ui.ar'); document.querySelector('#start .small').textContent = t('ui.arHint'); document.getElementById('btnFlat').textContent = t('ui.flat');
+  document.getElementById('loadText').textContent = t('ui.loading'); document.getElementById('hint').textContent = t('ui.cam'); document.getElementById('again').textContent = t('ui.again'); }
 const $ = id => document.getElementById(id);
 const BALL = { x: 569/1152 - .5, y: .75 - 1328/1728*1.5, d: 142/1152 };   // Kugel-Position auf der Karte (Kartenbreite = 1)
 
@@ -132,8 +135,8 @@ function drawOverlay(){
   if(phase === 'wait'){
     og.fillStyle = 'rgba(40,20,30,.35)'; og.fillRect(0,0,600,900);
     og.fillStyle = '#fff'; og.strokeStyle = 'rgba(120,40,70,.9)'; og.lineWidth = 8;
-    og.font = 'italic bold 48px Georgia';
-    og.strokeText('Wirf den Ball zurück!', 300, 300); og.fillText('Wirf den Ball zurück!', 300, 300);
+    { let f = 48; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(t('kaetzchen.throw')).width > 560 && f > 20); }
+    og.strokeText(t('kaetzchen.throw'), 300, 300); og.fillText(t('kaetzchen.throw'), 300, 300);
     if(phaseT > 1.2){
       const frac = (phaseT - 1.2) % 1, sc = 1.4 - frac*.5;
       og.save(); og.translate(300, 470); og.scale(sc, sc); og.globalAlpha = 1 - frac*.6;
@@ -141,13 +144,13 @@ function drawOverlay(){
       og.strokeText(String(countdownN), 0, 0); og.fillText(String(countdownN), 0, 0);
       og.restore();
     } else {
-      og.font = '30px Georgia'; og.fillStyle = '#fff'; og.fillText('in 3 … 2 … 1 …', 300, 380);
+      og.font = '30px Georgia'; og.fillStyle = '#fff'; og.fillText(t('kaetzchen.count'), 300, 380);
     }
   }
   if(phase === 'end'){
     for(const h of hearts){ og.save(); og.translate(h.x + Math.sin(h.w)*12, h.y); og.font = h.s+'px serif'; og.globalAlpha = .9; og.fillText('💗', 0, 0); og.restore(); }
-    og.font = 'italic bold 54px Georgia'; og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
-    og.strokeText('Danke fürs Spielen!', 300, 820); og.fillText('Danke fürs Spielen!', 300, 820);
+    { let f = 54; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(t('kaetzchen.thanks')).width > 560 && f > 20); } og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
+    og.strokeText(t('kaetzchen.thanks'), 300, 820); og.fillText(t('kaetzchen.thanks'), 300, 820);
   }
   if(ovTex) ovTex.needsUpdate = true;
   if(mode === 'flat'){ const fc = $('fov').getContext('2d'); fc.clearRect(0,0,600,900); fc.drawImage(ov,0,0); }
@@ -198,7 +201,7 @@ $('btnAR').onclick = async () => {
     let url = null;
     try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
     if(!url){
-      txt.textContent = 'Lerne deine Karte kennen …';
+      txt.textContent = t('ui.learn');
       const img = new Image(); img.src = 'karte.jpg'; await img.decode();
       const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
       const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
@@ -206,7 +209,7 @@ $('btnAR').onclick = async () => {
       await c.compileImageTargets([img], pr => { bar.style.width = Math.round(pr*.8)+'%'; });
       url = URL.createObjectURL(new Blob([await c.exportData()]));
     }
-    txt.textContent = 'Kamera wird gestartet …'; bar.style.width = '90%';
+    txt.textContent = t('ui.camStart'); bar.style.width = '90%';
     const THREE = await import('three');
     const { MindARThree } = await import('mindar-image-three');
     const mind = new MindARThree({ container: $('ar'), imageTargetSrc: url, uiScanning:'no', uiLoading:'no', uiError:'no', filterMinCF:0.0001, filterBeta:0.001 });
@@ -244,14 +247,14 @@ $('btnAR').onclick = async () => {
     };
     anchor.onTargetLost = () => {
       visible = false; vid.pause();
-      $('hint').textContent = '📷 Karte wieder ins Bild halten'; $('hint').style.display='block';
+      $('hint').textContent = t('ui.camAgain'); $('hint').style.display='block';
     };
     await mind.start();
     renderer.setAnimationLoop(() => renderer.render(scene, camera));
     $('loading').style.display='none'; $('hint').style.display='block';
   }catch(e){
     console.error(e);
-    startFlat('Kamera klappt hier nicht – dann ohne. Ton an! 🐱');
+    startFlat(t('ui.noCam') + ' 🐱');
   }
 };
 requestAnimationFrame(loop);

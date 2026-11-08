@@ -1,10 +1,10 @@
 // Hochzeit: Zwei goldene Ringe liegen links und rechts. Ziehe einen Ring
 // zum anderen -> sie verschmelzen funkelnd, Hochzeitsglocken läuten,
 // weiße Tauben fliegen auf, Blütenregen, Namen + Datum (?namen=, ?datum=).
-import { startCard, bigText, rnd } from '../core/card.js';
+import { startCard, t, bigText, rnd } from '../core/card.js';
 
 const P = new URLSearchParams(location.search);
-const NAMEN = P.get('namen') || 'Alles Liebe zur Hochzeit!';
+const NAMEN = P.get('namen') || P.get('name') || t('hochzeit.msg');
 const DATUM = P.get('datum');
 const CY = 430;
 
@@ -19,7 +19,7 @@ function ringDraw(g, x, y, r, rot){
 }
 
 const scene = {
-  title: 'Alles Liebe zur Hochzeit', subtitle: 'Führe die beiden Ringe zusammen.', emoji: '💍',
+  title: t('hochzeit.title'), subtitle: t('hochzeit.sub'), emoji: '💍',
   accent: '#f1e3c6', button: '#9c6644', bg: '#4a3b30',
   init(ctx){ this.restart(ctx); },
   restart(ctx){
@@ -90,7 +90,7 @@ const scene = {
       g.beginPath(); g.moveTo(-20, 0); g.lineTo(-36, -6); g.lineTo(-34, 6); g.fill(); g.restore();
     }
     for(const p of petals){ g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c; g.beginPath(); g.ellipse(0, 0, p.s*.6, p.s, 0, 0, 7); g.fill(); g.restore(); }
-    if(!joined && ctx.t > .5){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*3); bigText(g, 'Ringe zusammenführen', 300, CY + 110, 34, '#fff', 'rgba(110,80,60,.85)'); g.globalAlpha = 1; }
+    if(!joined && ctx.t > .5){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*3); bigText(g, t('hochzeit.hint'), 300, CY + 110, 34, '#fff', 'rgba(110,80,60,.85)'); g.globalAlpha = 1; }
     if(joined && ctx.t - jT > 1.5){
       g.globalAlpha = Math.min(1, ctx.t - jT - 1.5);
       bigText(g, NAMEN, 300, CY + 120, NAMEN.length > 18 ? 38 : 50, '#fff8e7', 'rgba(110,80,60,.9)');

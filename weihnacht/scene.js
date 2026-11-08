@@ -1,15 +1,16 @@
 // Weihnachtsdorf: Es schneit über der Karte. Antippen/Wischen = Schneegestöber,
 // Sterne funkeln am Himmel; "Schütteln" (Wischen) lässt es stärker schneien.
 // Nach dem 5. Antippen leuchtet der Baum auf, Sternschnuppe + Jingle Bells.
-import { startCard, bigText, rnd } from '../core/card.js';
+import { startCard, t, bigText, rnd } from '../core/card.js';
 
-const msg = new URLSearchParams(location.search).get('text');
+const QP = new URLSearchParams(location.search), QN = QP.get('name');
+const msg = QP.get('text') || (QN ? t('weihnacht.msgN', {name: QN}) : '');
 let flakes, stars, shooting, taps, glow, wind, finished;
 
 function flake(top){ return { x: rnd(0, 600), y: top ? rnd(-900, 0) : rnd(0, 900), r: rnd(1.2, 4), vy: rnd(25, 60), ph: rnd(0, 6) }; }
 
 const scene = {
-  title: 'Frohe Weihnachten', subtitle: 'Tippe auf die Karte – und lass es schneien!', emoji: '❄️',
+  title: t('weihnacht.title'), subtitle: t('weihnacht.sub'), emoji: '❄️',
   accent: '#f6d77a', button: '#2c5f8a', bg: '#1d3557',
   init(ctx){ this.restart(ctx); },
   restart(ctx){
@@ -58,10 +59,10 @@ const scene = {
       for(let i=0;i<14;i++){ const a = i/14*6.28 + ctx.t*.6, rr = 120 + 30*Math.sin(ctx.t*2 + i); g.fillStyle = `rgba(255,240,180,${.7*glow*(.5+.5*Math.sin(ctx.t*5+i))})`; g.beginPath(); g.arc(300 + Math.cos(a)*rr*.6, 600 + Math.sin(a)*rr*.35, 3, 0, 7); g.fill(); }
     }
     for(const f of flakes){ g.fillStyle = 'rgba(255,255,255,.9)'; g.beginPath(); g.arc(f.x, f.y, f.r, 0, 7); g.fill(); }
-    if(ctx.t < 4 && !finished){ g.globalAlpha = Math.min(1, 4 - ctx.t); bigText(g, 'Tipp auf die Karte!', 300, 470, 40, '#fff', 'rgba(20,40,80,.85)'); g.globalAlpha = 1; }
+    if(ctx.t < 4 && !finished){ g.globalAlpha = Math.min(1, 4 - ctx.t); bigText(g, t('weihnacht.hint'), 300, 470, 40, '#fff', 'rgba(20,40,80,.85)'); g.globalAlpha = 1; }
     if(finished && glow > .3){
       g.globalAlpha = Math.min(1, (glow - .3)*2);
-      bigText(g, msg || 'Ein frohes Fest!', 300, 460, msg && msg.length > 16 ? 40 : 54, '#fff7d6', 'rgba(20,40,80,.9)');
+      bigText(g, msg || t('weihnacht.msg'), 300, 460, msg && msg.length > 16 ? 40 : 54, '#fff7d6', 'rgba(20,40,80,.9)');
       g.globalAlpha = 1;
     }
   }

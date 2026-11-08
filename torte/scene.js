@@ -1,7 +1,7 @@
 // Geburtstagstorte: Die ganze Torte dreht sich (Etagen, Zuckerguss, Perlen, Macarons, Kerzen).
 // Auf jeder Etage brennen Kerzen. Antippen oder Wischen pustet sie aus – und dreht die Torte schneller.
 // Einzelne Kerzen gehen wieder an. Alle aus vor Ablauf der Zeit -> Konfetti + Happy Birthday.
-import { startCard, confetti, drawConfetti, bigText, rnd } from '../core/card.js';
+import { startCard, t, confetti, drawConfetti, bigText, rnd } from '../core/card.js';
 
 const name = new URLSearchParams(location.search).get('name');
 const GAME = 35;                                   // Sekunden
@@ -178,7 +178,7 @@ function hitAt(x, y, r, ctx){
 }
 
 const scene = {
-  title: 'Happy Birthday!', subtitle: 'Puste alle Kerzen aus, bevor die Zeit abläuft – aber Vorsicht, die Torte dreht sich!', emoji: '🎂',
+  title: t('torte.title'), subtitle: t('torte.sub'), emoji: '🎂',
   accent: '#f3c98b', button: '#d9718f', bg: '#5a3a44',
   images: { leer: 'leer.png' },                    // Hintergrund über der Torte ohne die gemalten Kerzen
   init(ctx){ this.restart(ctx); },
@@ -243,21 +243,21 @@ const scene = {
     g.fillStyle = '#fff'; g.fillText('🕯 ' + lit, 115, 786);
     if(state === 'play' && !started && ctx.t < 7){
       g.save(); g.globalAlpha = Math.min(1, ctx.t*1.5);
-      bigText(g, 'Tippe oder wische die Kerzen aus!', 300, 235, 32, '#fff', 'rgba(150,60,90,.85)'); g.restore();
+      bigText(g, t('torte.hint'), 300, 235, 32, '#fff', 'rgba(150,60,90,.85)'); g.restore();
     }
     if(state === 'win'){
       g.fillStyle = `rgba(40,20,30,${Math.min(.35, endT*.3)})`; g.fillRect(0, 0, 600, 900);
       drawConfetti(g, conf, 1/60);
       const s = 1 + Math.sin(ctx.t*4)*.03;
       g.save(); g.translate(300, 470); g.scale(s, s);
-      bigText(g, name ? 'Alles Gute,' : 'Alles Gute', 0, -40, 66);
-      bigText(g, name ? name + '!' : 'zum Geburtstag!', 0, 40, name ? 72 : 52);
+      bigText(g, name ? t('torte.win1n') : t('torte.win1'), 0, -40, 66);
+      bigText(g, name ? name + '!' : t('torte.win2'), 0, 40, name ? 72 : 52);
       g.restore();
     }
     if(state === 'lost'){
       g.fillStyle = `rgba(40,20,30,${Math.min(.45, endT*.4)})`; g.fillRect(0, 0, 600, 900);
-      bigText(g, 'Puh, zu viele Kerzen!', 300, 420, 52);
-      bigText(g, 'Noch ' + lit + ' brennen – nochmal?', 300, 490, 36, '#f3c98b');
+      bigText(g, t('torte.lost'), 300, 420, 52);
+      bigText(g, t('torte.lost2', {n: lit}), 300, 490, 36, '#f3c98b');
     }
   }
 };

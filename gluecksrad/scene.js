@@ -1,12 +1,12 @@
 // Glücksrad: Auf die leere Scheibe der Karte wird ein buntes Rad gezeichnet.
 // Wischen oder Tippen dreht es (Wischstärke = Schwung). Es tickt, bremst ab,
 // der Zeiger oben zeigt den Gewinn (?preise=Kino|Pizza|... bis 8 Stück).
-import { startCard, bigText, rnd, confetti, drawConfetti } from '../core/card.js';
+import { startCard, t, bigText, rnd, confetti, drawConfetti } from '../core/card.js';
 import { WHEEL } from './data.js';   // {x,y,r} Mittelpunkt/Radius der leeren Scheibe in 600x900
 
 const P = new URLSearchParams(location.search);
 const NAME = P.get('name');
-const PRIZES = (P.get('preise') || 'Kinoabend|Frühstück ans Bett|Wellness-Tag|Pizza-Abend|Ausflug|Ein Wunsch frei|Eis essen|Überraschung').split('|').slice(0, 8);
+const PRIZES = (P.get('preise') || t('gluecksrad.prizes')).split('|').slice(0, 8);
 const COLS = ['#e63946','#f4a261','#2a9d8f','#e9c46a','#457b9d','#f28482','#8ab17d','#b56576'];
 
 let ang, vel, spinning, lastSeg, result, conf, dragA, dragT, spins;
@@ -18,7 +18,7 @@ function segAt(a){
 }
 
 const scene = {
-  title: 'Dreh am Glück!', subtitle: 'Wisch über das Rad und gib ihm Schwung – was gewinnst du?', emoji: '🎡',
+  title: t('gluecksrad.title'), subtitle: t('gluecksrad.sub'), emoji: '🎡',
   accent: '#ffd166', button: '#c1121f', bg: '#6a040f',
   init(ctx){ ang = 0; spins = 0; this.restart(ctx); },
   restart(ctx){ vel = 0; spinning = false; result = null; conf = null; lastSeg = segAt(ang); dragA = null; },
@@ -72,12 +72,12 @@ const scene = {
     // Zeiger
     g.fillStyle = '#c1121f'; g.strokeStyle = '#fff'; g.lineWidth = 3;
     g.beginPath(); g.moveTo(WHEEL.x - 18, WHEEL.y - R - 18); g.lineTo(WHEEL.x + 18, WHEEL.y - R - 18); g.lineTo(WHEEL.x, WHEEL.y - R + 16); g.closePath(); g.fill(); g.stroke();
-    if(!spins && !spinning && ctx.t > .5){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*4); bigText(g, '👆 Wisch zum Drehen!', 300, WHEEL.y + R + 60, 36, '#fff', 'rgba(106,4,15,.85)'); g.globalAlpha = 1; }
+    if(!spins && !spinning && ctx.t > .5){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*4); bigText(g, t('gluecksrad.hint'), 300, WHEEL.y + R + 60, 36, '#fff', 'rgba(106,4,15,.85)'); g.globalAlpha = 1; }
     if(result){
       if(conf) drawConfetti(g, conf, 1/60);
       g.fillStyle = 'rgba(255,248,230,.94)'; g.fillRect(40, WHEEL.y - 70, 520, 140);
       g.strokeStyle = '#c1121f'; g.lineWidth = 5; g.strokeRect(46, WHEEL.y - 64, 508, 128);
-      bigText(g, NAME ? NAME + ', gewonnen:' : 'Gewonnen:', 300, WHEEL.y - 30, NAME && NAME.length > 14 ? 26 : 34, '#c1121f', 'rgba(255,255,255,.9)');
+      bigText(g, NAME ? t('gluecksrad.wonN', {name: NAME}) : t('gluecksrad.won'), 300, WHEEL.y - 30, NAME && NAME.length > 14 ? 26 : 34, '#c1121f', 'rgba(255,255,255,.9)');
       bigText(g, result, 300, WHEEL.y + 26, result.length > 16 ? 36 : 48, '#370617', 'rgba(255,255,255,.9)');
     }
   }

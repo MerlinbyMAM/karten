@@ -1,12 +1,12 @@
 // Rubbellos: Über dem Feld liegt eine silberne Rubbelschicht. Mit dem Finger
 // freirubbeln -> darunter die Überraschung (?text=, ?text2=). Ab 60 % frei:
 // Rest fällt ab, Konfetti, Fanfare.
-import { startCard, bigText, wrapText, rnd, confetti, drawConfetti } from '../core/card.js';
+import { startCard, t, bigText, wrapText, rnd, confetti, drawConfetti } from '../core/card.js';
 import { FIELD } from './data.js';   // {x,y,w,h} des Rubbelfelds in 600x900
 
 const P = new URLSearchParams(location.search);
-const TEXT = P.get('text') || 'Du hast gewonnen:';
-const TEXT2 = P.get('text2') || 'Einen Tag ganz nach deinen Wünschen!';
+const TEXT = P.get('text') || (P.get('name') ? t('rubbellos.wonN', {name: P.get('name')}) : t('rubbellos.won'));
+const TEXT2 = P.get('text2') || t('rubbellos.gift');
 
 let layer, lg, cleared, lastP, conf, done, doneT, checkT;
 
@@ -19,11 +19,11 @@ function makeLayer(){
   for(let i=0;i<900;i++){ lg.fillStyle = `rgba(255,255,255,${Math.random()*.25})`; lg.fillRect(Math.random()*FIELD.w, Math.random()*FIELD.h, 2, 2); }
   lg.fillStyle = 'rgba(90,90,100,.55)'; lg.font = `bold ${Math.round(FIELD.h*.16)}px system-ui, sans-serif`;
   lg.textAlign = 'center'; lg.textBaseline = 'middle';
-  lg.fillText('★ HIER RUBBELN ★', FIELD.w/2, FIELD.h/2);
+  lg.fillText(t('rubbellos.scratch'), FIELD.w/2, FIELD.h/2);
 }
 
 const scene = {
-  title: 'Dein Rubbellos', subtitle: 'Rubbel das Feld mit dem Finger frei – was steckt dahinter?', emoji: '🎟️',
+  title: t('rubbellos.title'), subtitle: t('rubbellos.sub'), emoji: '🎟️',
   accent: '#ffd166', button: '#d62828', bg: '#5a189a',
   init(ctx){ this.restart(ctx); },
   restart(ctx){ makeLayer(); cleared = 0; lastP = null; conf = null; done = false; checkT = 0; },
@@ -68,7 +68,7 @@ const scene = {
     if(!done) g.drawImage(layer, FIELD.x, FIELD.y);
     else { const k = (ctx.t - doneT); if(k < 1){ g.globalAlpha = 1 - k; g.drawImage(layer, FIELD.x, FIELD.y + k*k*400); g.globalAlpha = 1; } }
     if(conf) drawConfetti(g, conf, 1/60);
-    if(!done && cleared < .05 && ctx.t > 1){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*4); bigText(g, '👆 Rubbeln!', FIELD.x + FIELD.w/2, FIELD.y + FIELD.h + 50, 38, '#fff', 'rgba(60,10,90,.85)'); g.globalAlpha = 1; }
+    if(!done && cleared < .05 && ctx.t > 1){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*4); bigText(g, t('rubbellos.hint'), FIELD.x + FIELD.w/2, FIELD.y + FIELD.h + 50, 38, '#fff', 'rgba(60,10,90,.85)'); g.globalAlpha = 1; }
   }
 };
 startCard(scene);

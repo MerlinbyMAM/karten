@@ -1,17 +1,17 @@
 // Willkommen Baby: Wolken bedecken den Himmel. Wolken wegwischen/antippen
 // -> darunter erscheinen Name, Datum, Gewicht/Größe (Parameter). Danach
 // steigen Ballons auf, Sterne funkeln, Brahms-Wiegenlied (gemeinfrei).
-import { startCard, bigText, rnd } from '../core/card.js';
+import { startCard, t, bigText, rnd } from '../core/card.js';
 
 const P = new URLSearchParams(location.search);
-const NAME = P.get('name') || 'Hallo, Baby!';
+const NAME = P.get('name') || t('baby.hello');
 const INFO = [P.get('datum'), [P.get('gewicht'), P.get('groesse')].filter(Boolean).join(' · ')].filter(Boolean);
 
 let clouds, done, t0, balloons, sparks;
 const AREA = { x: 60, y: 168, w: 480, h: 220 };
 
 const scene = {
-  title: 'Willkommen, kleiner Schatz', subtitle: 'Schiebe die Wolken weg – wer ist da angekommen?', emoji: '🍼',
+  title: t('baby.title'), subtitle: t('baby.sub'), emoji: '🍼',
   accent: '#fbe7c6', button: '#7aa5a0', bg: '#3d5a80',
   init(ctx){ this.restart(ctx); },
   restart(ctx){
@@ -57,7 +57,7 @@ const scene = {
     g.beginPath(); g.roundRect ? g.roundRect(AREA.x, AREA.y, AREA.w, AREA.h, 40) : g.rect(AREA.x, AREA.y, AREA.w, AREA.h); g.fill();
     bigText(g, NAME, 300, AREA.y + 70, NAME.length > 12 ? 50 : 64, '#c98b6b', 'rgba(255,255,255,.95)');
     INFO.forEach((l, i) => bigText(g, l, 300, AREA.y + 138 + i*46, 32, '#6b8f8a', 'rgba(255,255,255,.95)'));
-    if(!INFO.length) bigText(g, 'Herzlich willkommen!', 300, AREA.y + 145, 36, '#6b8f8a', 'rgba(255,255,255,.95)');
+    if(!INFO.length) bigText(g, t('baby.welcome'), 300, AREA.y + 145, 36, '#6b8f8a', 'rgba(255,255,255,.95)');
     for(const s of sparks){ g.fillStyle = `rgba(255,215,120,${s.life})`; g.font = `${18 + 10*s.life}px serif`; g.textAlign = 'center'; g.fillText('✦', s.x, s.y); }
     // Wolken
     for(const c of clouds){
@@ -70,7 +70,7 @@ const scene = {
       g.fillStyle = b.c; g.beginPath(); g.ellipse(b.x, b.y, 28, 36, 0, 0, 7); g.fill();
       g.fillStyle = 'rgba(255,255,255,.5)'; g.beginPath(); g.ellipse(b.x - 9, b.y - 12, 6, 10, -.4, 0, 7); g.fill();
     }
-    if(!done && ctx.t < 5){ g.globalAlpha = Math.min(1, 5 - ctx.t); bigText(g, 'Wolken wegwischen!', 300, 440, 38, '#fff', 'rgba(70,110,130,.85)'); g.globalAlpha = 1; }
+    if(!done && ctx.t < 5){ g.globalAlpha = Math.min(1, 5 - ctx.t); bigText(g, t('baby.hint'), 300, 440, 38, '#fff', 'rgba(70,110,130,.85)'); g.globalAlpha = 1; }
   }
 };
 startCard(scene);

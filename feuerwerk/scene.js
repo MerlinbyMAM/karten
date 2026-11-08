@@ -1,9 +1,10 @@
 // Feuerwerk: Antippen des Himmels startet eine Rakete von der Skyline, die am
 // Tipp-Punkt explodiert. Verschiedene Formen (Kugel, Ring, Herz, Weide).
 // Nach 8 Raketen: großes Finale + Text (?text=, Standard "Zeit zu feiern!").
-import { startCard, bigText, rnd } from '../core/card.js';
+import { startCard, t, bigText, rnd } from '../core/card.js';
 
-const MSG = new URLSearchParams(location.search).get('text') || 'Glückwunsch!';
+const QP = new URLSearchParams(location.search), QN = QP.get('name');
+const MSG = QP.get('text') || (QN ? t('feuerwerk.msgN', {name: QN}) : t('feuerwerk.msg'));
 const COLS = ['#ffd166','#ef476f','#06d6a0','#118ab2','#f78c6b','#c77dff','#ffffff'];
 let rockets, parts, count, finale, finT, msgT;
 
@@ -21,7 +22,7 @@ function boom(x, y, ctx, kind){
 }
 
 const scene = {
-  title: 'Zeit zu feiern!', subtitle: 'Tippe in den Himmel und zünde dein eigenes Feuerwerk.', emoji: '🎆',
+  title: t('feuerwerk.title'), subtitle: t('feuerwerk.sub'), emoji: '🎆',
   accent: '#ffd166', button: '#3a0ca3', bg: '#0b132b',
   init(ctx){ this.restart(ctx); },
   restart(ctx){ rockets = []; parts = []; count = 0; finale = false; finT = 0; msgT = -1; },
@@ -59,7 +60,7 @@ const scene = {
       g.beginPath(); g.arc(p.x, p.y, p.small ? 2 : 3*a + 1, 0, 7); g.fill();
     }
     g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
-    if(count === 0 && ctx.t < 6){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*4); bigText(g, 'Tipp in den Himmel!', 300, 440, 42, '#fff', 'rgba(10,20,60,.85)'); g.globalAlpha = 1; }
+    if(count === 0 && ctx.t < 6){ g.globalAlpha = .6 + .4*Math.sin(ctx.t*4); bigText(g, t('feuerwerk.hint'), 300, 440, 42, '#fff', 'rgba(10,20,60,.85)'); g.globalAlpha = 1; }
     else if(!finale){ bigText(g, `${count} / 8`, 540, 600, 30, '#ffd166', 'rgba(10,20,60,.85)'); }
     if(msgT >= 0){ const a = Math.min(1, (ctx.t - msgT)/.8); g.globalAlpha = a; bigText(g, MSG, 300, 420, MSG.length > 14 ? 46 : 60, '#ffd166', 'rgba(10,20,60,.9)'); g.globalAlpha = 1; }
   }

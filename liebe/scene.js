@@ -1,17 +1,17 @@
 // Liebesbrief: Antippen des Siegels -> Siegel bricht, Umschlag öffnet sich,
 // Brief gleitet heraus mit persönlicher Nachricht (?text=, ?von=), Rosenblätter regnen.
 // Herzen tippen = kleine Herz-Explosion.
-import { startCard, bigText, wrapText, fitLines, rnd } from '../core/card.js';
+import { startCard, t, bigText, wrapText, fitLines, rnd } from '../core/card.js';
 import { ENV } from './data.js';   // Umschlag-Box {x,y,w,h} in 600x900-Koordinaten
 
 const P = new URLSearchParams(location.search);
-const TEXT = P.get('text') || 'Du bist das Schönste, was mir je passiert ist. Ich liebe dich!';
+const TEXT = P.get('text') || (P.get('name') ? P.get('name') + ', ' : '') + t('liebe.msg');
 const VON = P.get('von') || '';
 
 let phase, t0, petals, hearts, crack;
 
 const scene = {
-  title: 'Für dich, mein Schatz', subtitle: 'Tippe auf das Siegel und öffne den Brief.', emoji: '💌',
+  title: t('liebe.title'), subtitle: t('liebe.sub'), emoji: '💌',
   accent: '#ffd1dc', button: '#a4161a', bg: '#3a0d14',
   init(ctx){ this.restart(ctx); },
   restart(ctx){ phase = 'closed'; t0 = 0; petals = []; hearts = []; crack = 0; },
@@ -43,7 +43,7 @@ const scene = {
       const pulse = 1 + .08*Math.sin(ctx.t*4);
       g.strokeStyle = `rgba(255,220,120,${.5 + .4*Math.sin(ctx.t*4)})`; g.lineWidth = 4;
       g.beginPath(); g.arc(sx, sy, 48*pulse, 0, 7); g.stroke();
-      bigText(g, 'Tipp aufs Siegel', 300, 700 + crack*4*Math.sin(ctx.t*60), 38, '#fff', 'rgba(90,10,20,.85)');
+      bigText(g, t('liebe.hint'), 300, 700 + crack*4*Math.sin(ctx.t*60), 38, '#fff', 'rgba(90,10,20,.85)');
     } else {
       const k = Math.min(1, (ctx.t - t0)/1.6), e = 1 - Math.pow(1 - k, 3);
       // dunkle Bühne
@@ -56,7 +56,7 @@ const scene = {
       if(k > .7){
         g.globalAlpha = Math.min(1, (k - .7)/.3);
         g.fillStyle = '#a4161a'; g.font = 'italic 700 40px Georgia, serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-        g.fillText('Mein Schatz,', cx, cy - h/2 + 70);
+        g.fillText(t('liebe.dear'), cx, cy - h/2 + 70);
         g.font = 'italic 30px Georgia, serif'; g.fillStyle = '#5a1a1a';
         const shown = TEXT.slice(0, Math.floor((ctx.t - t0 - 1.2)*22));
         // Nachricht mittig zwischen Anrede und Herz setzen

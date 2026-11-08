@@ -18,7 +18,12 @@
      danach nur Quelle wechseln. Keine Handy-Sprachausgabe.
    ===================================================================== */
 
+import { t, LANG } from './i18n.js';
+export { t, LANG, NAME } from './i18n.js';
 const $ = id => document.getElementById(id);
+// Kartenbild in der passenden Sprache (karte_en.jpg …), sonst das deutsche karte.jpg
+let KARTE = 'karte.jpg';
+const karteReady = (async () => { if(LANG === 'de') return; try{ const r = await fetch('karte_' + LANG + '.jpg', {method: 'HEAD'}); if(r.ok){ KARTE = 'karte_' + LANG + '.jpg'; const f = document.getElementById('fbg'); if(f) f.src = KARTE; } }catch(e){} })();
 const W = 600, H = 900;
 
 export function startCard(scene){
@@ -45,19 +50,19 @@ export function startCard(scene){
   document.body.insertAdjacentHTML('beforeend', `
   <div id="ar"></div>
   <div id="flat"><img id="fbg" src="karte.jpg" alt=""></div>
-  <div id="hint">📷 Halt die Kamera auf deine Karte</div>
-  <button id="again">🔁 Nochmal</button>
+  <div id="hint">${t('ui.cam')}</div>
+  <button id="again">${t('ui.again')}</button>
   <div class="scr" id="start">
     <div style="font-size:3em">${scene.emoji||'✨'}</div>
     <h1>${scene.title}</h1>
     <h2>${scene.subtitle||''}</h2>
-    <button id="btnAR">📷 Karte zum Leben erwecken</button>
-    <p class="small">Danach die Kamera auf die Karte halten – Ton an!</p>
-    <button class="alt" id="btnFlat">Ohne Kamera ansehen</button>
+    <button id="btnAR">${t('ui.ar')}</button>
+    <p class="small">${t('ui.arHint')}</p>
+    <button class="alt" id="btnFlat">${t('ui.flat')}</button>
   </div>
   <div class="scr" id="loading" style="display:none">
     <div style="font-size:2.6em">${scene.emoji||'✨'}</div>
-    <h2 id="loadText">Gleich geht's los …</h2>
+    <h2 id="loadText">${t('ui.loading')}</h2>
     <div class="bar"><div id="loadBar"></div></div>
   </div>`);
 
@@ -196,15 +201,15 @@ export function startCard(scene){
       let url = null;
       try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
       if(!url){
-        txt.textContent = 'Lerne deine Karte kennen …';
-        const im = new Image(); im.src = 'karte.jpg'; await im.decode();
+        txt.textContent = t('ui.learn');
+        await karteReady; const im = new Image(); im.src = KARTE; await im.decode();
         const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
         const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
         const c = new Compiler();
         await c.compileImageTargets([im], p => { bar.style.width = Math.round(p*.8)+'%'; });
         url = URL.createObjectURL(new Blob([await c.exportData()]));
       }
-      txt.textContent = 'Kamera wird gestartet …'; bar.style.width = '90%';
+      txt.textContent = t('ui.camStart'); bar.style.width = '90%';
       const THREE = await import('three');
       const { MindARThree } = await import('mindar-image-three');
       const mind = new MindARThree({ container: $('ar'), imageTargetSrc: url, uiScanning:'no', uiLoading:'no', uiError:'no', filterMinCF:0.0001, filterBeta:0.001 });
@@ -235,16 +240,16 @@ export function startCard(scene){
         scene.onFound && scene.onFound(ctx);
       };
       anchor.onTargetLost = () => {
-        ctx.visible = false; ctx.hint('📷 Karte wieder ins Bild halten');
+        ctx.visible = false; ctx.hint(t('ui.camAgain'));
         scene.onLost && scene.onLost(ctx);
       };
       await preload;
       await mind.start();
       renderer.setAnimationLoop(() => renderer.render(s3, camera));
-      $('loading').style.display = 'none'; ctx.hint('📷 Halt die Kamera auf deine Karte');
+      $('loading').style.display = 'none'; ctx.hint(t('ui.cam'));
     }catch(e){
       console.error(e);
-      startFlat('Kamera klappt hier nicht – dann ohne. Ton an!');
+      startFlat(t('ui.noCam'));
     }
   };
   requestAnimationFrame(loop);

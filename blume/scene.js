@@ -1,10 +1,10 @@
 // Von Herzen: Antippen der Knospe -> die Rose erblüht (Video), danach
 // schweben Blütenblätter und Schmetterlinge, die persönliche Botschaft
 // erscheint (?text=, ?von=). Antippen danach = Blütenblatt-Wirbel.
-import { startCard, bigText, wrapText, rnd } from '../core/card.js';
+import { startCard, t, bigText, wrapText, rnd } from '../core/card.js';
 
 const P = new URLSearchParams(location.search);
-const TEXT = P.get('text') || 'Schön, dass es dich gibt.';
+const TEXT = P.get('text') || (P.get('name') ? t('blume.msgN', {name: P.get('name')}) : t('blume.msg'));
 const VON = P.get('von');
 
 let phase, t0, petals, flies;
@@ -38,7 +38,7 @@ function drawRose(g, x, y, k, t){
 }
 
 const scene = {
-  title: 'Von Herzen', subtitle: 'Tippe auf die Knospe und schau, was passiert.', emoji: '🌹',
+  title: t('blume.title'), subtitle: t('blume.sub'), emoji: '🌹',
   accent: '#f4acb7', button: '#b5838d', bg: '#4a3a3a',
   // Ohne Video: die Rose erblüht als gemalte Animation über der Knospe.
   // Liegt später ein clip.mp4 bei, kann VIDEO auf true gesetzt werden.
@@ -80,7 +80,7 @@ const scene = {
     if(phase === 'bud'){
       g.strokeStyle = `rgba(255,255,255,${.4 + .4*Math.sin(ctx.t*3)})`; g.lineWidth = 3;
       g.beginPath(); g.arc(BUD.x, BUD.y, 60 + 6*Math.sin(ctx.t*3), 0, 7); g.stroke();
-      bigText(g, 'Tipp auf die Knospe', 300, 520, 34, '#fff', 'rgba(120,70,80,.85)');
+      bigText(g, t('blume.hint'), 300, 520, 34, '#fff', 'rgba(120,70,80,.85)');
     }
     for(const p of petals){ g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = 'rgba(232,140,160,.9)'; g.beginPath(); g.ellipse(0, 0, p.s*.6, p.s, 0, 0, 7); g.fill(); g.restore(); }
     for(const f of flies){

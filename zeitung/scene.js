@@ -1,18 +1,18 @@
 // Der Tagesbote: Die Zeitung erwacht – die Bilder bewegen sich (Video in Schleife),
 // unten im freien Feld tippt eine magische Schreibfeder die persönliche
 // Meldung (?name=, ?text=). Antippen = goldene Funken + Glöckchen.
-import { startCard, bigText, wrapText, rnd } from '../core/card.js';
+import { startCard, t, bigText, wrapText, rnd } from '../core/card.js';
 import { BOX } from './data.js';   // freies Pergament-Feld unten {x,y,w,h} in 600x900
 
 const P = new URLSearchParams(location.search);
 const NAME = P.get('name');
-const HEAD = NAME ? `${NAME} hat Geburtstag!` : 'Heute wird gefeiert!';
-const TEXT = P.get('text') || 'Augenzeugen berichten von Kuchen, Kerzen und bester Laune. Der Tagesbote gratuliert von Herzen!';
+const HEAD = NAME ? t('zeitung.headN', {name: NAME}) : t('zeitung.head');
+const TEXT = P.get('text') || t('zeitung.text');
 
 let t0, sparks, chars, lastTick;
 
 const scene = {
-  title: 'Der Tagesbote', subtitle: 'Extrablatt! Halte die Kamera auf die Zeitung – und sieh, was passiert.', emoji: '📜',
+  title: t('zeitung.title'), subtitle: t('zeitung.sub'), emoji: '📜',
   accent: '#e9c46a', button: '#6b4226', bg: '#3b2a1a',
   video: true, firstVideo: 'clip.mp4',
   init(ctx){ this.restart(ctx); },

@@ -1,7 +1,7 @@
 // Weltraum-Mission: Das Raumschiff fliegt unten über die Karte und schießt automatisch.
 // Finger bewegen = steuern. Meteoriten abschießen, Sterne einsammeln: jeder Stern macht die
 // Waffe stärker (bis Stufe 5). Ein Meteor-Treffer kostet ein Leben – nach drei: Game Over.
-import { startCard, bigText, rnd, confetti, drawConfetti } from '../core/card.js';
+import { startCard, t as tr, bigText, rnd, confetti, drawConfetti } from '../core/card.js';
 
 const P = new URLSearchParams(location.search);
 const NAME = P.get('name');
@@ -20,7 +20,7 @@ const WEAPON = [                                         // Stufe: [Feuerpause, 
 function boom(x, y, n, cols, sp = 160){ for(let i=0;i<n;i++){ const a = rnd(0, 6.28), v = rnd(40, sp); booms.push({ x, y, vx: Math.cos(a)*v, vy: Math.sin(a)*v, life: rnd(.4, .9), c: cols[i % cols.length], r: rnd(2, 5) }); } }
 
 const scene = {
-  title: 'Ab ins All!', subtitle: 'Steuere das Raumschiff mit dem Finger, schieß Meteoriten ab und sammle Sterne – jeder Stern macht deine Waffe stärker!', emoji: '🚀',
+  title: tr('weltraum.title'), subtitle: tr('weltraum.sub'), emoji: '🚀',
   accent: '#9bf6ff', button: '#7209b7', bg: '#10002b',
   init(ctx){ this.restart(ctx); },
   restart(ctx){
@@ -105,7 +105,7 @@ const scene = {
     g.font = 'bold 32px system-ui, sans-serif'; g.textBaseline = 'middle';
     g.fillStyle = '#9bf6ff'; g.textAlign = 'left'; g.fillText(`★ ${score}`, 20, 34);
     g.textAlign = 'center'; g.fillStyle = flash > 0 ? '#ffd60a' : '#c77dff'; g.font = 'bold 24px system-ui, sans-serif';
-    g.fillText('Waffe ' + '▮'.repeat(level) + '▯'.repeat(5 - level), 300, 34);
+    g.fillText(tr('weltraum.weapon') + ' ' + '▮'.repeat(level) + '▯'.repeat(5 - level), 300, 34);
     g.textAlign = 'right'; g.font = '30px serif'; g.fillStyle = '#ef233c';
     g.fillText('❤'.repeat(Math.max(0, lives)) + '♡'.repeat(Math.max(0, LIVES - lives)), 580, 34);
     // Schüsse
@@ -152,16 +152,16 @@ const scene = {
       g.fillStyle = '#48cae4'; g.beginPath(); g.arc(x, y - 4, 7, 0, 7); g.fill();
       if(flash > 0){ g.strokeStyle = `rgba(255,214,10,${flash*2})`; g.lineWidth = 4; g.beginPath(); g.arc(x, y, 50 - flash*40, 0, 7); g.stroke(); }
     }
-    if(!over && ctx.t < 4){ g.globalAlpha = Math.min(1, 4 - ctx.t); bigText(g, 'Finger bewegen = steuern', 300, 450, 36, '#fff', 'rgba(16,0,43,.85)'); g.globalAlpha = 1; }
-    if(!over && wreck > 0 && lives > 0) bigText(g, lives === 1 ? 'Letztes Leben!' : `Noch ${lives} Leben`, 300, 470, 44, '#ff6b6b', 'rgba(16,0,43,.9)');
+    if(!over && ctx.t < 4){ g.globalAlpha = Math.min(1, 4 - ctx.t); bigText(g, tr('weltraum.hint'), 300, 450, 36, '#fff', 'rgba(16,0,43,.85)'); g.globalAlpha = 1; }
+    if(!over && wreck > 0 && lives > 0) bigText(g, lives === 1 ? tr('weltraum.last') : tr('weltraum.lives', {n: lives}), 300, 470, 44, '#ff6b6b', 'rgba(16,0,43,.9)');
     if(over){
       g.fillStyle = 'rgba(16,0,43,.55)'; g.fillRect(0, 64, 600, 836);
       if(conf) drawConfetti(g, conf, 1/60);
       bigText(g, 'GAME OVER', 300, 300, 70, '#ef233c', 'rgba(16,0,43,.95)');
-      const rank = score >= 80 ? 'Kommandant!' : score >= 40 ? 'Super-Pilot!' : 'Gut gemacht!';
+      const rank = score >= 80 ? tr('weltraum.r1') : score >= 40 ? tr('weltraum.r2') : tr('weltraum.r3');
       bigText(g, rank, 300, 390, 54, '#ffd60a', 'rgba(16,0,43,.9)');
-      bigText(g, `${score} Punkte` + (best > score ? ` · Rekord ${best}` : ''), 300, 470, 40, '#9bf6ff', 'rgba(16,0,43,.9)');
-      if(NAME) bigText(g, `Alles Gute, ${NAME}!`, 300, 560, 44, '#fff', 'rgba(16,0,43,.9)');
+      bigText(g, tr('weltraum.pts', {n: score}) + (best > score ? ' · ' + tr('weltraum.rec', {n: best}) : ''), 300, 470, 40, '#9bf6ff', 'rgba(16,0,43,.9)');
+      if(NAME) bigText(g, tr('weltraum.bday', {name: NAME}), 300, 560, 44, '#fff', 'rgba(16,0,43,.9)');
     }
   }
 };

@@ -35,88 +35,97 @@ footer{text-align:center;padding:30px 20px 50px;font-size:.85em;color:#7a6250}
 .link{font-size:.75em;word-break:break-all;color:#7a6250;background:#f6efe4;padding:8px 10px;border-radius:8px;width:100%}
 .x{position:absolute;top:8px;right:12px;background:none!important;border:none!important;color:#7a6250!important;font-size:1.6em!important;padding:0 6px!important}
 .hint{font-size:.8em;color:#7a6250;line-height:1.4}
+.lsel{position:absolute;top:14px;right:18px;font-size:.85em;color:#7a6250}
+.lsel select,.box select{font:inherit;padding:6px 8px;border:1px solid #d8c8b4;border-radius:8px;background:#fffdf9}
+.box select{width:100%}
+header{position:relative}
 @media (max-width:640px){.box{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
-  <h1>Lebendige Karten</h1>
-  <p>Hochwertig gedruckte Grußkarten mit verstecktem QR-Code: Handy drauf halten – und die Karte erwacht zum Leben, mit Animation, Musik und kleinem Spiel. Mit „Personalisieren“ trägst du einen oder zwei Namen ein und bekommst die fertige Druckdatei mit persönlichem QR-Code.</p>
+  <div class="lsel"><label for="ls" id="lsl"></label> <select id="ls"></select></div>
+  <h1 id="th1"></h1>
+  <p id="tin"></p>
 </header>
 <div class="grid" id="g"></div>
-<footer>© MAM · Munich AI Media · Tipp: „Ohne Kamera ansehen“ zeigt jede Karte auch direkt am Bildschirm.</footer>
+<footer id="tft"></footer>
 
 <div class="dlg" id="dlg"><div class="box">
   <button class="x" id="dx" aria-label="Schließen">×</button>
   <h3 id="dt"></h3>
   <div>
-    <label for="n1">Name</label><input id="n1" maxlength="24" placeholder="z. B. Anna">
-    <label for="n2">Zweiter Name (optional)</label><input id="n2" maxlength="24" placeholder="z. B. Tom">
+    <label for="cl" id="lcl"></label><select id="cl"></select>
+    <label for="n1" id="ln1"></label><input id="n1" maxlength="24">
+    <label for="n2" id="ln2"></label><input id="n2" maxlength="24">
     <div id="ex"></div>
-    <p class="hint">Die Namen erscheinen in der lebendigen Karte. Der QR-Code auf der Druckdatei führt direkt zu dieser persönlichen Version.</p>
+    <p class="hint" id="thint"></p>
   </div>
   <div class="prev">
     <canvas id="pv" width="576" height="864"></canvas>
     <div class="link" id="lk"></div>
     <div class="btns">
-      <a class="btn" id="open" target="_blank">Karte ansehen</a>
-      <button id="pdf">Druck-PDF laden</button>
-      <button class="alt" id="cp">Link kopieren</button>
+      <a class="btn" id="open" target="_blank"></a>
+      <button id="pdf"></button>
+      <button class="alt" id="cp"></button>
     </div>
     <p class="hint" id="st"></p>
   </div>
 </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="katalog_text.js"></script>
 <script>
 const BASE = location.href.replace(/[#?].*$/, '').replace(/index\.html$/, '').replace(/\/?$/, '/');
 const both = (a, b) => a && b ? a + ' & ' + b : (a || b || '');
-// [Ordner, Anlass, Titel, Beschreibung, Beispiel, Zusatzfelder, Parameter aus Eingaben, QR-Position]
+// [Ordner, Beispiel, Zusatzfelder [Parameter, Text-Schlüssel, mehrzeilig], Parameter aus Eingaben, QR-Position]
 const K = [
- ['kaetzchen','Für dich / Allgemein','Kätzchen mit Ball','Das Kätzchen schießt den Ball aus der Karte – zurückwerfen und es spielt glücklich weiter.','?name=Anna',
-   [], v => ({ name: v.N })],
- ['max','Geburtstag / Bayern','Ois Guade – Wiesn-Spiel','Mit dem Maßkrug Brezn, Bier und Herzerl fangen – das Lebkuchenherz trägt den eigenen Namen.','?name=Max&datum=7.11.2026',
-   [['datum','Datum (steht unten auf dem Krug)','z. B. 7.11.2026']], v => ({ name: v.N, datum: v.datum }), [.5, .375]],
- ['torte','Geburtstag','Puste die Kerzen aus','Die Torte dreht sich – alle Kerzen auspusten, bevor die Zeit abläuft. Dann Konfetti und „Happy Birthday“.','?name=Anna',
-   [], v => ({ name: v.N })],
- ['ballons','Geburtstag / Kinder','Ballon-Platzen','20 Sekunden Ballons zerplatzen, goldene zählen dreifach.','?text=Alles%20Gute%20Paul!',
-   [], v => ({ text: v.N && 'Alles Gute, ' + v.N + '!' })],
- ['rubbellos','Gutschein / Geschenk','Rubbellos','Feld freirubbeln – darunter steckt das persönliche Geschenk.','?text=Du%20hast%20gewonnen:&text2=Ein%20Wellness-Wochenende!',
-   [['text2','Das Geschenk unter dem Rubbelfeld','z. B. Ein Wellness-Wochenende!']], v => ({ text: v.N && v.N + ', du hast gewonnen:', text2: v.text2 })],
- ['weihnacht','Weihnachten','Schneegestöber im Dorf','Antippen lässt es schneien, beim fünften Mal leuchtet der Baum – mit Jingle Bells.','?text=Frohe%20Festtage!',
-   [], v => ({ text: v.N && 'Frohe Weihnachten, ' + v.N + '!' })],
- ['liebe','Liebe / Valentinstag','Der Liebesbrief','Siegel antippen – der Brief öffnet sich, Rosenblätter regnen, die Nachricht schreibt sich.','?text=Ich%20liebe%20dich!&von=Max',
-   [['nachricht','Liebesbotschaft','Du bist das Schönste, was mir je passiert ist.','area'],['von','Von','z. B. Dein Max']], v => ({ text: v.nachricht ? (v.N ? v.N + ', ' : '') + v.nachricht : v.N && v.N + ', du bist das Schönste, was mir je passiert ist. Ich liebe dich!', von: v.von })],
- ['baby','Geburt / Taufe','Willkommen, kleiner Schatz','Wolken wegwischen – Name, Datum und Gewicht erscheinen, Wiegenlied.','?name=Lena&datum=3.%20M%C3%A4rz%202026&gewicht=3250%20g',
-   [['datum','Geburtsdatum','z. B. 3. März 2026'],['gewicht','Gewicht','z. B. 3250 g'],['groesse','Größe','z. B. 51 cm']], v => ({ name: v.N, datum: v.datum, gewicht: v.gewicht, groesse: v.groesse })],
- ['feuerwerk','Silvester / Erfolg / Jubiläum','Feuerwerk zünden','Jeder Tipp eine Rakete, nach acht das große Finale.','?text=Frohes%20neues%20Jahr!',
-   [['gruss','Gruß','Glückwunsch / Frohes neues Jahr']], v => { const gr = (v.gruss || '').replace(/[\s!.,;:]+$/, ''); return { text: (gr || v.N) && (gr || 'Glückwunsch') + (v.N ? ', ' + v.N : '') + '!' }; }],
- ['weltraum','Kinder / Geburtstag','Weltraum-Mission','Raumschiff steuern, Meteoriten abschießen, Sterne sammeln.','?name=Leo',
-   [], v => ({ name: v.N })],
- ['blume','Danke / Muttertag / Trost','Die Rose erblüht','Knospe antippen – die Rose blüht auf, Schmetterlinge und eine Botschaft.','?text=Danke%20f%C3%BCr%20alles!&von=Deine%20Tochter',
-   [['nachricht','Botschaft','z. B. Danke für alles!','area'],['von','Von','z. B. Deine Tochter']], v => ({ text: v.nachricht ? (v.N ? v.N + ', ' : '') + v.nachricht : v.N && 'Schön, dass es dich gibt, ' + v.N + '.', von: v.von }), [.84, .975]],
- ['gluecksrad','Gutschein / Geburtstag','Glücksrad','Am Rad drehen – die Preise bestimmt der Schenkende selbst.','?preise=Kino|Pizza|Massage|Ausflug|Fr%C3%BChst%C3%BCck|Wunsch%20frei',
-   [['preise','Preise (bis 8, mit | trennen)','Kino|Pizza|Massage|Ausflug']], v => ({ name: v.N, preise: v.preise })],
- ['zeitung','Geburtstag / Abschied / Spaß','Der Tagesbote','Die Zeitung erwacht: bewegte Bilder, die Feder schreibt die persönliche Meldung.','?name=Oma%20Gerda',
-   [['meldung','Die Meldung','Augenzeugen berichten von Kuchen, Kerzen und bester Laune …','area']], v => ({ name: v.N, text: v.meldung }), [.82, .965]],
- ['hochzeit','Hochzeit / Jahrestag','Ringe zusammenführen','Die Ringe vereinen – Glocken, Tauben, Blütenregen, Namen und Datum.','?namen=Anna%20%26%20Tom&datum=12.%20Juni%202026',
-   [['datum','Datum','z. B. 12. Juni 2026']], v => ({ namen: v.N, datum: v.datum })],
+ ['kaetzchen', '?name=Anna', [], v => ({ name: v.N })],
+ ['max', '?name=Max&datum=7.11.2026', [['datum','datumMax']], v => ({ name: v.N, datum: v.datum }), [.5, .375]],
+ ['torte', '?name=Anna', [], v => ({ name: v.N })],
+ ['ballons', '?name=Paul', [], v => ({ name: v.N })],
+ ['rubbellos', '?name=Anna&text2=Ein%20Wellness-Wochenende!', [['text2','text2']], v => ({ name: v.N, text2: v.text2 })],
+ ['weihnacht', '?name=Familie%20M%C3%BCller', [], v => ({ name: v.N })],
+ ['liebe', '?text=Ich%20liebe%20dich!&von=Max', [['nachricht','nachricht',1],['von','von']], v => v.nachricht ? { text: (v.N ? v.N + ', ' : '') + v.nachricht, von: v.von } : { name: v.N, von: v.von }],
+ ['baby', '?name=Lena&datum=3.%20M%C3%A4rz%202026&gewicht=3250%20g', [['datum','geburt'],['gewicht','gewicht'],['groesse','groesse']], v => ({ name: v.N, datum: v.datum, gewicht: v.gewicht, groesse: v.groesse })],
+ ['feuerwerk', '?name=Anna%20%26%20Tom', [['gruss','gruss']], v => { const gr = (v.gruss || '').replace(/[\s!.,;:]+$/, ''); return gr ? { text: gr + (v.N ? ', ' + v.N : '') + '!' } : { name: v.N }; }],
+ ['weltraum', '?name=Leo', [], v => ({ name: v.N })],
+ ['blume', '?text=Danke%20f%C3%BCr%20alles!&von=Deine%20Tochter', [['nachricht','nachricht',1],['von','von']], v => v.nachricht ? { text: (v.N ? v.N + ', ' : '') + v.nachricht, von: v.von } : { name: v.N, von: v.von }, [.84, .975]],
+ ['gluecksrad', '?preise=Kino|Pizza|Massage|Ausflug|Fr%C3%BChst%C3%BCck|Wunsch%20frei', [['preise','preise']], v => ({ name: v.N, preise: v.preise })],
+ ['zeitung', '?name=Oma%20Gerda', [['meldung','meldung',1]], v => ({ name: v.N, text: v.meldung }), [.82, .965]],
+ ['hochzeit', '?namen=Anna%20%26%20Tom&datum=12.%20Juni%202026', [['datum','datum']], v => ({ namen: v.N, datum: v.datum })],
 ];
 const $ = id => document.getElementById(id);
-$('g').innerHTML = K.map(([d,t,h,p,q], i) => `
- <div class="card"><img loading="lazy" src="${d}/karte.jpg" alt="${h}">
+const LS = Object.keys(CT);
+let UL = new URLSearchParams(location.search).get('lang');
+if(!CT[UL]){ UL = 'en'; for(const l of (navigator.languages || [navigator.language])){ const k = String(l).slice(0, 2).toLowerCase(); if(CT[k]){ UL = k; break; } } }
+const T = () => CT[UL];
+function drawUI(){
+  document.documentElement.lang = UL;
+  $('ls').innerHTML = LS.map(l => `<option value="${l}"${l === UL ? ' selected' : ''}>${CT[l].name}</option>`).join('');
+  $('lsl').textContent = T().lang; $('th1').textContent = T().h1; $('tin').textContent = T().intro; $('tft').textContent = T().footer;
+  $('lcl').textContent = T().cardLang; $('ln1').textContent = T().n1; $('ln2').textContent = T().n2; $('n1').placeholder = T().p1; $('n2').placeholder = T().p2;
+  $('thint').textContent = T().hint; $('open').textContent = T().view; $('pdf').textContent = T().pdf; $('cp').textContent = T().copy;
+  $('cl').innerHTML = LS.map(l => `<option value="${l}">${CT[l].name}</option>`).join('');
+  $('g').innerHTML = K.map(([d, q], i) => { const [t, h, p] = T().CARDS[d];
+    return `<div class="card"><img loading="lazy" src="${d}/karte${UL === 'de' ? '' : '_' + UL}.jpg" onerror="this.onerror=null;this.src='${d}/karte.jpg'" alt="${h}">
  <div class="b"><div class="t">${t}</div><h2>${h}</h2><p>${p}</p>
- <div class="btns"><a href="${d}/">Karte öffnen</a><button onclick="openP(${i})">Personalisieren</button>
- ${q ? `<a class="alt" href="${d}/${q}">Beispiel</a>` : ''}</div></div></div>`).join('');
+ <div class="btns"><a href="${d}/?lang=${UL}">${T().open}</a><button onclick="openP(${i})">${T().pers}</button>
+ <a class="alt" href="${d}/${q}&lang=${UL}">${T().ex}</a></div></div></div>`; }).join('');
+}
+$('ls').onchange = () => { UL = $('ls').value; history.replaceState(null, '', '?lang=' + UL); drawUI(); };
+drawUI();
 
 /* ---------- Personalisieren ---------- */
 let cur = null, baseImg = null;
 const cache = {};
-async function loadBase(d){
-  if(cache[d]) return cache[d];
+async function loadBase(d, lang){
+  const key = d + '_' + lang;
+  if(cache[key]) return cache[key];
   let blob;
-  try{                                           // Druckbild (hohe Auflösung) aus dem Druck-PDF holen
-    const b = new Uint8Array(await (await fetch(`druck/Karte_${d}_13x18.pdf`)).arrayBuffer());
+  const pdfUrl = async () => { if(lang !== 'de'){ const u = `druck/${lang}/Karte_${d}_13x18.pdf`; try{ if((await fetch(u, {method: 'HEAD'})).ok) return u; }catch(e){} } return `druck/Karte_${d}_13x18.pdf`; };
+  try{                                           // Druckbild (hohe Auflösung) aus dem Druck-PDF holen – in der Sprache der Karte, falls vorhanden
+    const b = new Uint8Array(await (await fetch(await pdfUrl())).arrayBuffer());
     const txt = new TextDecoder('latin1').decode(b);
     const m = /\/DCTDecode \/Length (\d+) >>\nstream\n/.exec(txt);
     if(!m) throw 0;
@@ -124,16 +133,17 @@ async function loadBase(d){
     blob = new Blob([b.slice(start, start + +m[1])], {type: 'image/jpeg'});
   }catch(e){ blob = await (await fetch(`${d}/karte.jpg`)).blob(); }
   const im = new Image(); im.src = URL.createObjectURL(blob); await im.decode();
-  return cache[d] = im;
+  return cache[key] = im;
 }
 function values(){
   const v = { N: both($('n1').value.trim(), $('n2').value.trim()) };
-  for(const [k] of cur[5]) v[k] = ($('x_' + k).value || '').trim();
+  for(const [k] of cur[2]) v[k] = ($('x_' + k).value || '').trim();
   return v;
 }
 function link(){
-  const p = cur[6](values()), q = new URLSearchParams();
+  const p = cur[3](values()), q = new URLSearchParams();
   for(const [k, val] of Object.entries(p)) if(val) q.set(k, val);
+  q.set('lang', $('cl').value);
   const s = q.toString();
   return BASE + cur[0] + '/' + (s ? '?' + s : '');
 }
@@ -152,7 +162,7 @@ function render(cv, url){
   const g = cv.getContext('2d', {willReadFrequently: true}), W = cv.width, H = cv.height;
   g.drawImage(baseImg, 0, 0, W, H);
   if(cur[0] === 'max'){ const v = values(); personalizeMax(g, W/600, v.N || 'Max', v.datum); }
-  const [cx, by] = cur[7] || [.5, .975];
+  const [cx, by] = cur[4] || [.5, .975];
   qrTag(g, url, cx, by, W, H);
 }
 function upd(){
@@ -163,30 +173,31 @@ function upd(){
 }
 async function openP(i){
   cur = K[i]; baseImg = null;
-  $('dt').textContent = 'Personalisieren: ' + cur[2];
+  $('dt').textContent = T().title + T().CARDS[cur[0]][1];
   $('n1').value = ''; $('n2').value = '';
-  $('ex').innerHTML = cur[5].map(([k, l, ph, area]) => `<label for="x_${k}">${l}</label>` + (area ? `<textarea id="x_${k}" maxlength="160" placeholder="${ph}"></textarea>` : `<input id="x_${k}" maxlength="${k === 'preise' ? 120 : 40}" placeholder="${ph}">`)).join('');
+  $('ex').innerHTML = cur[2].map(([k, fk, area]) => { const [l, ph] = T().F[fk]; return `<label for="x_${k}">${l}</label>` + (area ? `<textarea id="x_${k}" maxlength="160" placeholder="${ph}"></textarea>` : `<input id="x_${k}" maxlength="${k === 'preise' ? 120 : 40}" placeholder="${ph}">`); }).join('');
   $('ex').querySelectorAll('input,textarea').forEach(e => e.oninput = upd);
-  $('st').textContent = 'Lade Kartenbild …';
+  $('cl').value = UL; $('st').textContent = T().loading;
   $('dlg').classList.add('on');
-  baseImg = await loadBase(cur[0]);
+  baseImg = await loadBase(cur[0], $('cl').value);
   $('st').textContent = '';
   upd(); $('n1').focus();
 }
 $('n1').oninput = upd; $('n2').oninput = upd;
+$('cl').onchange = async () => { $('st').textContent = T().loading; baseImg = await loadBase(cur[0], $('cl').value); $('st').textContent = ''; upd(); };
 $('dx').onclick = () => $('dlg').classList.remove('on');
 $('dlg').onclick = e => { if(e.target.id === 'dlg') $('dlg').classList.remove('on'); };
-$('cp').onclick = async () => { try{ await navigator.clipboard.writeText(link()); $('st').textContent = 'Link kopiert.'; }catch(e){ $('st').textContent = 'Kopieren nicht möglich – Link oben markieren.'; } };
+$('cp').onclick = async () => { try{ await navigator.clipboard.writeText(link()); $('st').textContent = T().copied; }catch(e){ $('st').textContent = T().nocopy; } };
 $('pdf').onclick = async () => {
-  $('st').textContent = 'Erzeuge Druck-PDF …';
+  $('st').textContent = T().making;
   const cv = document.createElement('canvas'); cv.width = 1152; cv.height = 1728;
   render(cv, link());
   const jpg = await new Promise(r => cv.toBlob(r, 'image/jpeg', .92));
   const pdf = await makePdf(jpg, 1152, 1728);
   const v = values(), nm = (v.N || 'Karte').replace(/ & /g, '_und_').replace(/[^\wäöüÄÖÜß-]+/g, '_');
-  const a = document.createElement('a'); a.href = URL.createObjectURL(pdf); a.download = `Karte_${cur[0]}_${nm}_13x18.pdf`;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(pdf); a.download = `Karte_${cur[0]}_${$('cl').value}_${nm}_13x18.pdf`;
   document.body.appendChild(a); a.click(); a.remove();
-  $('st').textContent = 'Fertig: 13 × 18 cm, Karte 11,5 × 17,2 cm mittig – mit persönlichem QR-Code.';
+  $('st').textContent = T().done;
 };
 // Druck-PDF: 130 x 180 mm, Karte 114,67 x 172 mm mittig, JPEG direkt eingebettet
 async function makePdf(jpgBlob, iw, ih){
