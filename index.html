@@ -160,6 +160,18 @@ const K = [
  ['regenbogen', '?name=Bello', [], v => ({ name: v.N }), [.5, .975]],
  ['mops', '?name=Paul', [['alter','alter']], v => ({ name: v.N, alter: v.alter }), [.5, .975]],
  ['kitten', '?name=Luna', [], v => ({ name: v.N }), [.5, .975]],
+ ['advent', '?name=Familie%20Huber', [], v => ({ name: v.N }), [.5, .975]],
+ ['nikolaus', '?name=Leon', [], v => ({ name: v.N }), [.5, .975]],
+ ['rentier', '?name=Max', [], v => ({ name: v.N }), [.5, .975]],
+ ['lichterdorf', '?name=Emma', [], v => ({ name: v.N }), [.5, .975]],
+ ['partyeinladung', '?name=Sophie', [['wann','wann'], ['wo','wo']], v => ({ name: v.N, wann: v.wann, wo: v.wo }), [.5, .975]],
+ ['geburtstagseinladung', '?name=Mia', [['wann','wann'], ['wo','wo']], v => ({ name: v.N, wann: v.wann, wo: v.wo }), [.5, .975]],
+ ['hochzeitseinladung', '?name=Anna%20%26%20Tom', [['wann','wann'], ['wo','wo']], v => ({ name: v.N, wann: v.wann, wo: v.wo }), [.5, .975]],
+ ['savethedate', '?name=Lisa%20%26%20Ben', [['datum','datum'], ['wo','wo']], v => ({ name: v.N, datum: v.datum, wo: v.wo }), [.5, .975]],
+ ['dankehochzeit', '?name=Familie%20Weber', [], v => ({ name: v.N }), [.5, .975]],
+ ['mutmacher', '?name=Jonas', [], v => ({ name: v.N }), [.5, .975]],
+ ['denkandich', '?name=Lena', [], v => ({ name: v.N }), [.5, .975]],
+ ['entschuldigung', '?name=Sarah', [], v => ({ name: v.N }), [.5, .975]],
  ['rennen', '?firma=Muster%20Fuhrpark%20GmbH', [['firma','firma']], v => ({ firma: v.firma }), [.15, .2]],   // nur QR-Sticker für eine vorhandene Karte
 ];
 const $ = id => document.getElementById(id);
