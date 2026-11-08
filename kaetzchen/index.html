@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Für dich!</title>
+<style>
+html,body{margin:0;height:100%;background:#1b1410;color:#fff8f0;font-family:Georgia,'Times New Roman',serif;overflow:hidden;-webkit-user-select:none;user-select:none}
+#ar{position:fixed;inset:0}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;box-sizing:border-box;background:radial-gradient(circle at 50% 35%,#5a3a2e,#1b1410 75%);z-index:10}
+h1{font-size:2.4em;color:#f3c98b;margin:.1em 0;text-shadow:0 3px 8px #000;font-style:italic}
+h2{font-size:1.15em;margin:.3em 0 1.1em;font-weight:normal}
+button{font:inherit;font-size:1.15em;margin:8px;padding:14px 28px;border-radius:32px;border:2px solid #f3c98b;background:#d9718f;color:#fff;box-shadow:0 4px 14px #0009}
+button.alt{background:transparent;font-size:.95em;padding:10px 20px}
+.small{opacity:.85;font-size:.95em;max-width:420px;line-height:1.4}
+.bar{width:240px;height:10px;background:#0007;border-radius:5px;overflow:hidden;margin-top:14px}
+.bar div{height:100%;width:0;background:#f3c98b;transition:width .2s}
+#hint{position:fixed;bottom:28px;left:12px;right:12px;text-align:center;z-index:6;font-size:1.1em;text-shadow:0 2px 5px #000;pointer-events:none;display:none;background:#0008;padding:10px;border-radius:14px}
+#again{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:7;display:none}
+/* Ersatzansicht ohne Kamera */
+#flat{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);height:min(100vh,150vw);aspect-ratio:2/3;display:none;z-index:4;box-shadow:0 0 30px #000;overflow:hidden}
+#flat video,#flat canvas,#flat img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill}
+#flatBall{position:absolute;width:12.33%;left:43.23%;top:72.74%;display:none;will-change:transform;filter:drop-shadow(0 6px 6px #0006)}
+</style>
+<script type="importmap">
+{"imports":{
+ "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+ "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+ "mindar-image-three":"https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+}}
+</script>
+</head>
+<body>
+<div id="ar"></div>
+<div id="flat">
+  <img class="bg" src="karte.jpg" alt="">
+  <video id="fv1" playsinline preload="auto" src="clip1.mp4"></video>
+  <video id="fv2" playsinline preload="auto" src="clip2.mp4" style="opacity:0"></video>
+  <canvas id="fov" width="600" height="900"></canvas>
+  <img id="flatBall" src="ball.png" alt="">
+</div>
+<div id="hint">📷 Halt die Kamera auf deine Karte</div>
+<button id="again">🔁 Nochmal</button>
+
+<div class="screen" id="start">
+  <div style="font-size:3em">🐱🎀</div>
+  <h1>Für dich!</h1>
+  <h2>Jemand möchte mit dir spielen …</h2>
+  <button id="btnAR">📷 Karte zum Leben erwecken</button>
+  <p class="small">Danach die Kamera auf die Karte halten – Ton an!</p>
+  <button class="alt" id="btnFlat">Ohne Kamera ansehen</button>
+</div>
+<div class="screen" id="loading" style="display:none">
+  <div style="font-size:2.6em">🐾</div>
+  <h2 id="loadText">Gleich geht's los …</h2>
+  <div class="bar"><div id="loadBar"></div></div>
+</div>
+
+<script type="module">
+const $ = id => document.getElementById(id);
+const BALL = { x: 569/1152 - .5, y: .75 - 1328/1728*1.5, d: 142/1152 };   // Kugel-Position auf der Karte (Kartenbreite = 1)
+
+/* ---------- Ablauf ----------
+   clip1  : Kätzchen stupst die Kugel aus dem Bild, schaut traurig
+   wait   : "Wirf den Ball zurück!" + Countdown 3-2-1
+   throw  : Kugel fliegt vom Betrachter zurück ins Bild
+   clip2  : Kätzchen spielt glücklich
+   end    : "Für dich ♥" + Nochmal                                         */
+let mode = 'ar', phase = 'idle', visible = false, phaseT = 0, countdownN = 3;
+let v1, v2;                 // aktive Videos (AR oder Ersatzansicht)
+const ov = document.createElement('canvas'); ov.width = 600; ov.height = 900;   // Text-/Effekt-Ebene
+const og = ov.getContext('2d');
+let hearts = [];
+
+function unlockVideos(vs){
+  // iPhone: Videos mit Ton nur nach Tippen erlaubt -> hier einmal kurz anspielen
+  for(const v of vs){ v.muted = false; const p = v.play(); if(p) p.then(()=>{ v.pause(); v.currentTime = 0; }).catch(()=>{ v.muted = true; }); }
+}
+// Falls das Handy Ton verweigert: stumm weiterspielen statt hängen zu bleiben
+function playSafe(v){ const p = v.play(); if(p) p.catch(()=>{ v.muted = true; v.play().catch(()=>{}); }); }
+function setPhase(p){ phase = p; phaseT = 0; }
+
+function startSequence(){
+  hearts = []; countdownN = 3;
+  v2.pause(); v2.currentTime = 0; setV2Opacity(0); ballVisible(false);
+  v1.currentTime = 0; playSafe(v1);
+  $('again').style.display = 'none';
+  setPhase('clip1');
+}
+function onClip1End(){ if(phase === 'clip1') setPhase('wait'); }
+function onClip2End(){ if(phase === 'clip2'){ setPhase('end'); for(let i=0;i<28;i++) hearts.push({x:Math.random()*600, y:900+Math.random()*300, s:14+Math.random()*22, v:60+Math.random()*90, w:Math.random()*6}); $('again').style.display = 'block'; } }
+
+function update(dt){
+  if(mode === 'ar' && !visible) return;
+  phaseT += dt;
+  if(phase === 'wait'){
+    // 1,2 s Text, dann 3-2-1
+    const t = phaseT - 1.2;
+    countdownN = t < 0 ? 3 : 3 - Math.floor(t);
+    if(t >= 3){ setPhase('throw'); ballVisible(true); }
+  } else if(phase === 'throw'){
+    const T = .95, k = Math.min(1, phaseT / T);
+    placeBall(k);
+    if(k >= 1 && phaseT > T + .05){
+      // Übergabe: Video 2 startet genau mit der Kugel an dieser Stelle
+      v2.currentTime = 0; playSafe(v2);
+      setPhase('fade');
+    }
+  } else if(phase === 'fade'){
+    const k = Math.min(1, phaseT / .25);
+    setV2Opacity(k);
+    if(k >= 1){ ballVisible(false); v1.pause(); setPhase('clip2'); }
+  }
+  for(const h of hearts){ h.y -= h.v*dt; h.w += dt*2; }
+}
+
+function drawOverlay(){
+  og.clearRect(0,0,600,900);
+  og.textAlign = 'center'; og.textBaseline = 'middle';
+  if(phase === 'wait'){
+    og.fillStyle = 'rgba(40,20,30,.35)'; og.fillRect(0,0,600,900);
+    og.fillStyle = '#fff'; og.strokeStyle = 'rgba(120,40,70,.9)'; og.lineWidth = 8;
+    og.font = 'italic bold 52px Georgia';
+    og.strokeText('Wirf den Ball zurück!', 300, 300); og.fillText('Wirf den Ball zurück!', 300, 300);
+    if(phaseT > 1.2){
+      const frac = (phaseT - 1.2) % 1, sc = 1.4 - frac*.5;
+      og.save(); og.translate(300, 470); og.scale(sc, sc); og.globalAlpha = 1 - frac*.6;
+      og.font = 'bold 170px Georgia'; og.fillStyle = '#ffd6e2'; og.lineWidth = 12;
+      og.strokeText(String(countdownN), 0, 0); og.fillText(String(countdownN), 0, 0);
+      og.restore();
+    } else {
+      og.font = '30px Georgia'; og.fillStyle = '#fff'; og.fillText('in 3 … 2 … 1 …', 300, 380);
+    }
+  }
+  if(phase === 'end'){
+    for(const h of hearts){ og.save(); og.translate(h.x + Math.sin(h.w)*12, h.y); og.font = h.s+'px serif'; og.globalAlpha = .9; og.fillText('💗', 0, 0); og.restore(); }
+    og.font = 'italic bold 58px Georgia'; og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
+    og.strokeText('Danke fürs Spielen!', 300, 820); og.fillText('Danke fürs Spielen!', 300, 820);
+  }
+  if(ovTex) ovTex.needsUpdate = true;
+  if(mode === 'flat'){ const fc = $('fov').getContext('2d'); fc.clearRect(0,0,600,900); fc.drawImage(ov,0,0); }
+}
+
+/* ---------- Kugel & Überblendung: je nach Ansicht ---------- */
+let ballVisible = ()=>{}, placeBall = ()=>{}, setV2Opacity = ()=>{}, ovTex = null;
+
+let last = performance.now();
+function loop(now){ const dt = Math.min(.05,(now-last)/1000); last = now; update(dt); drawOverlay(); requestAnimationFrame(loop); }
+
+/* ---------- Ersatzansicht ohne Kamera ---------- */
+function startFlat(msg){
+  mode = 'flat';
+  $('start').style.display='none'; $('loading').style.display='none';
+  $('flat').style.display='block';
+  v1 = $('fv1'); v2 = $('fv2');
+  const fb = $('flatBall');
+  ballVisible = on => { fb.style.display = on ? 'block' : 'none'; };
+  setV2Opacity = a => { v2.style.opacity = a; };
+  placeBall = k => {
+    // fliegt von "vor dem Bildschirm" (riesig, unten) auf die Kugelstelle
+    const e = 1 - Math.pow(1-k, 2.2);
+    const sc = 7 - 6*e;
+    const lift = Math.sin(k*Math.PI) * -18;          // kleiner Bogen
+    const dy = (1-e) * 55 + lift;                     // in % der Ballgröße
+    fb.style.transform = `translate(0, ${dy}%) scale(${sc}) rotate(${k*540}deg)`;
+  };
+  v1.onended = onClip1End; v2.onended = onClip2End;
+  if(msg){ const h=$('hint'); h.textContent=msg; h.style.display='block'; setTimeout(()=>h.style.display='none',4000); }
+  startSequence();
+}
+$('btnFlat').onclick = () => { unlockVideos([$('fv2')]); startFlat(); };
+$('again').onclick = () => { if(v1){ startSequence(); } };
+
+/* ---------- AR-Ansicht ---------- */
+$('btnAR').onclick = async () => {
+  const av1 = document.createElement('video'), av2 = document.createElement('video');
+  for(const [v,src] of [[av1,'clip1.mp4'],[av2,'clip2.mp4']]){ v.src = src; v.playsInline = true; v.setAttribute('playsinline',''); v.preload = 'auto'; v.crossOrigin = 'anonymous'; }
+  unlockVideos([av1, av2]);
+  $('start').style.display='none'; $('loading').style.display='flex';
+  const bar = $('loadBar'), txt = $('loadText');
+  try{
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nocam');
+    let url = null;
+    try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
+    if(!url){
+      txt.textContent = 'Lerne deine Karte kennen …';
+      const img = new Image(); img.src = 'karte.jpg'; await img.decode();
+      const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
+      const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
+      const c = new Compiler();
+      await c.compileImageTargets([img], p => { bar.style.width = Math.round(p*.8)+'%'; });
+      url = URL.createObjectURL(new Blob([await c.exportData()]));
+    }
+    txt.textContent = 'Kamera wird gestartet …'; bar.style.width = '90%';
+    const THREE = await import('three');
+    const { MindARThree } = await import('mindar-image-three');
+    const mind = new MindARThree({ container: $('ar'), imageTargetSrc: url, uiScanning:'no', uiLoading:'no', uiError:'no', filterMinCF:0.0001, filterBeta:0.001 });
+    const { renderer, scene, camera } = mind;
+    const anchor = mind.addAnchor(0);
+    const H = 1.5;
+    const mkVid = v => { const t = new THREE.VideoTexture(v); t.colorSpace = THREE.SRGBColorSpace; return t; };
+    const m1 = new THREE.Mesh(new THREE.PlaneGeometry(1,H), new THREE.MeshBasicMaterial({ map: mkVid(av1) }));
+    const m2mat = new THREE.MeshBasicMaterial({ map: mkVid(av2), transparent: true, opacity: 0 });
+    const m2 = new THREE.Mesh(new THREE.PlaneGeometry(1,H), m2mat); m2.position.z = .001;
+    ovTex = new THREE.CanvasTexture(ov); ovTex.colorSpace = THREE.SRGBColorSpace;
+    const m3 = new THREE.Mesh(new THREE.PlaneGeometry(1,H), new THREE.MeshBasicMaterial({ map: ovTex, transparent: true })); m3.position.z = .002;
+    anchor.group.add(m1, m2, m3);
+    const ballTex = new THREE.TextureLoader().load('ball.png'); ballTex.colorSpace = THREE.SRGBColorSpace;
+    const ballMat = new THREE.SpriteMaterial({ map: ballTex, transparent: true });
+    const ball = new THREE.Sprite(ballMat); ball.scale.set(BALL.d, BALL.d, 1); ball.visible = false;
+    anchor.group.add(ball);
+    const target = new THREE.Vector3(BALL.x, BALL.y, .01);
+    let startP = null;
+    v1 = av1; v2 = av2;
+    av1.onended = onClip1End; av2.onended = onClip2End;
+    ballVisible = on => { ball.visible = on; if(on){ const cw = new THREE.Vector3(); camera.getWorldPosition(cw); startP = anchor.group.worldToLocal(cw.clone()); startP.lerp(target, .12); startP.y -= .25; } };
+    setV2Opacity = a => { m2mat.opacity = a; };
+    placeBall = k => {
+      if(!startP) return;
+      const e = 1 - Math.pow(1-k, 2.2);
+      ball.position.lerpVectors(startP, target, e);
+      ball.position.y += Math.sin(k*Math.PI) * .18;     // Wurfbogen
+      ballMat.rotation = k * 9;
+    };
+    let started = false;
+    anchor.onTargetFound = () => {
+      visible = true; $('hint').style.display='none';
+      if(!started){ started = true; startSequence(); }
+      else { if(phase==='clip1') av1.play().catch(()=>{}); if(phase==='clip2') av2.play().catch(()=>{}); }
+    };
+    anchor.onTargetLost = () => {
+      visible = false; av1.pause(); av2.pause();
+      $('hint').textContent = '📷 Karte wieder ins Bild halten'; $('hint').style.display='block';
+    };
+    await mind.start();
+    renderer.setAnimationLoop(() => renderer.render(scene, camera));
+    $('loading').style.display='none'; $('hint').style.display='block';
+  }catch(e){
+    console.error(e);
+    startFlat('Kamera klappt hier nicht – dann ohne. Ton an! 🐱');
+  }
+};
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
