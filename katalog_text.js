@@ -10,6 +10,7 @@ de: {
   F: { firma: ['Firma (auf Banner und Pokal)', 'z. B. Muster Fuhrpark GmbH'], datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
        datum: ['Datum', 'z. B. 12. Juni 2026'], geburt: ['Geburtsdatum', 'z. B. 3. März 2026'], gewicht: ['Gewicht', 'z. B. 3250 g'], groesse: ['Größe', 'z. B. 51 cm'], gruss: ['Gruß', 'z. B. Frohes neues Jahr'], preise: ['Preise (bis 8, mit | trennen)', 'Kino|Pizza|Massage|Ausflug'], meldung: ['Die Meldung', 'Augenzeugen berichten von Kuchen, Kerzen …'] },
   CARDS: {
+    trauer: ['Trauer / Anteilnahme', 'Lichter der Erinnerung', 'Eine stille Karte ohne Punkte und Zeitdruck: sieben Schwimmkerzen entzünden, deren Licht als Laterne aufsteigt und zu Sternen wird.'],
     vatertag: ['Vatertag', 'Grillmeister für Papa', 'Sechs Würstchen auf dem Rost: im goldbraunen Moment wenden und servieren, bevor etwas verkohlt – Sommerabend-Grillfeeling zum Vatertag.'],
     einhorn: ['Kindergeburtstag / Mädchen', 'Einhorn-Abenteuer', 'Ein kleines Einhorn galoppiert mit Regenbogenspur über die Zauberwiese – springen, Sterne und Cupcakes sammeln.'],
     papa: ['Geburtstag / Für Papa', 'Torwand für Papa', 'Torwandschießen wie im Sportstudio: sechs Schüsse per Wisch, drei unten, drei oben – mit Stadionjubel.'],
@@ -42,6 +43,7 @@ en: {
   F: { firma: ['Company (on banners and trophy)', 'e.g. Sample Fleet Ltd'], datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
        datum: ['Date', 'e.g. 12 June 2026'], geburt: ['Date of birth', 'e.g. 3 March 2026'], gewicht: ['Weight', 'e.g. 3250 g'], groesse: ['Length', 'e.g. 51 cm'], gruss: ['Greeting', 'e.g. Happy New Year'], preise: ['Prizes (up to 8, separated by |)', 'Cinema|Pizza|Massage|Day trip'], meldung: ['The news story', 'Eyewitnesses report cake, candles …'] },
   CARDS: {
+    trauer: ['Sympathy', 'Lights of Remembrance', 'A quiet card with no score or timer: light seven floating candles whose glow rises as lanterns and turns into stars.'],
     vatertag: ['Father\'s Day', 'Grill Master Dad', 'Six sausages on the grill: flip at the golden moment and serve before anything burns – summer-evening barbecue vibes for Father\'s Day.'],
     einhorn: ['Kids\' birthday / Girls', 'Unicorn Adventure', 'A little unicorn gallops across the magic meadow with a rainbow trail – jump, collect stars and cupcakes.'],
     papa: ['Birthday / For Dad', 'Goal Wall for Dad', 'A classic goal-wall shootout: six swipe shots, three low and three high – with stadium cheers.'],
@@ -74,6 +76,7 @@ fr: {
   F: { firma: ['Entreprise (sur les banderoles et le trophée)', 'p. ex. Flotte Exemple SARL'], datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
        datum: ['Date', 'p. ex. 12 juin 2026'], geburt: ['Date de naissance', 'p. ex. 3 mars 2026'], gewicht: ['Poids', 'p. ex. 3250 g'], groesse: ['Taille', 'p. ex. 51 cm'], gruss: ['Vœux', 'p. ex. Bonne année'], preise: ['Lots (jusqu\'à 8, séparés par |)', 'Cinéma|Pizza|Massage|Excursion'], meldung: ['La nouvelle', 'Des témoins parlent de gâteau, de bougies …'] },
   CARDS: {
+    trauer: ['Condoléances', 'Lumières du souvenir', 'Une carte paisible, sans score ni chrono : allumer sept bougies flottantes dont la lumière s\'élève en lanternes et devient étoiles.'],
     vatertag: ['Fête des pères', 'Papa roi du barbecue', 'Six saucisses sur le grill : retourner au moment doré et servir avant que ça brûle – ambiance barbecue d\'un soir d\'été.'],
     einhorn: ['Anniversaire enfant / Fille', 'L\'aventure de la licorne', 'Une petite licorne galope sur la prairie magique avec un arc-en-ciel – saute, ramasse étoiles et cupcakes.'],
     papa: ['Anniversaire / Pour Papa', 'Mur de tir pour Papa', 'Le défi du mur de tir : six tirs d\'un glissement, trois en bas, trois en haut – avec la clameur du stade.'],
@@ -106,6 +109,7 @@ it: {
   F: { firma: ['Azienda (su striscioni e coppa)', 'es. Flotta Esempio srl'], datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
        datum: ['Data', 'es. 12 giugno 2026'], geburt: ['Data di nascita', 'es. 3 marzo 2026'], gewicht: ['Peso', 'es. 3250 g'], groesse: ['Lunghezza', 'es. 51 cm'], gruss: ['Augurio', 'es. Buon anno'], preise: ['Premi (fino a 8, separati da |)', 'Cinema|Pizza|Massaggio|Gita'], meldung: ['La notizia', 'Testimoni parlano di torta, candeline …'] },
   CARDS: {
+    trauer: ['Condoglianze', 'Luci del ricordo', 'Un biglietto silenzioso, senza punti né tempo: accendere sette candele galleggianti la cui luce sale come lanterne e diventa stelle.'],
     vatertag: ['Festa del papà', 'Papà re della griglia', 'Sei salsicce sulla griglia: girarle al momento dorato e servirle prima che brucino – atmosfera da grigliata estiva.'],
     einhorn: ['Compleanno bambini / Bambina', 'L\'avventura dell\'unicorno', 'Un piccolo unicorno galoppa sul prato magico con una scia arcobaleno – salta, raccogli stelle e cupcake.'],
     papa: ['Compleanno / Per papà', 'Muro di tiro per papà', 'La sfida del muro di tiro: sei tiri con uno swipe, tre in basso e tre in alto – con il boato dello stadio.'],
@@ -138,6 +142,7 @@ es: {
   F: { firma: ['Empresa (en pancartas y trofeo)', 'p. ej. Flota Ejemplo S.L.'], datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
        datum: ['Fecha', 'p. ej. 12 de junio de 2026'], geburt: ['Fecha de nacimiento', 'p. ej. 3 de marzo de 2026'], gewicht: ['Peso', 'p. ej. 3250 g'], groesse: ['Talla', 'p. ej. 51 cm'], gruss: ['Saludo', 'p. ej. Feliz Año Nuevo'], preise: ['Premios (hasta 8, separados por |)', 'Cine|Pizza|Masaje|Excursión'], meldung: ['La noticia', 'Testigos hablan de tarta, velas …'] },
   CARDS: {
+    trauer: ['Condolencias', 'Luces del recuerdo', 'Una tarjeta serena, sin puntos ni prisas: encender siete velas flotantes cuya luz sube como farolillos y se vuelve estrellas.'],
     vatertag: ['Día del Padre', 'Papá, rey de la parrilla', 'Seis salchichas en la parrilla: darles la vuelta en el momento dorado y servirlas antes de que se quemen – ambiente de barbacoa de verano.'],
     einhorn: ['Cumpleaños infantil / Niña', 'La aventura del unicornio', 'Un pequeño unicornio galopa por el prado mágico con estela de arcoíris – salta, recoge estrellas y cupcakes.'],
     papa: ['Cumpleaños / Para papá', 'Muro de tiro para papá', 'El clásico muro de tiro: seis disparos deslizando, tres abajo y tres arriba – con el rugido del estadio.'],
@@ -170,6 +175,7 @@ nl: {
   F: { firma: ['Bedrijf (op spandoeken en beker)', 'bijv. Voorbeeld Wagenpark BV'], datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
        datum: ['Datum', 'bijv. 12 juni 2026'], geburt: ['Geboortedatum', 'bijv. 3 maart 2026'], gewicht: ['Gewicht', 'bijv. 3250 g'], groesse: ['Lengte', 'bijv. 51 cm'], gruss: ['Groet', 'bijv. Gelukkig nieuwjaar'], preise: ['Prijzen (max. 8, gescheiden door |)', 'Bioscoop|Pizza|Massage|Uitstapje'], meldung: ['Het bericht', 'Ooggetuigen melden taart, kaarsjes …'] },
   CARDS: {
+    trauer: ['Rouw / Medeleven', 'Lichtjes van herinnering', 'Een stille kaart zonder punten of tijdsdruk: zeven drijvende kaarsjes aansteken waarvan het licht als lantaarn opstijgt en sterren wordt.'],
     vatertag: ['Vaderdag', 'Grillmeester papa', 'Zes worstjes op de grill: keren op het gouden moment en serveren voor er iets verbrandt – zomerse barbecuesfeer.'],
     einhorn: ['Kinderverjaardag / Meisje', 'Eenhoorn-avontuur', 'Een kleine eenhoorn galoppeert met regenboogspoor over de toverweide – spring, verzamel sterren en cupcakes.'],
     papa: ['Verjaardag / Voor papa', 'Doelmuur voor papa', 'Klassiek doelmuurschieten: zes schoten met een veeg, drie laag en drie hoog – met stadiongejuich.'],
@@ -202,6 +208,7 @@ pl: {
   F: { firma: ['Firma (na banerach i pucharze)', 'np. Przykładowa Flota sp. z o.o.'], datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
        datum: ['Data', 'np. 12 czerwca 2026'], geburt: ['Data urodzenia', 'np. 3 marca 2026'], gewicht: ['Waga', 'np. 3250 g'], groesse: ['Wzrost', 'np. 51 cm'], gruss: ['Życzenia', 'np. Szczęśliwego Nowego Roku'], preise: ['Nagrody (do 8, oddzielone |)', 'Kino|Pizza|Masaż|Wycieczka'], meldung: ['Wiadomość dnia', 'Świadkowie donoszą o torcie, świeczkach …'] },
   CARDS: {
+    trauer: ['Kondolencje', 'Światła pamięci', 'Spokojna kartka bez punktów i pośpiechu: zapal siedem pływających świec, których światło wznosi się jak lampiony i zamienia w gwiazdy.'],
     vatertag: ['Dzień Ojca', 'Tata – mistrz grilla', 'Sześć kiełbasek na ruszcie: odwrócić w złotym momencie i podać, zanim coś się przypali – klimat letniego grillowania.'],
     einhorn: ['Urodziny dziecka / Dziewczynka', 'Przygoda jednorożca', 'Mały jednorożec galopuje z tęczowym śladem po magicznej łące – skacz, zbieraj gwiazdki i babeczki.'],
     papa: ['Urodziny / Dla taty', 'Ściana strzelecka dla taty', 'Klasyczne strzały w ścianę: sześć strzałów przesunięciem, trzy dołem i trzy górą – z dopingiem stadionu.'],
@@ -234,6 +241,7 @@ tr: {
   F: { firma: ['Şirket (afişlerde ve kupada)', 'ör. Örnek Filo A.Ş.'], datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
        datum: ['Tarih', 'ör. 12 Haziran 2026'], geburt: ['Doğum tarihi', 'ör. 3 Mart 2026'], gewicht: ['Kilo', 'ör. 3250 g'], groesse: ['Boy', 'ör. 51 cm'], gruss: ['Tebrik', 'ör. Mutlu yıllar'], preise: ['Ödüller (en fazla 8, | ile ayır)', 'Sinema|Pizza|Masaj|Gezi'], meldung: ['Haber', 'Görgü tanıkları pastadan, mumlardan …'] },
   CARDS: {
+    trauer: ['Taziye', 'Anı ışıkları', 'Puansız, acelesiz sakin bir kart: yedi yüzen mumu yak, ışıkları fener gibi yükselip yıldıza dönüşsün.'],
     vatertag: ['Babalar Günü', 'Mangal ustası baba', 'Izgarada altı sosis: altın anında çevir ve yanmadan servis et – yaz akşamı mangal keyfi.'],
     einhorn: ['Çocuk doğum günü / Kız', 'Tek Boynuz Macerası', 'Küçük bir tek boynuzlu at gökkuşağı izinde sihirli çayırda koşuyor – zıpla, yıldız ve kek topla.'],
     papa: ['Doğum günü / Babama', 'Babama gol duvarı', 'Klasik gol duvarı: kaydırarak altı şut, üçü alta üçü üste – stadyum coşkusuyla.'],
