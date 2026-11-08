@@ -1,13 +1,13 @@
 // Katalog-Texte in allen Sprachen. CARDS: [Anlass, Titel, Beschreibung]; F: Feldbeschriftungen
 window.CT = {
 de: {
-  name: 'Deutsch', h1: 'Lebendige Karten', intro: 'Hochwertig gedruckte Grußkarten mit verstecktem QR-Code: Handy drauf halten – und die Karte erwacht zum Leben, mit Animation, Musik und kleinem Spiel. Mit „Personalisieren“ trägst du einen oder zwei Namen ein und bekommst die fertige Druckdatei mit persönlichem QR-Code.',
+  sheet: 'Sticker-Bogen (A4, 48 × 3 cm) herunterladen', name: 'Deutsch', h1: 'Lebendige Karten', intro: 'Hochwertig gedruckte Grußkarten mit verstecktem QR-Code: Handy drauf halten – und die Karte erwacht zum Leben, mit Animation, Musik und kleinem Spiel. Mit „Personalisieren“ trägst du einen oder zwei Namen ein und bekommst die fertige Druckdatei mit persönlichem QR-Code.',
   footer: '© MAM · Munich AI Media · Tipp: „Ohne Kamera ansehen“ zeigt jede Karte auch direkt am Bildschirm.', lang: 'Sprache',
   open: 'Karte öffnen', pers: 'Personalisieren', ex: 'Beispiel', title: 'Personalisieren: ', n1: 'Name', n2: 'Zweiter Name (optional)', p1: 'z. B. Anna', p2: 'z. B. Tom',
   cardLang: 'Sprache der Karte', hint: 'Die Namen erscheinen in der lebendigen Karte. Der QR-Code auf der Druckdatei führt direkt zu dieser persönlichen Version.',
   view: 'Karte ansehen', pdf: 'Druck-PDF laden', copy: 'Link kopieren', loading: 'Lade Kartenbild …', copied: 'Link kopiert.', nocopy: 'Kopieren nicht möglich – Link oben markieren.', making: 'Erzeuge Druck-PDF …',
   done: 'Fertig: 13 × 18 cm, Karte 11,5 × 17,2 cm mittig – mit persönlichem QR-Code.',
-  F: { datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
+  F: { firma: ['Firma (auf Banner und Pokal)', 'z. B. Muster Fuhrpark GmbH'], datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
        datum: ['Datum', 'z. B. 12. Juni 2026'], geburt: ['Geburtsdatum', 'z. B. 3. März 2026'], gewicht: ['Gewicht', 'z. B. 3250 g'], groesse: ['Größe', 'z. B. 51 cm'], gruss: ['Gruß', 'z. B. Frohes neues Jahr'], preise: ['Preise (bis 8, mit | trennen)', 'Kino|Pizza|Massage|Ausflug'], meldung: ['Die Meldung', 'Augenzeugen berichten von Kuchen, Kerzen …'] },
   CARDS: {
     kaetzchen: ['Für dich / Allgemein', 'Kätzchen mit Ball', 'Das Kätzchen schießt den Ball aus der Karte – zurückwerfen und es spielt glücklich weiter.'],
@@ -24,16 +24,17 @@ de: {
     gluecksrad: ['Gutschein / Geburtstag', 'Glücksrad', 'Am Rad drehen – die Preise bestimmt der Schenkende selbst.'],
     zeitung: ['Geburtstag / Abschied / Spaß', 'Der Tagesbote', 'Die Zeitung erwacht: Geister gratulieren im großen Bild, die Feder schreibt die persönliche Meldung.'],
     hochzeit: ['Hochzeit / Jahrestag', 'Ringwurf', 'Goldene Ringe auf die wandernde Sektflasche werfen – danach Glocken, Tauben, Blütenregen, Namen und Datum.'],
+    rennen: ['Firmen-Weihnachtsfeier / QR-Sticker', 'Weihnachts-Rallye', 'Aufkleber (3 × 3 cm) für eine vorhandene Karte: Rennen, DTM, Rallye oder Drag Race im Schnee – auch live zu zweit, mit Pokal für den Sieger.'],
   }
 },
 en: {
-  name: 'English', h1: 'Living Cards', intro: 'Beautifully printed greeting cards with a hidden QR code: hold your phone over it – and the card comes to life with animation, music and a little game. With “Personalise” you enter one or two names and get the finished print file with a personal QR code.',
+  sheet: 'Download sticker sheet (A4, 48 × 3 cm)', name: 'English', h1: 'Living Cards', intro: 'Beautifully printed greeting cards with a hidden QR code: hold your phone over it – and the card comes to life with animation, music and a little game. With “Personalise” you enter one or two names and get the finished print file with a personal QR code.',
   footer: '© MAM · Munich AI Media · Tip: “View without camera” shows every card right on screen.', lang: 'Language',
   open: 'Open card', pers: 'Personalise', ex: 'Example', title: 'Personalise: ', n1: 'Name', n2: 'Second name (optional)', p1: 'e.g. Anna', p2: 'e.g. Tom',
   cardLang: 'Card language', hint: 'The names appear in the living card. The QR code on the print file leads straight to this personal version.',
   view: 'View card', pdf: 'Download print PDF', copy: 'Copy link', loading: 'Loading card image …', copied: 'Link copied.', nocopy: 'Copying not possible – select the link above.', making: 'Creating print PDF …',
   done: 'Done: 13 × 18 cm, card 11.5 × 17.2 cm centred – with personal QR code.',
-  F: { datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
+  F: { firma: ['Company (on banners and trophy)', 'e.g. Sample Fleet Ltd'], datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
        datum: ['Date', 'e.g. 12 June 2026'], geburt: ['Date of birth', 'e.g. 3 March 2026'], gewicht: ['Weight', 'e.g. 3250 g'], groesse: ['Length', 'e.g. 51 cm'], gruss: ['Greeting', 'e.g. Happy New Year'], preise: ['Prizes (up to 8, separated by |)', 'Cinema|Pizza|Massage|Day trip'], meldung: ['The news story', 'Eyewitnesses report cake, candles …'] },
   CARDS: {
     kaetzchen: ['For you / General', 'Kitten with ball', 'The kitten kicks the ball out of the card – throw it back and it happily plays on.'],
@@ -50,16 +51,17 @@ en: {
     gluecksrad: ['Voucher / Birthday', 'Wheel of fortune', 'Spin the wheel – the giver chooses the prizes.'],
     zeitung: ['Birthday / Farewell / Fun', 'The Daily Herald', 'The newspaper comes alive: ghosts congratulate in the big picture, a quill writes the personal news.'],
     hochzeit: ['Wedding / Anniversary', 'Ring toss', 'Toss golden rings onto the moving champagne bottle – then bells, doves, a shower of petals, names and date.'],
+    rennen: ['Company Christmas party / QR sticker', 'Christmas Rally', 'Sticker (3 × 3 cm) for an existing card: race, touring cars, rally or drag race in the snow – also live with two phones, with a trophy for the winner.'],
   }
 },
 fr: {
-  name: 'Français', h1: 'Cartes vivantes', intro: 'Des cartes de vœux imprimées avec un QR code caché : approche ton téléphone – et la carte prend vie, avec animation, musique et un petit jeu. Avec « Personnaliser », tu saisis un ou deux prénoms et tu reçois le fichier d\'impression avec un QR code personnel.',
+  sheet: 'Télécharger la planche d\'autocollants (A4, 48 × 3 cm)', name: 'Français', h1: 'Cartes vivantes', intro: 'Des cartes de vœux imprimées avec un QR code caché : approche ton téléphone – et la carte prend vie, avec animation, musique et un petit jeu. Avec « Personnaliser », tu saisis un ou deux prénoms et tu reçois le fichier d\'impression avec un QR code personnel.',
   footer: '© MAM · Munich AI Media · Astuce : « Voir sans caméra » affiche chaque carte directement à l\'écran.', lang: 'Langue',
   open: 'Ouvrir la carte', pers: 'Personnaliser', ex: 'Exemple', title: 'Personnaliser : ', n1: 'Prénom', n2: 'Deuxième prénom (facultatif)', p1: 'p. ex. Anna', p2: 'p. ex. Tom',
   cardLang: 'Langue de la carte', hint: 'Les prénoms apparaissent dans la carte vivante. Le QR code du fichier d\'impression mène directement à cette version personnelle.',
   view: 'Voir la carte', pdf: 'Télécharger le PDF', copy: 'Copier le lien', loading: 'Chargement de l\'image …', copied: 'Lien copié.', nocopy: 'Copie impossible – sélectionne le lien ci-dessus.', making: 'Création du PDF …',
   done: 'Terminé : 13 × 18 cm, carte 11,5 × 17,2 cm centrée – avec QR code personnel.',
-  F: { datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
+  F: { firma: ['Entreprise (sur les banderoles et le trophée)', 'p. ex. Flotte Exemple SARL'], datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
        datum: ['Date', 'p. ex. 12 juin 2026'], geburt: ['Date de naissance', 'p. ex. 3 mars 2026'], gewicht: ['Poids', 'p. ex. 3250 g'], groesse: ['Taille', 'p. ex. 51 cm'], gruss: ['Vœux', 'p. ex. Bonne année'], preise: ['Lots (jusqu\'à 8, séparés par |)', 'Cinéma|Pizza|Massage|Excursion'], meldung: ['La nouvelle', 'Des témoins parlent de gâteau, de bougies …'] },
   CARDS: {
     kaetzchen: ['Pour toi / Général', 'Chaton et balle', 'Le chaton envoie la balle hors de la carte – renvoie-la et il continue à jouer, tout content.'],
@@ -76,16 +78,17 @@ fr: {
     gluecksrad: ['Bon cadeau / Anniversaire', 'Roue de la fortune', 'Fais tourner la roue – c\'est celui qui offre qui choisit les lots.'],
     zeitung: ['Anniversaire / Départ / Humour', 'Le Messager du Jour', 'Le journal prend vie : des fantômes félicitent dans la grande image, une plume écrit la nouvelle.'],
     hochzeit: ['Mariage / Anniversaire de mariage', 'Lancer d\'anneaux', 'Lance des alliances dorées sur la bouteille de champagne qui bouge – puis cloches, colombes, pluie de pétales, prénoms et date.'],
+    rennen: ['Fête de Noël d\'entreprise / autocollant QR', 'Rallye de Noël', 'Autocollant (3 × 3 cm) pour une carte existante : course, DTM, rallye ou drag race dans la neige – aussi en duel en direct, avec un trophée pour le vainqueur.'],
   }
 },
 it: {
-  name: 'Italiano', h1: 'Biglietti viventi', intro: 'Biglietti d\'auguri stampati con un codice QR nascosto: avvicina il telefono – e il biglietto prende vita, con animazioni, musica e un piccolo gioco. Con «Personalizza» inserisci uno o due nomi e ricevi il file di stampa con codice QR personale.',
+  sheet: 'Scarica il foglio di adesivi (A4, 48 × 3 cm)', name: 'Italiano', h1: 'Biglietti viventi', intro: 'Biglietti d\'auguri stampati con un codice QR nascosto: avvicina il telefono – e il biglietto prende vita, con animazioni, musica e un piccolo gioco. Con «Personalizza» inserisci uno o due nomi e ricevi il file di stampa con codice QR personale.',
   footer: '© MAM · Munich AI Media · Suggerimento: «Guarda senza fotocamera» mostra ogni biglietto direttamente sullo schermo.', lang: 'Lingua',
   open: 'Apri il biglietto', pers: 'Personalizza', ex: 'Esempio', title: 'Personalizza: ', n1: 'Nome', n2: 'Secondo nome (facoltativo)', p1: 'es. Anna', p2: 'es. Tom',
   cardLang: 'Lingua del biglietto', hint: 'I nomi compaiono nel biglietto vivente. Il codice QR sul file di stampa porta direttamente a questa versione personale.',
   view: 'Vedi il biglietto', pdf: 'Scarica il PDF', copy: 'Copia link', loading: 'Caricamento immagine …', copied: 'Link copiato.', nocopy: 'Copia non possibile – seleziona il link sopra.', making: 'Creazione del PDF …',
   done: 'Fatto: 13 × 18 cm, biglietto 11,5 × 17,2 cm centrato – con codice QR personale.',
-  F: { datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
+  F: { firma: ['Azienda (su striscioni e coppa)', 'es. Flotta Esempio srl'], datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
        datum: ['Data', 'es. 12 giugno 2026'], geburt: ['Data di nascita', 'es. 3 marzo 2026'], gewicht: ['Peso', 'es. 3250 g'], groesse: ['Lunghezza', 'es. 51 cm'], gruss: ['Augurio', 'es. Buon anno'], preise: ['Premi (fino a 8, separati da |)', 'Cinema|Pizza|Massaggio|Gita'], meldung: ['La notizia', 'Testimoni parlano di torta, candeline …'] },
   CARDS: {
     kaetzchen: ['Per te / Generale', 'Gattino con palla', 'Il gattino lancia la palla fuori dal biglietto – rilanciala e continua a giocare felice.'],
@@ -102,16 +105,17 @@ it: {
     gluecksrad: ['Buono / Compleanno', 'Ruota della fortuna', 'Gira la ruota – i premi li sceglie chi regala.'],
     zeitung: ['Compleanno / Addio / Divertimento', 'Il Messaggero del Giorno', 'Il giornale prende vita: fantasmi fanno gli auguri nella foto grande, una piuma scrive la notizia.'],
     hochzeit: ['Nozze / Anniversario', 'Lancio degli anelli', 'Lancia anelli d\'oro sulla bottiglia di spumante in movimento – poi campane, colombe, pioggia di petali, nomi e data.'],
+    rennen: ['Festa di Natale aziendale / adesivo QR', 'Rally di Natale', 'Adesivo (3 × 3 cm) per un biglietto esistente: gara, DTM, rally o drag race sulla neve – anche dal vivo in due, con coppa per il vincitore.'],
   }
 },
 es: {
-  name: 'Español', h1: 'Tarjetas vivas', intro: 'Tarjetas de felicitación impresas con un código QR oculto: acerca el móvil – y la tarjeta cobra vida, con animación, música y un pequeño juego. Con «Personalizar» escribes uno o dos nombres y recibes el archivo de impresión con un código QR personal.',
+  sheet: 'Descargar hoja de pegatinas (A4, 48 × 3 cm)', name: 'Español', h1: 'Tarjetas vivas', intro: 'Tarjetas de felicitación impresas con un código QR oculto: acerca el móvil – y la tarjeta cobra vida, con animación, música y un pequeño juego. Con «Personalizar» escribes uno o dos nombres y recibes el archivo de impresión con un código QR personal.',
   footer: '© MAM · Munich AI Media · Consejo: «Ver sin cámara» muestra cada tarjeta directamente en pantalla.', lang: 'Idioma',
   open: 'Abrir tarjeta', pers: 'Personalizar', ex: 'Ejemplo', title: 'Personalizar: ', n1: 'Nombre', n2: 'Segundo nombre (opcional)', p1: 'p. ej. Anna', p2: 'p. ej. Tom',
   cardLang: 'Idioma de la tarjeta', hint: 'Los nombres aparecen en la tarjeta viva. El código QR del archivo de impresión lleva directamente a esta versión personal.',
   view: 'Ver tarjeta', pdf: 'Descargar PDF', copy: 'Copiar enlace', loading: 'Cargando imagen …', copied: 'Enlace copiado.', nocopy: 'No se puede copiar – selecciona el enlace de arriba.', making: 'Creando el PDF …',
   done: 'Listo: 13 × 18 cm, tarjeta de 11,5 × 17,2 cm centrada – con código QR personal.',
-  F: { datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
+  F: { firma: ['Empresa (en pancartas y trofeo)', 'p. ej. Flota Ejemplo S.L.'], datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
        datum: ['Fecha', 'p. ej. 12 de junio de 2026'], geburt: ['Fecha de nacimiento', 'p. ej. 3 de marzo de 2026'], gewicht: ['Peso', 'p. ej. 3250 g'], groesse: ['Talla', 'p. ej. 51 cm'], gruss: ['Saludo', 'p. ej. Feliz Año Nuevo'], preise: ['Premios (hasta 8, separados por |)', 'Cine|Pizza|Masaje|Excursión'], meldung: ['La noticia', 'Testigos hablan de tarta, velas …'] },
   CARDS: {
     kaetzchen: ['Para ti / General', 'Gatito con pelota', 'El gatito lanza la pelota fuera de la tarjeta – devuélvesela y sigue jugando feliz.'],
@@ -128,16 +132,17 @@ es: {
     gluecksrad: ['Vale / Cumpleaños', 'Ruleta de la suerte', 'Gira la ruleta – los premios los elige quien regala.'],
     zeitung: ['Cumpleaños / Despedida / Diversión', 'El Heraldo del Día', 'El periódico cobra vida: fantasmas felicitan en la foto grande, una pluma escribe la noticia.'],
     hochzeit: ['Boda / Aniversario', 'Lanzamiento de anillos', 'Lanza anillos dorados a la botella de cava que se mueve – luego campanas, palomas, lluvia de pétalos, nombres y fecha.'],
+    rennen: ['Fiesta de Navidad de empresa / pegatina QR', 'Rally de Navidad', 'Pegatina (3 × 3 cm) para una tarjeta existente: carrera, DTM, rally o drag race en la nieve – también en directo entre dos, con trofeo para el ganador.'],
   }
 },
 nl: {
-  name: 'Nederlands', h1: 'Levende kaarten', intro: 'Gedrukte wenskaarten met een verborgen QR-code: houd je telefoon erboven – en de kaart komt tot leven, met animatie, muziek en een klein spelletje. Met „Personaliseren” vul je één of twee namen in en krijg je het drukbestand met persoonlijke QR-code.',
+  sheet: 'Stickervel downloaden (A4, 48 × 3 cm)', name: 'Nederlands', h1: 'Levende kaarten', intro: 'Gedrukte wenskaarten met een verborgen QR-code: houd je telefoon erboven – en de kaart komt tot leven, met animatie, muziek en een klein spelletje. Met „Personaliseren” vul je één of twee namen in en krijg je het drukbestand met persoonlijke QR-code.',
   footer: '© MAM · Munich AI Media · Tip: „Bekijken zonder camera” toont elke kaart direct op het scherm.', lang: 'Taal',
   open: 'Kaart openen', pers: 'Personaliseren', ex: 'Voorbeeld', title: 'Personaliseren: ', n1: 'Naam', n2: 'Tweede naam (optioneel)', p1: 'bijv. Anna', p2: 'bijv. Tom',
   cardLang: 'Taal van de kaart', hint: 'De namen verschijnen in de levende kaart. De QR-code op het drukbestand leidt direct naar deze persoonlijke versie.',
   view: 'Kaart bekijken', pdf: 'Druk-PDF downloaden', copy: 'Link kopiëren', loading: 'Kaartafbeelding laden …', copied: 'Link gekopieerd.', nocopy: 'Kopiëren niet mogelijk – selecteer de link hierboven.', making: 'Druk-PDF maken …',
   done: 'Klaar: 13 × 18 cm, kaart 11,5 × 17,2 cm gecentreerd – met persoonlijke QR-code.',
-  F: { datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
+  F: { firma: ['Bedrijf (op spandoeken en beker)', 'bijv. Voorbeeld Wagenpark BV'], datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
        datum: ['Datum', 'bijv. 12 juni 2026'], geburt: ['Geboortedatum', 'bijv. 3 maart 2026'], gewicht: ['Gewicht', 'bijv. 3250 g'], groesse: ['Lengte', 'bijv. 51 cm'], gruss: ['Groet', 'bijv. Gelukkig nieuwjaar'], preise: ['Prijzen (max. 8, gescheiden door |)', 'Bioscoop|Pizza|Massage|Uitstapje'], meldung: ['Het bericht', 'Ooggetuigen melden taart, kaarsjes …'] },
   CARDS: {
     kaetzchen: ['Voor jou / Algemeen', 'Kitten met bal', 'Het kitten schiet de bal uit de kaart – gooi hem terug en het speelt vrolijk verder.'],
@@ -154,16 +159,17 @@ nl: {
     gluecksrad: ['Cadeaubon / Verjaardag', 'Rad van fortuin', 'Draai aan het rad – de gever kiest zelf de prijzen.'],
     zeitung: ['Verjaardag / Afscheid / Plezier', 'De Dagbode', 'De krant komt tot leven: geesten feliciteren op de grote foto, een veer schrijft het bericht.'],
     hochzeit: ['Bruiloft / Jubileum', 'Ringwerpen', 'Gooi gouden ringen op de bewegende champagnefles – daarna klokken, duiven, bloemenregen, namen en datum.'],
+    rennen: ['Kerstfeest van het bedrijf / QR-sticker', 'Kerstrally', 'Sticker (3 × 3 cm) voor een bestaande kaart: race, DTM, rally of dragrace in de sneeuw – ook live met z\'n tweeën, met een beker voor de winnaar.'],
   }
 },
 pl: {
-  name: 'Polski', h1: 'Żywe kartki', intro: 'Drukowane kartki z życzeniami z ukrytym kodem QR: przyłóż telefon – a kartka ożywa, z animacją, muzyką i małą grą. W „Personalizuj” wpisujesz jedno lub dwa imiona i dostajesz gotowy plik do druku z osobistym kodem QR.',
+  sheet: 'Pobierz arkusz naklejek (A4, 48 × 3 cm)', name: 'Polski', h1: 'Żywe kartki', intro: 'Drukowane kartki z życzeniami z ukrytym kodem QR: przyłóż telefon – a kartka ożywa, z animacją, muzyką i małą grą. W „Personalizuj” wpisujesz jedno lub dwa imiona i dostajesz gotowy plik do druku z osobistym kodem QR.',
   footer: '© MAM · Munich AI Media · Wskazówka: „Zobacz bez aparatu” pokazuje każdą kartkę od razu na ekranie.', lang: 'Język',
   open: 'Otwórz kartkę', pers: 'Personalizuj', ex: 'Przykład', title: 'Personalizuj: ', n1: 'Imię', n2: 'Drugie imię (opcjonalnie)', p1: 'np. Anna', p2: 'np. Tomek',
   cardLang: 'Język kartki', hint: 'Imiona pojawiają się w żywej kartce. Kod QR w pliku do druku prowadzi prosto do tej osobistej wersji.',
   view: 'Zobacz kartkę', pdf: 'Pobierz PDF do druku', copy: 'Kopiuj link', loading: 'Ładowanie obrazu …', copied: 'Link skopiowany.', nocopy: 'Kopiowanie niemożliwe – zaznacz link powyżej.', making: 'Tworzę PDF …',
   done: 'Gotowe: 13 × 18 cm, kartka 11,5 × 17,2 cm na środku – z osobistym kodem QR.',
-  F: { datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
+  F: { firma: ['Firma (na banerach i pucharze)', 'np. Przykładowa Flota sp. z o.o.'], datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
        datum: ['Data', 'np. 12 czerwca 2026'], geburt: ['Data urodzenia', 'np. 3 marca 2026'], gewicht: ['Waga', 'np. 3250 g'], groesse: ['Wzrost', 'np. 51 cm'], gruss: ['Życzenia', 'np. Szczęśliwego Nowego Roku'], preise: ['Nagrody (do 8, oddzielone |)', 'Kino|Pizza|Masaż|Wycieczka'], meldung: ['Wiadomość dnia', 'Świadkowie donoszą o torcie, świeczkach …'] },
   CARDS: {
     kaetzchen: ['Dla ciebie / Ogólne', 'Kotek z piłką', 'Kotek wybija piłkę z kartki – odrzuć ją, a dalej będzie się wesoło bawić.'],
@@ -180,16 +186,17 @@ pl: {
     gluecksrad: ['Bon / Urodziny', 'Koło fortuny', 'Zakręć kołem – nagrody wybiera darczyńca.'],
     zeitung: ['Urodziny / Pożegnanie / Zabawa', 'Kurier Dnia', 'Gazeta ożywa: duchy składają życzenia na dużym zdjęciu, pióro pisze wiadomość.'],
     hochzeit: ['Ślub / Rocznica', 'Rzut obrączkami', 'Rzucaj złote obrączki na wędrującą butelkę szampana – potem dzwony, gołębie, deszcz płatków, imiona i data.'],
+    rennen: ['Firmowa Wigilia / naklejka QR', 'Świąteczny rajd', 'Naklejka (3 × 3 cm) na istniejącą kartkę: wyścig, DTM, rajd lub drag race na śniegu – także na żywo we dwoje, z pucharem dla zwycięzcy.'],
   }
 },
 tr: {
-  name: 'Türkçe', h1: 'Canlı Kartlar', intro: 'Gizli QR kodlu baskılı tebrik kartları: telefonunu tut – kart animasyon, müzik ve küçük bir oyunla canlanır. „Kişiselleştir” ile bir ya da iki isim girersin ve kişisel QR kodlu baskı dosyasını alırsın.',
+  sheet: 'Etiket sayfasını indir (A4, 48 × 3 cm)', name: 'Türkçe', h1: 'Canlı Kartlar', intro: 'Gizli QR kodlu baskılı tebrik kartları: telefonunu tut – kart animasyon, müzik ve küçük bir oyunla canlanır. „Kişiselleştir” ile bir ya da iki isim girersin ve kişisel QR kodlu baskı dosyasını alırsın.',
   footer: '© MAM · Munich AI Media · İpucu: „Kamerasız izle” her kartı doğrudan ekranda gösterir.', lang: 'Dil',
   open: 'Kartı aç', pers: 'Kişiselleştir', ex: 'Örnek', title: 'Kişiselleştir: ', n1: 'İsim', n2: 'İkinci isim (isteğe bağlı)', p1: 'ör. Ayşe', p2: 'ör. Can',
   cardLang: 'Kartın dili', hint: 'İsimler canlı kartta görünür. Baskı dosyasındaki QR kod doğrudan bu kişisel sürüme götürür.',
   view: 'Kartı gör', pdf: 'Baskı PDF\'ini indir', copy: 'Bağlantıyı kopyala', loading: 'Kart resmi yükleniyor …', copied: 'Bağlantı kopyalandı.', nocopy: 'Kopyalanamadı – yukarıdaki bağlantıyı seç.', making: 'Baskı PDF\'i oluşturuluyor …',
   done: 'Hazır: 13 × 18 cm, kart 11,5 × 17,2 cm ortada – kişisel QR kodla.',
-  F: { datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
+  F: { firma: ['Şirket (afişlerde ve kupada)', 'ör. Örnek Filo A.Ş.'], datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
        datum: ['Tarih', 'ör. 12 Haziran 2026'], geburt: ['Doğum tarihi', 'ör. 3 Mart 2026'], gewicht: ['Kilo', 'ör. 3250 g'], groesse: ['Boy', 'ör. 51 cm'], gruss: ['Tebrik', 'ör. Mutlu yıllar'], preise: ['Ödüller (en fazla 8, | ile ayır)', 'Sinema|Pizza|Masaj|Gezi'], meldung: ['Haber', 'Görgü tanıkları pastadan, mumlardan …'] },
   CARDS: {
     kaetzchen: ['Senin için / Genel', 'Toplu kedi yavrusu', 'Kedi yavrusu topu karttan dışarı atar – geri at, mutlu mutlu oynamaya devam etsin.'],
@@ -206,6 +213,7 @@ tr: {
     gluecksrad: ['Hediye çeki / Doğum günü', 'Şans çarkı', 'Çarkı çevir – ödülleri hediye eden seçer.'],
     zeitung: ['Doğum günü / Veda / Eğlence', 'Günün Habercisi', 'Gazete canlanır: büyük resimde hayaletler tebrik eder, bir tüy kalem haberi yazar.'],
     hochzeit: ['Düğün / Yıldönümü', 'Yüzük atma', 'Altın yüzükleri hareket eden şampanya şişesine at – ardından çanlar, güvercinler, çiçek yağmuru, isimler ve tarih.'],
+    rennen: ['Şirket Noel partisi / QR etiketi', 'Noel Rallisi', 'Mevcut bir kart için etiket (3 × 3 cm): karda yarış, DTM, ralli ya da drag yarışı – iki telefonla canlı da, kazanana kupa.'],
   }
 },
 };

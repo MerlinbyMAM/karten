@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Weihnachts-Rallye</title>
+<meta name="theme-color" content="#0f3b4f">
+<style>
+  html,body{margin:0;height:100%;background:#0f3b4f;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+  #game{position:fixed;inset:0;width:100%;height:100%;display:block}
+  .ov{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:20px calc(16px + env(safe-area-inset-right)) 20px calc(16px + env(safe-area-inset-left));box-sizing:border-box;
+      background:radial-gradient(circle at 50% 20%,rgba(63,140,154,.92),rgba(11,37,51,.96));overflow:auto;touch-action:pan-y;z-index:5}
+  h1{margin:0;font-family:Georgia,serif;font-size:clamp(30px,9vw,46px);color:#ffd166;text-shadow:0 3px 0 #7a3b00;text-align:center}
+  p{margin:0;text-align:center;max-width:430px;line-height:1.35;opacity:.92}
+  .btn{border:0;border-radius:16px;padding:14px 18px;font-size:18px;font-weight:700;color:#0b2533;background:#ffd166;box-shadow:0 4px 0 #b07d00;cursor:pointer;width:min(360px,90vw)}
+  .btn.alt{background:#bfe3e6;box-shadow:0 4px 0 #6aa3a8}
+  .btn.ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5);box-shadow:none}
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:min(420px,92vw)}
+  .mode{border:0;border-radius:16px;padding:12px 10px;background:#fff;color:#0b2533;text-align:left;box-shadow:0 4px 0 #9bb8bd;cursor:pointer}
+  .mode b{display:block;font-size:18px;margin-bottom:2px}.mode span{font-size:12.5px;opacity:.8}
+  .mode i{font-style:normal;font-size:24px;float:right}
+  input{font-size:18px;padding:10px 14px;border-radius:12px;border:2px solid #bfe3e6;width:min(330px,84vw);text-align:center}
+  #qr svg{width:200px;height:200px;background:#fff;border-radius:10px}
+  #code{font:bold 34px monospace;letter-spacing:6px;color:#ffd166}
+  #trophy{width:min(260px,62vw);height:auto}
+  #firmaTag{font-family:Georgia,serif;font-style:italic;color:#ffd166}
+  #ar{position:fixed;inset:0;display:none;z-index:3}
+  #arHint{position:fixed;left:0;right:0;bottom:calc(24px + env(safe-area-inset-bottom));display:none;flex-direction:column;align-items:center;gap:10px;z-index:4}
+  #arHint div{background:rgba(11,37,51,.8);padding:8px 14px;border-radius:12px}
+  #hudtip{display:none}
+  #loading{position:fixed;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:6;background:rgba(11,37,51,.9)}
+  #loadBarW{width:220px;height:10px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}#loadBar{height:100%;width:0;background:#ffd166}
+</style>
+<script type="importmap">
+{"imports":{
+ "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+ "mindar-image-three":"https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+}}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="ar"></div>
+<div id="arHint"><div id="arHintText"></div><button class="btn" id="arGo"></button></div>
+<div id="loading"><div id="loadText">…</div><div id="loadBarW"><div id="loadBar"></div></div></div>
+<div id="hudtip"></div>
+
+<!-- Start -->
+<div class="ov" id="start" style="display:flex">
+  <div style="font-size:54px">🎄🚗🏆</div>
+  <h1 data-t="title"></h1>
+  <div id="firmaTag"></div>
+  <p data-t="sub"></p>
+  <button class="btn" id="btnAR" data-t="ar"></button>
+  <button class="btn alt" id="btnFlat" data-t="flat"></button>
+</div>
+
+<!-- Menü -->
+<div class="ov" id="menu">
+  <h1 data-t="title" style="font-size:32px"></h1>
+  <div id="duelBanner" style="color:#ffd166;font-weight:700"></div>
+  <input id="pname" maxlength="18" autocomplete="off">
+  <p data-t="mode" style="font-weight:700"></p>
+  <div class="modes">
+    <button class="mode" data-mode="race"><i>🏁</i><b data-t="m_race"></b><span data-t="m_race_d"></span></button>
+    <button class="mode" data-mode="dtm"><i>🏎️</i><b data-t="m_dtm"></b><span data-t="m_dtm_d"></span></button>
+    <button class="mode" data-mode="rally"><i>❄️</i><b data-t="m_rally"></b><span data-t="m_rally_d"></span></button>
+    <button class="mode" data-mode="drag"><i>🚦</i><b data-t="m_drag"></b><span data-t="m_drag_d"></span></button>
+  </div>
+  <button class="btn alt" id="btnDuel" data-t="duel"></button>
+  <p data-t="snowHint" style="font-size:13px;opacity:.75"></p>
+</div>
+
+<!-- Duell-Lobby -->
+<div class="ov" id="lobby">
+  <h1 data-t="duel" style="font-size:28px"></h1>
+  <p id="lobbyText">…</p>
+  <div id="qr"></div>
+  <div id="code"></div>
+  <button class="btn ghost" id="lobbyBack" data-t="menu"></button>
+</div>
+
+<!-- Ergebnis -->
+<div class="ov" id="res">
+  <h1 id="resTitle"></h1>
+  <canvas id="trophy"></canvas>
+  <p id="resTime"></p>
+  <button class="btn" id="again" data-t="again"></button>
+  <button class="btn ghost" id="tomenu" data-t="menu"></button>
+</div>
+
+<script type="module">
+import { tx, LANG } from './text.js';
+import { openMenu } from './game.js';
+const $ = id => document.getElementById(id);
+const Q = new URLSearchParams(location.search), FIRMA = (Q.get('firma') || '').trim();
+document.documentElement.lang = LANG; document.title = tx('title');
+document.querySelectorAll('[data-t]').forEach(e => e.textContent = tx(e.dataset.t));
+$('pname').placeholder = tx('yourName');
+try{ $('pname').value = localStorage.getItem('mamrally_name') || Q.get('name') || ''; }catch(e){}
+$('pname').addEventListener('change', () => { try{ localStorage.setItem('mamrally_name', $('pname').value); }catch(e){} });
+if(FIRMA) $('firmaTag').textContent = tx('merry') + ' · ' + FIRMA;
+$('lobbyBack').onclick = () => location.href = location.pathname + '?lang=' + LANG + (FIRMA ? '&firma=' + encodeURIComponent(FIRMA) : '');
+const go = () => { $('start').style.display = 'none'; openMenu(); };
+$('btnFlat').onclick = go;
+if(Q.get('join') || Q.has('direkt')) go();
+
+/* ---------- AR: Karte erkennen, Schnee + Lichter auf die Karte, dann losfahren ---------- */
+const KARTE = 'karte.jpg';
+$('arGo').textContent = tx('flat');
+$('arGo').onclick = () => { try{ window.__arStop && window.__arStop(); }catch(e){} $('ar').style.display = 'none'; $('arHint').style.display = 'none'; go(); };
+$('btnAR').onclick = async () => {
+  $('start').style.display = 'none'; $('loading').style.display = 'flex';
+  const bar = $('loadBar'), txt = $('loadText');
+  try{
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nocam');
+    let url = null;
+    try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
+    if(!url){
+      const im = new Image(); im.src = KARTE; await im.decode();
+      const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
+      const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
+      const c = new Compiler(); await c.compileImageTargets([im], p => bar.style.width = Math.round(p*.8) + '%');
+      url = URL.createObjectURL(new Blob([await c.exportData()]));
+    }
+    bar.style.width = '90%';
+    const THREE = await import('three');
+    const { MindARThree } = await import('mindar-image-three');
+    $('ar').style.display = 'block';
+    const mind = new MindARThree({ container: $('ar'), imageTargetSrc: url, uiScanning: 'no', uiLoading: 'no', uiError: 'no', filterMinCF: .0001, filterBeta: .001 });
+    const { renderer, scene, camera } = mind, anchor = mind.addAnchor(0);
+    const AH = 1004/768;                                       // Seitenverhältnis der Karte
+    const oc = document.createElement('canvas'); oc.width = 512; oc.height = Math.round(512*AH); const o = oc.getContext('2d');
+    const tex = new THREE.CanvasTexture(oc); tex.colorSpace = THREE.SRGBColorSpace;
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, AH), new THREE.MeshBasicMaterial({ map: tex, transparent: true }));
+    mesh.position.z = .003; anchor.group.add(mesh);
+    const flakes = Array.from({length: 120}, () => ({ x: Math.random(), y: Math.random(), s: .5 + Math.random() }));
+    let t0 = performance.now(), seen = false;
+    function paint(){
+      const t = (performance.now() - t0)/1000, W = oc.width, H = oc.height; o.clearRect(0, 0, W, H);
+      // blinkende Lichterkette oben, Schnee, Scheinwerfer des Autos, Startampel
+      for(let i=0;i<10;i++){ const x = W*(i + .5)/10, y = H*.06 + Math.sin(i*.9)*H*.015; o.fillStyle = (i + Math.floor(t*3)) % 2 ? 'rgba(255,209,102,.95)' : 'rgba(247,127,0,.9)'; o.beginPath(); o.arc(x, y, 7, 0, 7); o.fill(); }
+      o.fillStyle = 'rgba(255,255,255,.9)'; for(const f of flakes){ f.y += .002*f.s; if(f.y > 1) f.y = 0; o.beginPath(); o.arc((f.x + Math.sin(t + f.y*8)*.01)*W, f.y*H, 2*f.s, 0, 7); o.fill(); }
+      const glow = .5 + .5*Math.sin(t*4); o.fillStyle = `rgba(255,240,170,${.25 + glow*.35})`; o.beginPath(); o.ellipse(W*.5, H*.62, W*.22, H*.05, 0, 0, 7); o.fill();
+      if(seen){ const n = Math.max(0, 3 - Math.floor(t % 4)); o.fillStyle = 'rgba(11,37,51,.8)'; o.fillRect(W*.36, H*.82, W*.28, H*.07);
+        for(let i=0;i<3;i++){ o.fillStyle = i < 3 - n ? (n === 0 ? '#06d6a0' : '#ef233c') : '#333'; o.beginPath(); o.arc(W*(.41 + i*.09), H*.855, H*.022, 0, 7); o.fill(); } }
+      tex.needsUpdate = true;
+    }
+    anchor.onTargetFound = () => { seen = true; t0 = performance.now(); $('arHintText').textContent = '🎄 ' + tx('merry') + (FIRMA ? ' · ' + FIRMA : '') + ' 🎄'; $('arGo').style.display = 'block'; };
+    anchor.onTargetLost = () => { seen = false; };
+    await mind.start();
+    renderer.setAnimationLoop(() => { paint(); renderer.render(scene, camera); });
+    window.__arStop = () => { renderer.setAnimationLoop(null); try{ mind.stop(); }catch(e){} };
+    $('loading').style.display = 'none'; $('arHint').style.display = 'flex'; $('arGo').style.display = 'none';
+    $('arHintText').textContent = '📷 ' + tx('ar');
+  }catch(e){ console.error(e); $('loading').style.display = 'none'; $('ar').style.display = 'none'; go(); }
+};
+</script>
+</body>
+</html>

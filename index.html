@@ -94,6 +94,7 @@ const K = [
  ['gluecksrad', '?preise=Kino|Pizza|Massage|Ausflug|Fr%C3%BChst%C3%BCck|Wunsch%20frei', [['preise','preise']], v => ({ name: v.N, preise: v.preise })],
  ['zeitung', '?name=Oma%20Gerda', [['meldung','meldung',1]], v => ({ name: v.N, text: v.meldung }), [.82, .965]],
  ['hochzeit', '?namen=Anna%20%26%20Tom&datum=12.%20Juni%202026', [['datum','datum']], v => ({ namen: v.N, datum: v.datum })],
+ ['rennen', '?firma=Muster%20Fuhrpark%20GmbH', [['firma','firma']], v => ({ firma: v.firma }), [.15, .2]],   // nur QR-Sticker für eine vorhandene Karte
 ];
 const $ = id => document.getElementById(id);
 const LS = Object.keys(CT);
@@ -177,6 +178,9 @@ async function openP(i){
   $('n1').value = ''; $('n2').value = '';
   $('ex').innerHTML = cur[2].map(([k, fk, area]) => { const [l, ph] = T().F[fk]; return `<label for="x_${k}">${l}</label>` + (area ? `<textarea id="x_${k}" maxlength="160" placeholder="${ph}"></textarea>` : `<input id="x_${k}" maxlength="${k === 'preise' ? 120 : 40}" placeholder="${ph}">`); }).join('');
   $('ex').querySelectorAll('input,textarea').forEach(e => e.oninput = upd);
+  const st = cur[0] === 'rennen';                // Sticker: keine Namen, Bogen statt Karte
+  for(const id of ['n1','n2','ln1','ln2']) $(id).style.display = st ? 'none' : '';
+  $('pdf').textContent = st ? T().sheet : T().pdf;
   $('cl').value = UL; $('st').textContent = T().loading;
   $('dlg').classList.add('on');
   baseImg = await loadBase(cur[0], $('cl').value);
@@ -190,6 +194,7 @@ $('dlg').onclick = e => { if(e.target.id === 'dlg') $('dlg').classList.remove('o
 $('cp').onclick = async () => { try{ await navigator.clipboard.writeText(link()); $('st').textContent = T().copied; }catch(e){ $('st').textContent = T().nocopy; } };
 $('pdf').onclick = async () => {
   $('st').textContent = T().making;
+  if(cur[0] === 'rennen') return stickerSheet();
   const cv = document.createElement('canvas'); cv.width = 1152; cv.height = 1728;
   render(cv, link());
   const jpg = await new Promise(r => cv.toBlob(r, 'image/jpeg', .92));
@@ -200,9 +205,9 @@ $('pdf').onclick = async () => {
   $('st').textContent = T().done;
 };
 // Druck-PDF: 130 x 180 mm, Karte 114,67 x 172 mm mittig, JPEG direkt eingebettet
-async function makePdf(jpgBlob, iw, ih){
+async function makePdf(jpgBlob, iw, ih, page = [130, 180], img = [114.667, 172]){
   const jpg = new Uint8Array(await jpgBlob.arrayBuffer());
-  const mm = v => v*72/25.4, PW = mm(130), PH = mm(180), CW = mm(114.667), CH = mm(172);
+  const mm = v => v*72/25.4, PW = mm(page[0]), PH = mm(page[1]), CW = mm(img[0]), CH = mm(img[1]);
   const X = (PW-CW)/2, Y = (PH-CH)/2;
   const content = `q ${CW.toFixed(3)} 0 0 ${CH.toFixed(3)} ${X.toFixed(3)} ${Y.toFixed(3)} cm /Im0 Do Q`;
   const enc = new TextEncoder(); const parts = []; const offs = []; let len = 0;
@@ -217,6 +222,29 @@ async function makePdf(jpgBlob, iw, ih){
   const xref = len; let x = 'xref\n0 6\n0000000000 65535 f \n'; for(let i=1;i<=5;i++) x += String(offs[i]).padStart(10,'0') + ' 00000 n \n';
   push(x + `trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`);
   return new Blob(parts, {type: 'application/pdf'});
+}
+// QR-Sticker-Bogen A4 (300 dpi): 6 x 8 Sticker à 3 x 3 cm, in Originalgröße drucken
+async function stickerSheet(){
+  const D = 300/25.4, W = Math.round(210*D), H = Math.round(297*D), S = 30*D, cols = 6, rows = 8;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const g = cv.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, W, H);
+  const url = link(), qr = qrcode(0, 'M'); qr.addData(url); qr.make(); const N = qr.getModuleCount();
+  const gx = (W - cols*S)/(cols + 1), gy = (H - rows*S - 12*D)/(rows + 1);
+  g.fillStyle = '#555'; g.font = `bold ${3*D}px sans-serif`; g.fillText(T().CARDS.rennen[1] + ' · QR 3 × 3 cm · 100 %', 10*D, 8*D);
+  for(let r=0;r<rows;r++) for(let k=0;k<cols;k++){
+    const x = gx + k*(S + gx), y = 12*D + gy + r*(S + gy);
+    g.fillStyle = '#fff'; g.strokeStyle = '#0f3b4f'; g.lineWidth = .25*D; rr(g, x, y, S, S, 2.5*D); g.fill(); g.stroke();
+    const q = 23*D, m = q/N, qx = x + (S - q)/2, qy = y + 1.6*D;
+    g.fillStyle = '#000'; for(let i=0;i<N;i++) for(let j=0;j<N;j++) if(qr.isDark(i, j)) g.fillRect(Math.floor(qx + j*m), Math.floor(qy + i*m), Math.ceil(m), Math.ceil(m));
+    g.fillStyle = '#0f3b4f'; rr(g, x + 2*D, y + S - 4.8*D, S - 4*D, 3.6*D, 1.2*D); g.fill();
+    g.fillStyle = '#ffd166'; g.font = `bold ${2.6*D}px sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('SCAN & RACE!', x + S/2, y + S - 3*D); g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  }
+  const jpg = await new Promise(r => cv.toBlob(r, 'image/jpeg', .95));
+  const pdf = await makePdf(jpg, W, H, [210, 297], [210, 297]);
+  const nm = (values().firma || 'Sticker').replace(/[^\wäöüÄÖÜß-]+/g, '_');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(pdf); a.download = `QR-Sticker_Rallye_${$('cl').value}_${nm}_3x3cm.pdf`;
+  document.body.appendChild(a); a.click(); a.remove();
+  $('st').textContent = T().done;
 }
 function personalizeMax(c, s, name, datum){
   // Lebkuchenherz: alten Namen überdecken, neuen Namen schreiben (Kartenmaße 600 x 900, Faktor s)
