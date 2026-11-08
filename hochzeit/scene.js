@@ -6,7 +6,7 @@ import { startCard, bigText, rnd } from '../core/card.js';
 const P = new URLSearchParams(location.search);
 const NAMEN = P.get('namen') || 'Alles Liebe zur Hochzeit!';
 const DATUM = P.get('datum');
-const CY = 560;
+const CY = 430;
 
 let rings, held, joined, jT, doves, petals, sparks;
 
