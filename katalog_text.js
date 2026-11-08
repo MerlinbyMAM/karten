@@ -10,6 +10,7 @@ de: {
   F: { firma: ['Firma (auf Banner und Pokal)', 'z. B. Muster Fuhrpark GmbH'], datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
        datum: ['Datum', 'z. B. 12. Juni 2026'], geburt: ['Geburtsdatum', 'z. B. 3. März 2026'], gewicht: ['Gewicht', 'z. B. 3250 g'], groesse: ['Größe', 'z. B. 51 cm'], gruss: ['Gruß', 'z. B. Frohes neues Jahr'], preise: ['Preise (bis 8, mit | trennen)', 'Kino|Pizza|Massage|Ausflug'], meldung: ['Die Meldung', 'Augenzeugen berichten von Kuchen, Kerzen …'] },
   CARDS: {
+    dreissig: ['30. Geburtstag', 'Piñata zum 30.', 'Eine bunte 30-Piñata zum Aufhängen. Beim Scannen schwingt die gedruckte Piñata bei jedem Schlag – bis sie platzt und Süßigkeiten regnen.'],
     ostern: ['Ostern', 'Eiersuche', 'Ein Osterhase mit Korb auf der Frühlingswiese, rundherum bunte Eier. Beim Scannen verstecken sich die gedruckten Eier im Gras und lugen kurz hervor – schnell antippen, dann hüpfen sie in den Korb.'],
     fuenfzig: ['50. Geburtstag', 'Trickkerzen zum 50.', 'Eine festliche Torte mit goldener 50 und fünf brennenden Kerzen. Beim Scannen werden die gedruckten Kerzen zu Trickkerzen: auspusten per Wisch – bis alle fünf gleichzeitig aus sind.'],
     achtzehn: ['18. Geburtstag', 'Endlich 18!', 'Sektflasche und vier leere Gläser im Partylicht. Beim Scannen wird die gedruckte Flasche geschüttelt bis der Korken knallt – dann die gedruckten Gläser randvoll füllen, aber nicht überlaufen lassen.'],
@@ -48,6 +49,7 @@ en: {
   F: { firma: ['Company (on banners and trophy)', 'e.g. Sample Fleet Ltd'], datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
        datum: ['Date', 'e.g. 12 June 2026'], geburt: ['Date of birth', 'e.g. 3 March 2026'], gewicht: ['Weight', 'e.g. 3250 g'], groesse: ['Length', 'e.g. 51 cm'], gruss: ['Greeting', 'e.g. Happy New Year'], preise: ['Prizes (up to 8, separated by |)', 'Cinema|Pizza|Massage|Day trip'], meldung: ['The news story', 'Eyewitnesses report cake, candles …'] },
   CARDS: {
+    dreissig: ['30th birthday', 'Piñata for 30', 'A colourful number-30 piñata. When scanned, the printed piñata swings with every hit – until it bursts in a shower of sweets.'],
     ostern: ['Easter', 'Egg Hunt', 'An Easter bunny with a basket on a spring meadow, colourful eggs all around. When scanned, the printed eggs hide in the grass and peek out briefly – tap fast and they hop into the basket.'],
     fuenfzig: ['50th birthday', 'Trick Candles for 50', 'A festive cake with a golden 50 and five burning candles. When scanned, the printed candles become trick candles: blow them out with a swipe until all five are out at once.'],
     achtzehn: ['18th birthday', 'Finally 18!', 'A bottle of bubbly and four empty glasses in party light. When scanned, shake the printed bottle until the cork pops – then fill the printed glasses to the brim without overflowing.'],
@@ -86,6 +88,7 @@ fr: {
   F: { firma: ['Entreprise (sur les banderoles et le trophée)', 'p. ex. Flotte Exemple SARL'], datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
        datum: ['Date', 'p. ex. 12 juin 2026'], geburt: ['Date de naissance', 'p. ex. 3 mars 2026'], gewicht: ['Poids', 'p. ex. 3250 g'], groesse: ['Taille', 'p. ex. 51 cm'], gruss: ['Vœux', 'p. ex. Bonne année'], preise: ['Lots (jusqu\'à 8, séparés par |)', 'Cinéma|Pizza|Massage|Excursion'], meldung: ['La nouvelle', 'Des témoins parlent de gâteau, de bougies …'] },
   CARDS: {
+    dreissig: ['30 ans', 'Piñata pour 30 ans', 'Une piñata colorée en forme de 30. Au scan, la piñata imprimée balance à chaque coup – jusqu\'à éclater en pluie de bonbons.'],
     ostern: ['Pâques', 'Chasse aux œufs', 'Un lapin de Pâques avec un panier dans un pré fleuri, entouré d\'œufs colorés. Au scan, les œufs imprimés se cachent dans l\'herbe et pointent le nez – touche vite pour qu\'ils sautent dans le panier.'],
     fuenfzig: ['50 ans', 'Bougies magiques pour 50 ans', 'Un gâteau festif avec un 50 doré et cinq bougies allumées. Au scan, les bougies imprimées deviennent magiques : souffle-les d\'un glissement jusqu\'à les éteindre toutes.'],
     achtzehn: ['18 ans', 'Enfin 18 ans !', 'Une bouteille et quatre verres vides sous les lumières de fête. Au scan, secoue la bouteille imprimée jusqu\'à ce que le bouchon saute – puis remplis les verres imprimés à ras bord sans déborder.'],
@@ -124,6 +127,7 @@ it: {
   F: { firma: ['Azienda (su striscioni e coppa)', 'es. Flotta Esempio srl'], datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
        datum: ['Data', 'es. 12 giugno 2026'], geburt: ['Data di nascita', 'es. 3 marzo 2026'], gewicht: ['Peso', 'es. 3250 g'], groesse: ['Lunghezza', 'es. 51 cm'], gruss: ['Augurio', 'es. Buon anno'], preise: ['Premi (fino a 8, separati da |)', 'Cinema|Pizza|Massaggio|Gita'], meldung: ['La notizia', 'Testimoni parlano di torta, candeline …'] },
   CARDS: {
+    dreissig: ['30 anni', 'Pignatta per i 30', 'Una pignatta colorata a forma di 30. Alla scansione la pignatta stampata oscilla a ogni colpo – finché scoppia in una pioggia di dolci.'],
     ostern: ['Pasqua', 'Caccia alle uova', 'Un coniglietto con il cestino su un prato primaverile, uova colorate tutt\'intorno. Alla scansione le uova stampate si nascondono nell\'erba e spuntano per un attimo – toccale in fretta e saltano nel cestino.'],
     fuenfzig: ['50 anni', 'Candele magiche per i 50', 'Una torta festosa con un 50 dorato e cinque candeline accese. Alla scansione diventano candele magiche: spegnile con uno swipe finché sono tutte spente.'],
     achtzehn: ['18 anni', 'Finalmente 18!', 'Una bottiglia e quattro bicchieri vuoti tra le luci della festa. Alla scansione scuoti la bottiglia stampata finché il tappo salta – poi riempi i bicchieri stampati fino all\'orlo senza traboccare.'],
@@ -162,6 +166,7 @@ es: {
   F: { firma: ['Empresa (en pancartas y trofeo)', 'p. ej. Flota Ejemplo S.L.'], datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
        datum: ['Fecha', 'p. ej. 12 de junio de 2026'], geburt: ['Fecha de nacimiento', 'p. ej. 3 de marzo de 2026'], gewicht: ['Peso', 'p. ej. 3250 g'], groesse: ['Talla', 'p. ej. 51 cm'], gruss: ['Saludo', 'p. ej. Feliz Año Nuevo'], preise: ['Premios (hasta 8, separados por |)', 'Cine|Pizza|Masaje|Excursión'], meldung: ['La noticia', 'Testigos hablan de tarta, velas …'] },
   CARDS: {
+    dreissig: ['30 años', 'Piñata para los 30', 'Una piñata de colores con forma de 30. Al escanear, la piñata impresa se balancea con cada golpe – hasta reventar en una lluvia de dulces.'],
     ostern: ['Pascua', 'Búsqueda de huevos', 'Un conejo de Pascua con su cesta en una pradera, rodeado de huevos de colores. Al escanear, los huevos impresos se esconden en la hierba y se asoman un instante – tócalos rápido y saltan a la cesta.'],
     fuenfzig: ['50 años', 'Velas mágicas para los 50', 'Una tarta festiva con un 50 dorado y cinco velas encendidas. Al escanear se vuelven velas mágicas: sóplalas deslizando hasta apagarlas todas a la vez.'],
     achtzehn: ['18 años', '¡Por fin 18!', 'Una botella y cuatro copas vacías bajo luces de fiesta. Al escanear, agita la botella impresa hasta que salte el corcho – luego llena las copas impresas hasta el borde sin derramar.'],
@@ -200,6 +205,7 @@ nl: {
   F: { firma: ['Bedrijf (op spandoeken en beker)', 'bijv. Voorbeeld Wagenpark BV'], datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
        datum: ['Datum', 'bijv. 12 juni 2026'], geburt: ['Geboortedatum', 'bijv. 3 maart 2026'], gewicht: ['Gewicht', 'bijv. 3250 g'], groesse: ['Lengte', 'bijv. 51 cm'], gruss: ['Groet', 'bijv. Gelukkig nieuwjaar'], preise: ['Prijzen (max. 8, gescheiden door |)', 'Bioscoop|Pizza|Massage|Uitstapje'], meldung: ['Het bericht', 'Ooggetuigen melden taart, kaarsjes …'] },
   CARDS: {
+    dreissig: ['30e verjaardag', 'Piñata voor je 30e', 'Een kleurrijke piñata in de vorm van 30. Bij het scannen slingert de gedrukte piñata bij elke klap – tot hij knapt in een regen van snoep.'],
     ostern: ['Pasen', 'Eieren zoeken', 'Een paashaas met mandje op een voorjaarsweide, met overal gekleurde eieren. Bij het scannen verstoppen de gedrukte eieren zich in het gras en piepen even tevoorschijn – snel tikken en ze springen in het mandje.'],
     fuenfzig: ['50e verjaardag', 'Trukkaarsjes voor je 50e', 'Een feestelijke taart met een gouden 50 en vijf brandende kaarsjes. Bij het scannen worden het trukkaarsjes: uitblazen met een veeg tot ze alle vijf tegelijk uit zijn.'],
     achtzehn: ['18e verjaardag', 'Eindelijk 18!', 'Een fles bubbels en vier lege glazen in feestlicht. Bij het scannen schud je de gedrukte fles tot de kurk knalt – en vul je de gedrukte glazen tot de rand zonder over te lopen.'],
@@ -238,6 +244,7 @@ pl: {
   F: { firma: ['Firma (na banerach i pucharze)', 'np. Przykładowa Flota sp. z o.o.'], datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
        datum: ['Data', 'np. 12 czerwca 2026'], geburt: ['Data urodzenia', 'np. 3 marca 2026'], gewicht: ['Waga', 'np. 3250 g'], groesse: ['Wzrost', 'np. 51 cm'], gruss: ['Życzenia', 'np. Szczęśliwego Nowego Roku'], preise: ['Nagrody (do 8, oddzielone |)', 'Kino|Pizza|Masaż|Wycieczka'], meldung: ['Wiadomość dnia', 'Świadkowie donoszą o torcie, świeczkach …'] },
   CARDS: {
+    dreissig: ['30. urodziny', 'Piñata na 30.', 'Kolorowa piñata w kształcie 30. Po zeskanowaniu wydrukowana piñata kołysze się przy każdym uderzeniu – aż pęknie i posypią się słodycze.'],
     ostern: ['Wielkanoc', 'Szukanie jajek', 'Zajączek z koszykiem na wiosennej łące, wokół kolorowe pisanki. Po zeskanowaniu wydrukowane jajka chowają się w trawie i na chwilę wyglądają – dotknij szybko, a wskoczą do koszyka.'],
     fuenfzig: ['50. urodziny', 'Magiczne świeczki na 50.', 'Odświętny tort ze złotą pięćdziesiątką i pięcioma świeczkami. Po zeskanowaniu stają się magiczne: zdmuchuj je przesunięciem, aż wszystkie zgasną naraz.'],
     achtzehn: ['18. urodziny', 'Nareszcie 18!', 'Butelka i cztery puste kieliszki w imprezowym świetle. Po zeskanowaniu potrząsaj wydrukowaną butelką, aż korek wystrzeli – potem napełnij wydrukowane kieliszki po brzegi, nie przelewając.'],
@@ -276,6 +283,7 @@ tr: {
   F: { firma: ['Şirket (afişlerde ve kupada)', 'ör. Örnek Filo A.Ş.'], datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
        datum: ['Tarih', 'ör. 12 Haziran 2026'], geburt: ['Doğum tarihi', 'ör. 3 Mart 2026'], gewicht: ['Kilo', 'ör. 3250 g'], groesse: ['Boy', 'ör. 51 cm'], gruss: ['Tebrik', 'ör. Mutlu yıllar'], preise: ['Ödüller (en fazla 8, | ile ayır)', 'Sinema|Pizza|Masaj|Gezi'], meldung: ['Haber', 'Görgü tanıkları pastadan, mumlardan …'] },
   CARDS: {
+    dreissig: ['30. yaş günü', '30. yaş piñatası', 'Renkli, 30 şeklinde bir piñata. Tarayınca basılı piñata her vuruşta sallanır – sonunda patlar ve şeker yağar.'],
     ostern: ['Paskalya', 'Yumurta avı', 'Bahar çayırında sepetli bir Paskalya tavşanı, etrafta renkli yumurtalar. Tarayınca basılı yumurtalar çimenlere saklanır ve kısa süre dışarı bakar – hızlı dokun, sepete zıplasınlar.'],
     fuenfzig: ['50. yaş günü', '50. yaş için sihirli mumlar', 'Altın 50 ve beş yanan mumlu şık bir pasta. Tarayınca basılı mumlar sihirli olur: beşi aynı anda sönene kadar kaydırarak üfle.'],
     achtzehn: ['18. yaş günü', 'Sonunda 18!', 'Parti ışıkları altında bir şişe ve dört boş kadeh. Tarayınca basılı şişeyi mantar patlayana kadar çalkala – sonra basılı kadehleri taşırmadan ağzına kadar doldur.'],
