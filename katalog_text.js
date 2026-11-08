@@ -10,6 +10,7 @@ de: {
   F: { firma: ['Firma (auf Banner und Pokal)', 'z. B. Muster Fuhrpark GmbH'], datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
        datum: ['Datum', 'z. B. 12. Juni 2026'], geburt: ['Geburtsdatum', 'z. B. 3. März 2026'], gewicht: ['Gewicht', 'z. B. 3250 g'], groesse: ['Größe', 'z. B. 51 cm'], gruss: ['Gruß', 'z. B. Frohes neues Jahr'], preise: ['Preise (bis 8, mit | trennen)', 'Kino|Pizza|Massage|Ausflug'], meldung: ['Die Meldung', 'Augenzeugen berichten von Kuchen, Kerzen …'] },
   CARDS: {
+    besserung: ['Gute Besserung', 'Teddy-Pflege', 'Ein kranker Teddy im Bett, rundherum Tee, Honig, Wärmflasche und Tulpen. Beim Scannen lassen sich die gedruckten Sachen zum Teddy ziehen – bis er wieder lächelt.'],
     danke: ['Danke', 'Danke-Strauß', 'Der gedruckte Blumenstrauß wirbelt beim Scannen durcheinander – Teile tauschen, bis er wieder vollständig ist; dann erscheint das persönliche Dankeschön.'],
     trauer: ['Trauer / Anteilnahme', 'Lichter der Erinnerung', '„Aufrichtige Anteilnahme“ über einem stillen See mit Schwimmkerzen. Beim Scannen steigt das Licht jeder gedruckten Kerze als Laterne auf und wird zum Stern – ohne Punkte, ohne Zeitdruck.'],
     vatertag: ['Vatertag', 'Grillmeister für Papa', 'Der gedruckte Grill wird lebendig: Die Würstchen auf der Karte brutzeln live, werden im goldbraunen Moment gewendet und fliegen auf den gedruckten Teller.'],
@@ -44,6 +45,7 @@ en: {
   F: { firma: ['Company (on banners and trophy)', 'e.g. Sample Fleet Ltd'], datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
        datum: ['Date', 'e.g. 12 June 2026'], geburt: ['Date of birth', 'e.g. 3 March 2026'], gewicht: ['Weight', 'e.g. 3250 g'], groesse: ['Length', 'e.g. 51 cm'], gruss: ['Greeting', 'e.g. Happy New Year'], preise: ['Prizes (up to 8, separated by |)', 'Cinema|Pizza|Massage|Day trip'], meldung: ['The news story', 'Eyewitnesses report cake, candles …'] },
   CARDS: {
+    besserung: ['Get well', 'Teddy Care', 'A sick teddy in bed, surrounded by tea, honey, a hot-water bottle and tulips. When scanned, drag the printed items to the teddy until he smiles again.'],
     danke: ['Thank you', 'Thank-You Bouquet', 'The printed bouquet jumbles up when scanned – swap the pieces until it is whole again, then a personal thank-you appears.'],
     trauer: ['Sympathy', 'Lights of Remembrance', 'A quiet lake with floating candles. When scanned, the light of each printed candle rises as a lantern and becomes a star – no score, no timer.'],
     vatertag: ['Father\'s Day', 'Grill Master Dad', 'The printed grill comes alive: the sausages on the card sizzle live, get flipped at the golden moment and fly onto the printed plate.'],
@@ -78,6 +80,7 @@ fr: {
   F: { firma: ['Entreprise (sur les banderoles et le trophée)', 'p. ex. Flotte Exemple SARL'], datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
        datum: ['Date', 'p. ex. 12 juin 2026'], geburt: ['Date de naissance', 'p. ex. 3 mars 2026'], gewicht: ['Poids', 'p. ex. 3250 g'], groesse: ['Taille', 'p. ex. 51 cm'], gruss: ['Vœux', 'p. ex. Bonne année'], preise: ['Lots (jusqu\'à 8, séparés par |)', 'Cinéma|Pizza|Massage|Excursion'], meldung: ['La nouvelle', 'Des témoins parlent de gâteau, de bougies …'] },
   CARDS: {
+    besserung: ['Bon rétablissement', 'Soigner le nounours', 'Un nounours malade au lit, entouré de thé, miel, bouillotte et tulipes. Au scan, fais glisser les objets imprimés jusqu\'à lui pour qu\'il sourie à nouveau.'],
     danke: ['Merci', 'Bouquet de remerciement', 'Le bouquet imprimé se mélange au scan – échanger les morceaux jusqu\'à le reconstituer, puis un merci personnel apparaît.'],
     trauer: ['Condoléances', 'Lumières du souvenir', 'Un lac paisible avec des bougies flottantes. Au scan, la lumière de chaque bougie imprimée s\'élève en lanterne et devient étoile – sans score ni chrono.'],
     vatertag: ['Fête des pères', 'Papa roi du barbecue', 'Le barbecue imprimé prend vie : les saucisses de la carte grésillent en direct, se retournent au moment doré et volent dans l’assiette imprimée.'],
@@ -112,6 +115,7 @@ it: {
   F: { firma: ['Azienda (su striscioni e coppa)', 'es. Flotta Esempio srl'], datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
        datum: ['Data', 'es. 12 giugno 2026'], geburt: ['Data di nascita', 'es. 3 marzo 2026'], gewicht: ['Peso', 'es. 3250 g'], groesse: ['Lunghezza', 'es. 51 cm'], gruss: ['Augurio', 'es. Buon anno'], preise: ['Premi (fino a 8, separati da |)', 'Cinema|Pizza|Massaggio|Gita'], meldung: ['La notizia', 'Testimoni parlano di torta, candeline …'] },
   CARDS: {
+    besserung: ['Guarigione', 'Cure per l\'orsetto', 'Un orsetto malato a letto, circondato da tè, miele, borsa dell\'acqua calda e tulipani. Alla scansione trascina gli oggetti stampati fino a lui finché sorride.'],
     danke: ['Grazie', 'Bouquet del grazie', 'Il bouquet stampato si mescola alla scansione – scambiare i pezzi fino a ricomporlo, poi appare un grazie personale.'],
     trauer: ['Condoglianze', 'Luci del ricordo', 'Un lago tranquillo con candele galleggianti. Alla scansione la luce di ogni candela stampata sale come lanterna e diventa stella – senza punti né tempo.'],
     vatertag: ['Festa del papà', 'Papà re della griglia', 'La griglia stampata prende vita: le salsicce sul biglietto sfrigolano dal vivo, si girano al momento dorato e volano nel piatto stampato.'],
@@ -146,6 +150,7 @@ es: {
   F: { firma: ['Empresa (en pancartas y trofeo)', 'p. ej. Flota Ejemplo S.L.'], datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
        datum: ['Fecha', 'p. ej. 12 de junio de 2026'], geburt: ['Fecha de nacimiento', 'p. ej. 3 de marzo de 2026'], gewicht: ['Peso', 'p. ej. 3250 g'], groesse: ['Talla', 'p. ej. 51 cm'], gruss: ['Saludo', 'p. ej. Feliz Año Nuevo'], preise: ['Premios (hasta 8, separados por |)', 'Cine|Pizza|Masaje|Excursión'], meldung: ['La noticia', 'Testigos hablan de tarta, velas …'] },
   CARDS: {
+    besserung: ['Recuperación', 'Cuidar al osito', 'Un osito enfermo en la cama, rodeado de té, miel, bolsa de agua caliente y tulipanes. Al escanear, arrastra los objetos impresos hasta él hasta que sonría.'],
     danke: ['Gracias', 'Ramo de gracias', 'El ramo impreso se desordena al escanear – intercambiar piezas hasta recomponerlo; luego aparece un agradecimiento personal.'],
     trauer: ['Condolencias', 'Luces del recuerdo', 'Un lago sereno con velas flotantes. Al escanear, la luz de cada vela impresa sube como farolillo y se vuelve estrella – sin puntos ni prisas.'],
     vatertag: ['Día del Padre', 'Papá, rey de la parrilla', 'La parrilla impresa cobra vida: las salchichas de la tarjeta chisporrotean en vivo, se voltean en el momento dorado y vuelan al plato impreso.'],
@@ -180,6 +185,7 @@ nl: {
   F: { firma: ['Bedrijf (op spandoeken en beker)', 'bijv. Voorbeeld Wagenpark BV'], datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
        datum: ['Datum', 'bijv. 12 juni 2026'], geburt: ['Geboortedatum', 'bijv. 3 maart 2026'], gewicht: ['Gewicht', 'bijv. 3250 g'], groesse: ['Lengte', 'bijv. 51 cm'], gruss: ['Groet', 'bijv. Gelukkig nieuwjaar'], preise: ['Prijzen (max. 8, gescheiden door |)', 'Bioscoop|Pizza|Massage|Uitstapje'], meldung: ['Het bericht', 'Ooggetuigen melden taart, kaarsjes …'] },
   CARDS: {
+    besserung: ['Beterschap', 'Beertje verzorgen', 'Een ziek beertje in bed, met thee, honing, een kruik en tulpen. Bij het scannen sleep je de gedrukte spullen naar hem toe tot hij weer lacht.'],
     danke: ['Bedankt', 'Bedankt-boeket', 'Het gedrukte boeket raakt bij het scannen door elkaar – stukjes wisselen tot het heel is, dan verschijnt een persoonlijk bedankje.'],
     trauer: ['Rouw / Medeleven', 'Lichtjes van herinnering', 'Een stil meer met drijvende kaarsjes. Bij het scannen stijgt het licht van elk gedrukt kaarsje op als lantaarn en wordt een ster – zonder punten of tijdsdruk.'],
     vatertag: ['Vaderdag', 'Grillmeester papa', 'De gedrukte grill komt tot leven: de worstjes op de kaart sissen live, worden op het gouden moment gekeerd en vliegen op het gedrukte bord.'],
@@ -214,6 +220,7 @@ pl: {
   F: { firma: ['Firma (na banerach i pucharze)', 'np. Przykładowa Flota sp. z o.o.'], datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
        datum: ['Data', 'np. 12 czerwca 2026'], geburt: ['Data urodzenia', 'np. 3 marca 2026'], gewicht: ['Waga', 'np. 3250 g'], groesse: ['Wzrost', 'np. 51 cm'], gruss: ['Życzenia', 'np. Szczęśliwego Nowego Roku'], preise: ['Nagrody (do 8, oddzielone |)', 'Kino|Pizza|Masaż|Wycieczka'], meldung: ['Wiadomość dnia', 'Świadkowie donoszą o torcie, świeczkach …'] },
   CARDS: {
+    besserung: ['Powrót do zdrowia', 'Opieka nad misiem', 'Chory miś w łóżku, obok herbata, miód, termofor i tulipany. Po zeskanowaniu przeciągnij wydrukowane rzeczy do misia, aż znów się uśmiechnie.'],
     danke: ['Podziękowanie', 'Bukiet z podziękowaniem', 'Wydrukowany bukiet miesza się po zeskanowaniu – zamieniaj części, aż będzie cały; potem pojawia się osobiste podziękowanie.'],
     trauer: ['Kondolencje', 'Światła pamięci', 'Ciche jezioro z pływającymi świecami. Po zeskanowaniu światło każdej wydrukowanej świecy wznosi się jak lampion i staje się gwiazdą – bez punktów i pośpiechu.'],
     vatertag: ['Dzień Ojca', 'Tata – mistrz grilla', 'Wydrukowany grill ożywa: kiełbaski z kartki skwierczą na żywo, obracasz je w złotym momencie, a one lecą na wydrukowany talerz.'],
@@ -248,6 +255,7 @@ tr: {
   F: { firma: ['Şirket (afişlerde ve kupada)', 'ör. Örnek Filo A.Ş.'], datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
        datum: ['Tarih', 'ör. 12 Haziran 2026'], geburt: ['Doğum tarihi', 'ör. 3 Mart 2026'], gewicht: ['Kilo', 'ör. 3250 g'], groesse: ['Boy', 'ör. 51 cm'], gruss: ['Tebrik', 'ör. Mutlu yıllar'], preise: ['Ödüller (en fazla 8, | ile ayır)', 'Sinema|Pizza|Masaj|Gezi'], meldung: ['Haber', 'Görgü tanıkları pastadan, mumlardan …'] },
   CARDS: {
+    besserung: ['Geçmiş olsun', 'Ayıcık bakımı', 'Yatakta hasta bir ayıcık; çevresinde çay, bal, sıcak su torbası ve laleler. Tarayınca basılı eşyaları ayıcığa sürükle, yeniden gülümsesin.'],
     danke: ['Teşekkür', 'Teşekkür buketi', 'Basılı buket tarayınca karışır – parçaları değiştirip tamamla; ardından kişisel bir teşekkür belirir.'],
     trauer: ['Taziye', 'Anı ışıkları', 'Yüzen mumlarla sakin bir göl. Tarayınca her basılı mumun ışığı fener gibi yükselip yıldıza dönüşür – puansız, acelesiz.'],
     vatertag: ['Babalar Günü', 'Mangal ustası baba', 'Basılı mangal canlanıyor: karttaki sosisler canlı cızırdar, altın anında çevrilir ve basılı tabağa uçar.'],
