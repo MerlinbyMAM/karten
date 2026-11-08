@@ -261,10 +261,35 @@ export function confetti(n=140, colors=['#f3c98b','#ff7aa8','#7ad3ff','#9cf27a',
 export function drawConfetti(g, list, dt){
   for(const c of list){ c.x += c.vx*dt; c.y += c.vy*dt; c.r += c.vr*dt; if(c.y > 920){ c.y = -10; } g.save(); g.translate(c.x, c.y); g.rotate(c.r); g.fillStyle = c.c; g.fillRect(-c.s/2, -c.s/4, c.s, c.s/2); g.restore(); }
 }
-export function bigText(g, text, x, y, size=56, fill='#fff', stroke='rgba(80,30,50,.85)', font='Georgia'){
+// Große Schrift mit Kontur. Zu lange Texte werden automatisch umbrochen (max. 3 Zeilen)
+// und notfalls kleiner gesetzt, damit nichts aus dem Bild läuft.
+export function bigText(g, text, x, y, size=56, fill='#fff', stroke='rgba(80,30,50,.85)', font='Georgia', maxW=540){
+  text = String(text);
   g.save(); g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.font = `italic bold ${size}px ${font}`; g.lineWidth = Math.max(4, size/7); g.strokeStyle = stroke; g.fillStyle = fill;
-  g.strokeText(text, x, y); g.fillText(text, x, y); g.restore();
+  let fs = size, lines;
+  for(;;){
+    g.font = `italic bold ${fs}px ${font}`;
+    lines = fitLines(g, text, maxW);
+    const wide = lines.some(l => g.measureText(l).width > maxW);
+    if((!wide && lines.length <= (fs > size*.75 ? 2 : 3)) || fs <= size*.45) break;
+    fs = Math.round(fs*.92);
+  }
+  g.lineWidth = Math.max(4, fs/7); g.strokeStyle = stroke; g.fillStyle = fill; g.lineJoin = 'round';
+  const lh = fs*1.12, y0 = y - (lines.length - 1)*lh/2;
+  lines.forEach((l, i) => { g.strokeText(l, x, y0 + i*lh); g.fillText(l, x, y0 + i*lh); });
+  g.restore();
+}
+export function fitLines(g, text, maxW){
+  const words = String(text).split(/\s+/).filter(Boolean), out = []; let line = '';
+  for(const w of words){ const t = line ? line + ' ' + w : w; if(g.measureText(t).width > maxW && line){ out.push(line); line = w; } else line = t; }
+  if(line) out.push(line);
+  // ausgewogener: bei zwei Zeilen möglichst gleich lang
+  if(out.length === 2){
+    let best = out, bw = Math.max(...out.map(l => g.measureText(l).width));
+    for(let i=1;i<words.length;i++){ const a = words.slice(0, i).join(' '), b = words.slice(i).join(' '), w = Math.max(g.measureText(a).width, g.measureText(b).width); if(w < bw){ bw = w; best = [a, b]; } }
+    return best;
+  }
+  return out;
 }
 export function wrapText(g, text, x, y, maxW, lh){
   const words = text.split(' '); let line = '', yy = y;

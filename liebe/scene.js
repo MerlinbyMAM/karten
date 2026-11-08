@@ -1,7 +1,7 @@
 // Liebesbrief: Antippen des Siegels -> Siegel bricht, Umschlag öffnet sich,
 // Brief gleitet heraus mit persönlicher Nachricht (?text=, ?von=), Rosenblätter regnen.
 // Herzen tippen = kleine Herz-Explosion.
-import { startCard, bigText, wrapText, rnd } from '../core/card.js';
+import { startCard, bigText, wrapText, fitLines, rnd } from '../core/card.js';
 import { ENV } from './data.js';   // Umschlag-Box {x,y,w,h} in 600x900-Koordinaten
 
 const P = new URLSearchParams(location.search);
@@ -59,7 +59,9 @@ const scene = {
         g.fillText('Mein Schatz,', cx, cy - h/2 + 70);
         g.font = 'italic 30px Georgia, serif'; g.fillStyle = '#5a1a1a';
         const shown = TEXT.slice(0, Math.floor((ctx.t - t0 - 1.2)*22));
-        wrapText(g, shown, cx, cy - h/2 + 140, w - 80, 42);
+        // Nachricht mittig zwischen Anrede und Herz setzen
+        const n = fitLines(g, TEXT, w - 80).length, top = cy - h/2 + 115, bot = cy + h/2 - (VON ? 135 : 95);
+        wrapText(g, shown, cx, top + Math.max(0, (bot - top - n*42)/2) + 21, w - 80, 42);
         if(shown.length >= TEXT.length){
           g.font = '44px serif'; g.fillText('❤', cx, cy + h/2 - (VON ? 100 : 60));
           if(VON){ g.font = 'italic 30px Georgia, serif'; g.fillText('– ' + VON, cx, cy + h/2 - 50); }

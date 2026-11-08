@@ -90,7 +90,7 @@ const K = [
  ['baby','Geburt / Taufe','Willkommen, kleiner Schatz','Wolken wegwischen – Name, Datum und Gewicht erscheinen, Wiegenlied.','?name=Lena&datum=3.%20M%C3%A4rz%202026&gewicht=3250%20g',
    [['datum','Geburtsdatum','z. B. 3. März 2026'],['gewicht','Gewicht','z. B. 3250 g'],['groesse','Größe','z. B. 51 cm']], v => ({ name: v.N, datum: v.datum, gewicht: v.gewicht, groesse: v.groesse })],
  ['feuerwerk','Silvester / Erfolg / Jubiläum','Feuerwerk zünden','Jeder Tipp eine Rakete, nach acht das große Finale.','?text=Frohes%20neues%20Jahr!',
-   [['gruss','Gruß','Glückwunsch / Frohes neues Jahr']], v => ({ text: (v.gruss || v.N) && (v.gruss || 'Glückwunsch') + (v.N ? ', ' + v.N : '') + '!' })],
+   [['gruss','Gruß','Glückwunsch / Frohes neues Jahr']], v => { const gr = (v.gruss || '').replace(/[\s!.,;:]+$/, ''); return { text: (gr || v.N) && (gr || 'Glückwunsch') + (v.N ? ', ' + v.N : '') + '!' }; }],
  ['weltraum','Kinder / Geburtstag','Weltraum-Mission','Raumschiff steuern, Meteoriten abschießen, Sterne sammeln.','?name=Leo',
    [], v => ({ name: v.N })],
  ['blume','Danke / Muttertag / Trost','Die Rose erblüht','Knospe antippen – die Rose blüht auf, Schmetterlinge und eine Botschaft.','?text=Danke%20f%C3%BCr%20alles!&von=Deine%20Tochter',
