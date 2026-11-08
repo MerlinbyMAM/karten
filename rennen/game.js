@@ -4,7 +4,7 @@
    3D-Auto: Drift in steilen Kurven, Schleudern neben der Straße, Überschlag wenn man driftend abkommt
    Live-Duell über einen MQTT-Vermittler (funktioniert auch im Mobilfunk) + Geisterauto · Ergebnisliste · Pokal
    ===================================================================== */
-import { tx, LANG } from './text.js?v=3';
+import { tx, LANG } from './text.js?v=4';
 
 const Q = new URLSearchParams(location.search);
 const FIRMA = (Q.get('firma') || '').trim();
@@ -33,7 +33,7 @@ function engineSet(rpm, slide = 0){ if(!engine) return; const f = 60 + rpm*160; 
 function engineStop(){ if(!engine) return; try{ engine.gn.gain.setTargetAtTime(0, ac.currentTime, .1); engine.o.stop(ac.currentTime + .4); engine.o2.stop(ac.currentTime + .4); screech.sg.gain.setTargetAtTime(0, ac.currentTime, .05); screech.s.stop(ac.currentTime + .3); }catch(e){} engine = null; screech = null; }
 
 /* ---------- Strecke ---------- */
-const SEG = 200, ROADW = 2000, RUMBLE = 3, FOV = 100, CAMH = 1000, DEPTH = 1/Math.tan(FOV/2*Math.PI/180), DRAW = 170;
+const SEG = 200, ROADW = 3000, K = 2000/3000, RUMBLE = 3, FOV = 100, CAMH = 1000, DEPTH = 1/Math.tan(FOV/2*Math.PI/180), DRAW = 170;
 const PLAYERZ = CAMH*DEPTH, MAXSPEED = SEG*60;          // 60 Segmente pro Sekunde
 let segs = [], trackLen = 0;
 const lastY = () => segs.length ? segs[segs.length - 1].p2.world.y : 0;
@@ -126,23 +126,27 @@ function say(text, col = '#fff', t = 1.2){ if(msgs.length && msgs[msgs.length - 
 function puff(x, y, n, col, sp = 1, r = 1){ for(let i=0;i<n;i++) parts.push({ x, y, vx: rr(-60, 60)*sp*DPR, vy: rr(-80, -20)*sp*DPR, r: rr(6, 16)*DPR*r, life: rr(.5, 1), c: col }); }
 
 /* ---------- Eingabe ---------- */
-let touchX = null, touchId = null;
+// Ein Finger auf dem Display = Gas (und Wischen = Lenken). Zweiter Finger: unten links = Bremse, im Drag Race = Schalten.
+let touchX = null, touchId = null, kbGas = false;
 const brakeZone = (x, y) => x < W*.3 && y > H*.78;
+const gasOn = () => touchId !== null || kbGas;
 cv.addEventListener('pointerdown', e => {
   audio(); const x = e.clientX*DPR, y = e.clientY*DPR;
   if(state !== 'race' && state !== 'count') return;
-  if(mode === 'drag'){ if(state === 'race') shift(); return; }
+  if(mode === 'drag'){ if(touchId === null){ touchId = e.pointerId; touchX = x; } else if(state === 'race') shift(); return; }
   if(brakeZone(x, y)){ P.brake = true; P.brakeId = e.pointerId; return; }
-  touchX = x; touchId = e.pointerId; P.steerBase = P.steer;
+  if(touchId !== null) return;
+  touchX = x; touchId = e.pointerId; P.steerBase = 0;
 });
-cv.addEventListener('pointermove', e => { if(e.pointerId !== touchId || !P || touchX === null) return; P.steer = clamp((P.steerBase || 0) + (e.clientX*DPR - touchX)/(W*.22), -1, 1); });
+cv.addEventListener('pointermove', e => { if(e.pointerId !== touchId || !P || touchX === null || mode === 'drag') return; P.steer = clamp((e.clientX*DPR - touchX)/(W*.22), -1, 1); });
 const up = e => { if(!P) return; if(e.pointerId === touchId){ touchId = null; touchX = null; P.steer = 0; } if(e.pointerId === P.brakeId){ P.brake = false; P.brakeId = null; } };
+function releaseTouches(){ touchId = null; touchX = null; kbGas = false; if(P){ P.steer = 0; P.brake = false; P.brakeId = null; } }
 cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
-addEventListener('keydown', e => { if(!P) return; if(e.key === 'ArrowLeft') P.steer = -1; if(e.key === 'ArrowRight') P.steer = 1; if(e.key === 'ArrowDown') P.brake = true; if(e.key === ' ' && mode === 'drag') shift(); if(e.key === 'Escape') pause(); });
-addEventListener('keyup', e => { if(!P) return; if(e.key === 'ArrowLeft' || e.key === 'ArrowRight') P.steer = 0; if(e.key === 'ArrowDown') P.brake = false; });
+addEventListener('keydown', e => { if(!P) return; if(e.key === 'ArrowUp') kbGas = true; if(e.key === 'ArrowLeft') P.steer = -1; if(e.key === 'ArrowRight') P.steer = 1; if(e.key === 'ArrowDown') P.brake = true; if(e.key === ' ' && mode === 'drag') shift(); if(e.key === 'Escape') pause(); });
+addEventListener('keyup', e => { if(!P) return; if(e.key === 'ArrowUp') kbGas = false; if(e.key === 'ArrowLeft' || e.key === 'ArrowRight') P.steer = 0; if(e.key === 'ArrowDown') P.brake = false; });
 
 /* ---------- Pause ---------- */
-function pause(){ if(state !== 'race' && state !== 'count') return; P.wasState = state; if(!duel) state = 'pause'; $('pauseOv').style.display = 'flex'; $('pRestart').style.display = duel && !duel.host ? 'none' : ''; P.steer = 0; P.brake = false; engineSet(0, 0); }
+function pause(){ if(state !== 'race' && state !== 'count') return; P.wasState = state; releaseTouches(); if(!duel) state = 'pause'; $('pauseOv').style.display = 'flex'; $('pRestart').style.display = duel && !duel.host ? 'none' : ''; P.steer = 0; P.brake = false; engineSet(0, 0); }
 $('pResume').onclick = () => { $('pauseOv').style.display = 'none'; if(state === 'pause') state = P.wasState; last = performance.now(); };
 $('pRestart').onclick = () => { $('pauseOv').style.display = 'none'; engineStop(); $('trophy').dataset.done = ''; const s = (Math.random()*1e9)|0; if(duel && duel.host) send({ t: 'go', mode, seed: s, name: myName() }); startRace(mode, s); };
 $('pMenu').onclick = () => { $('pauseOv').style.display = 'none'; toMenu(); };
@@ -163,9 +167,12 @@ function updatePlayer(dt){
   const seg = findSeg(P.dist + PLAYERZ), sp = P.speed/MAXSPEED;
   if(P.fin){ P.speed = Math.max(0, P.speed - MAXSPEED*.7*dt); P.dist += P.speed*dt; P.yaw *= .9; P.spinA = 0; P.slide = 0; P.x += (clamp(P.x, -.7, .7) - P.x)*dt*2; engineSet(sp*.6); return; }
   if(mode === 'drag'){
-    P.rpm = Math.min(1.02, P.rpm + dt*(1.1 - P.gear*.12)*(P.shiftBonus || 1));
-    if(P.rpm >= 1) P.rpm = .97 + Math.random()*.05;
-    else P.speed = Math.min(MAXSPEED*GEARMAX[P.gear], P.speed + MAXSPEED*dt*(.55 - P.gear*.05)*(P.shiftBonus || 1));
+    if(!gasOn()){ P.rpm = Math.max(.15, P.rpm - dt*1.5); P.speed = Math.max(0, P.speed - MAXSPEED*.08*dt); }
+    else {
+      P.rpm = Math.min(1.02, P.rpm + dt*(1.1 - P.gear*.12)*(P.shiftBonus || 1));
+      if(P.rpm >= 1) P.rpm = .97 + Math.random()*.05;
+      else P.speed = Math.min(MAXSPEED*GEARMAX[P.gear], P.speed + MAXSPEED*dt*(.55 - P.gear*.05)*(P.shiftBonus || 1));
+    }
     P.dist += P.speed*dt; engineSet(P.rpm);
     if(P.dist >= DRAG_LEN) finishPlayer();
     return;
@@ -176,7 +183,7 @@ function updatePlayer(dt){
     P.roll -= dt;
     P.rollA = P.rollDir*Math.min(1, k/.75)*Math.PI*4;
     P.lift = Math.max(0, Math.sin(Math.min(1, k/.75)*Math.PI))*1.8 + (k > .75 ? Math.abs(Math.sin((k - .75)*4*Math.PI))*.3*(1 - k) : 0);
-    P.x += P.rollDir*dt*.6*(1 - k);
+    P.x += P.rollDir*dt*.6*K*(1 - k);
     P.speed *= Math.pow(.25, dt); P.dist += P.speed*dt; P.slide = 0;
     if(Math.random() < .5) puff(W/2 + rr(-W*.15, W*.15), H*.86, 1, 'rgba(255,255,255,.95)', 1.5);
     if(P.roll <= 0){ P.x = clamp(P.x, -.6, .6)*.5; P.rollA = 0; P.lift = 0; P.yaw = 0; P.inv = 1.6; P.drift = 0; P.speed = MAXSPEED*.15; }
@@ -186,22 +193,24 @@ function updatePlayer(dt){
   if(P.spin > 0){ P.spin -= dt; P.spinA += dt*P.spinDir*Math.PI*2.4; P.speed *= Math.pow(.3, dt); P.slide = 1; if(P.spin <= 0){ P.spinA = 0; P.yaw = 0; } }
   P.inv = Math.max(0, P.inv - dt);
   const off = Math.abs(P.x) > 1.02;
-  let accel = MAXSPEED/4.5;
+  let accel = gasOn() ? MAXSPEED/4.5 : -MAXSPEED*.14;      // ohne Finger rollt das Auto aus
   if(P.brake) accel = -MAXSPEED*.9;
   if(off) accel = P.speed > MAXSPEED*.3 ? -MAXSPEED*.8 : MAXSPEED/10;
   if(P.spin > 0) accel = 0;
   P.speed = clamp(P.speed + accel*dt, 0, MAXSPEED);
   const steerPow = dt*2*Math.max(sp, .25);
-  if(P.spin <= 0) P.x += steerPow*P.steer*1.3;
-  P.x -= dt*2*sp*sp*seg.curve*.22;                         // Fliehkraft wächst mit dem Quadrat der Geschwindigkeit
+  const grip = P.drift > 0 ? .7 : 1;                        // im Drift dreht das Auto in die Kurve – weniger Fliehkraft
+  if(P.spin <= 0) P.x += steerPow*P.steer*1.3*K*(P.drift > 0 ? 1.2 : 1);
+  P.x -= dt*2*sp*sp*seg.curve*.4*K*grip;                  // Fliehkraft wächst mit dem Quadrat der Geschwindigkeit
   // ---- Drift: in steilen Kurven bei hohem Tempo bricht das Heck aus
   const dir = Math.sign(seg.curve);
-  if(Math.abs(seg.curve) >= 3 && sp > .62 && P.spin <= 0 && !P.brake){ if(P.drift <= 0) say(tx('drift'), '#ffd166', .9); P.drift = .35; P.driftDir = dir; }
+  if(Math.abs(seg.curve) >= 3 && sp > .66 && P.spin <= 0 && !P.brake){ if(P.drift <= 0) say(tx('drift'), '#ffd166', .9); P.drift = .35; P.driftDir = dir; }
   if(P.drift > 0){
     P.drift -= dt;
     const dd = P.driftDir || dir;
-    P.x -= dt*2*sp*dd*.25;                                   // das Auto rutscht nach außen
-    P.speed *= Math.pow(.85, dt);
+    P.x -= dt*2*sp*dd*.08*K;                                 // das Heck rutscht leicht nach außen
+    const vT = MAXSPEED*clamp(1.05 - Math.abs(seg.curve)*.08, .45, .85);   // Drift bremst ab – je enger die Kurve, desto mehr
+    if(P.speed > vT) P.speed = Math.max(vT, P.speed*Math.pow(.55, dt));
     const into = Math.max(0, P.steer*dd);
     P.yaw += (dd*(.4 + .3*into) - P.yaw)*Math.min(1, dt*6);   // Nase zeigt in die Kurve, Heck nach außen
     P.slide = Math.min(1, .5 + sp*.5);
@@ -217,7 +226,7 @@ function updatePlayer(dt){
   // ---- Hindernisse
   if(P.inv <= 0 && P.roll <= 0) for(const s of seg.sprites){
     if(!s.hit || s.gone) continue;
-    if(Math.abs(P.x - s.offset) < (SP[s.type][0] + .32)/2){
+    if(Math.abs(P.x - s.offset) < (SP[s.type][0] + .32)*K/2){
       if(s.ped){ s.dodge = 1; P.speed *= .15; say(tx('ped'), '#ff6b6b', 1.4); tone(660, 0, .15); tone(660, .2, .15); P.inv = 1; }
       else if(s.soft){ s.gone = 1; P.speed *= .85; tone(200, 0, .1, 'triangle'); puff(W/2, H*.84, 6, '#ff7b00'); }
       else { P.speed *= .3; P.spin = .7; P.spinDir = Math.sign(P.x - s.offset) || 1; say(tx('crash'), '#ff6b6b'); noise(.4, .35, 200); P.inv = .8; }
@@ -227,9 +236,9 @@ function updatePlayer(dt){
   // ---- andere Autos (Auffahren, Seitenkontakt)
   for(const c of others()){
     const dz = c.dist - (P.dist + PLAYERZ);
-    if(dz > -SEG*.6 && dz < SEG*1.2 && Math.abs(P.x - c.x) < .4){
+    if(dz > -SEG*.6 && dz < SEG*1.2 && Math.abs(P.x - c.x) < .4*K){
       if(dz > 0 && P.speed > c.speed){ P.speed = c.speed*.85; say(tx('crash'), '#ffd166', .6); tone(180, 0, .1, 'square', .05); }
-      else { const push = Math.sign(P.x - c.x) || 1; P.x += push*dt*1.5; if(c.ai) c.x -= push*dt*1.5; }
+      else { const push = Math.sign(P.x - c.x) || 1; P.x += push*dt*K; if(c.ai) c.x -= push*dt*K; }
     }
   }
   P.dist += P.speed*dt;
@@ -256,7 +265,7 @@ function updateAI(c, dt, t){
   if(!P.fin){ if(gap > 2500) want *= 1 + Math.min(.14, gap/60000); else if(gap < -6000) want *= .9; }
   c.speed += Math.sign(want - c.speed)*Math.min(Math.abs(want - c.speed), MAXSPEED*.3*dt);
   let tgt = c.baseX ?? (c.baseX = c.x);
-  for(let i=1;i<12;i++){ const s = segs[(seg.index + i) % segs.length]; for(const sp of s.sprites) if(sp.hit && !sp.gone && Math.abs(sp.offset - c.x) < .45) tgt = sp.offset > 0 ? sp.offset - .7 : sp.offset + .7; }
+  for(let i=1;i<12;i++){ const s = segs[(seg.index + i) % segs.length]; for(const sp of s.sprites) if(sp.hit && !sp.gone && Math.abs(sp.offset - c.x) < .35) tgt = sp.offset > 0 ? sp.offset - .5 : sp.offset + .5; }
   if(gap < 0 && gap > -SEG*8 && Math.abs(P.x - c.x) < .5 && c.speed > P.speed) tgt = P.x > 0 ? P.x - .7 : P.x + .7;
   for(const o of cars) if(o !== c){ const d = o.dist - c.dist; if(d > 0 && d < SEG*6 && Math.abs(o.x - c.x) < .45 && c.speed > o.speed) tgt = o.x > 0 ? o.x - .7 : o.x + .7; }
   tgt = clamp(tgt, -.8, .8);
@@ -403,14 +412,14 @@ function render(dt){
     if(s.p1.camera.z <= DEPTH || (mode === 'drag' && base.index + n >= segs.length)) continue;
     g.save(); g.beginPath(); g.rect(0, 0, W, s.clip); g.clip();
     for(const sp of s.sprites){
-      const sc = s.p1.screen.scale, sx = s.p1.screen.x + sc*sp.offset*ROADW*W/2, sw = sc*ROADW*W/2*SP[sp.type][0];
+      const sc = s.p1.screen.scale, sx = s.p1.screen.x + sc*sp.offset*ROADW*W/2, sw = sc*ROADW*W/2*SP[sp.type][0]*K;
       if(sp.ped && sp.dodge){ sp.dt = (sp.dt || 0) + dt; sp.offset += (sp.offset < 0 ? -1 : 1)*dt*1.8; }
       else if(sp.ped && state === 'race'){ sp.offset += sp.walk*sp.dir*dt*.6; if(Math.abs(sp.offset) > 1.15) sp.dir *= -1; }
       drawSprite(sp, sx, s.p1.screen.y, sw);
     }
     for(const c of s.cars){
       const p = pctRem(c.dist, SEG), sc = interp(s.p1.screen.scale, s.p2.screen.scale, p), cx = interp(s.p1.screen.x, s.p2.screen.x, p) + sc*c.x*ROADW*W/2, cy = interp(s.p1.screen.y, s.p2.screen.y, p);
-      const cw = sc*ROADW*W/2*.36;
+      const cw = sc*ROADW*W/2*.36*K;
       if(cw > 3) drawCar3D(cx, cy, cw, c.col, { yaw: c.yaw || 0, roll: c.rollA || 0, lift: c.lift || 0, alpha: c.ghost ? .45 : 1 });
       if(c.name && cw > 16){ g.fillStyle = '#fff'; g.font = `bold ${Math.max(10*DPR, cw*.15)}px system-ui`; g.textAlign = 'center'; g.fillText(c.name, cx, cy - cw*.95); }
     }
@@ -457,7 +466,9 @@ function drawHUD(){
     g.fillStyle = '#fff'; g.font = `bold ${13*s}px system-ui`; g.textAlign = 'center'; g.fillText(tx('brake'), W*.13, H*.88);
   }
   if(state === 'count'){ const n = Math.ceil(countdown - .2); g.font = `bold ${110*s}px Georgia`; g.textAlign = 'center'; g.fillStyle = n > 0 ? '#ffd166' : '#06d6a0'; g.strokeStyle = 'rgba(0,0,0,.6)'; g.lineWidth = 8*s; const tt = n > 0 ? String(n) : tx('go'); g.strokeText(tt, W/2, H*.33); g.fillText(tt, W/2, H*.33);
-    g.font = `bold ${18*s}px system-ui`; g.fillStyle = '#fff'; g.fillText(mode === 'drag' ? tx('m_drag_d') : tx('steer'), W/2, H*.44); if(ghost) g.fillText(tx('ghost'), W/2, H*.48); }
+    g.font = `bold ${16*s}px system-ui`; g.fillStyle = '#fff'; g.lineWidth = 4*s; g.strokeStyle = 'rgba(11,37,51,.8)';
+    const lines = (mode === 'drag' ? tx('ctrlDrag') : tx('ctrl')).split(' · ').concat(ghost ? [tx('ghost')] : []);
+    lines.forEach((l, i) => { g.strokeText(l, W/2, H*.42 + i*24*s); g.fillText(l, W/2, H*.42 + i*24*s); }); }
   let y = H*.26;
   for(const m of msgs){ g.globalAlpha = Math.min(1, m.t/m.t0*2); g.font = `italic bold ${34*s}px Georgia`; g.textAlign = 'center'; g.lineWidth = 6*s; g.strokeStyle = 'rgba(11,37,51,.85)'; g.fillStyle = m.col; g.strokeText(m.text, W/2, y); g.fillText(m.text, W/2, y); y += 44*s; }
   g.globalAlpha = 1; g.textBaseline = 'alphabetic';
@@ -508,7 +519,8 @@ function renderResults(){
   try{ const b = JSON.parse(localStorage.getItem('mamrally_best_' + mode) || '[]'); if(b.length){ h += `<div class="rh">${tx('localBest')}</div>`; b.forEach((e, i) => h += `<div class="rr${Math.abs(e.t - P.fin) < .001 ? ' me' : ''}"><span>${i + 1}.</span><b>${esc(e.n)}</b><i>${fmt(e.t)}</i></div>`); } }catch(e){}
   $('resList').innerHTML = h;
   $('trophy').style.display = won ? 'block' : 'none';
-  if(won && !$('trophy').dataset.done){ drawTrophy($('trophy'), myName()); $('trophy').dataset.done = 1; [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i*.16, .3, 'triangle', .08)); }
+  if(won){ const quiet = $('trophy').dataset.done; drawTrophy($('trophy'), myName()); $('trophy').dataset.done = 1; if(!quiet) [523, 659, 784, 1047, 784, 1047].forEach((f, i) => tone(f, i*.16, .3, 'triangle', .08)); }
+  $('resName').value = $('pname').value;
 }
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function drawTrophy(c, name){
@@ -553,6 +565,7 @@ function handle(d){
   else if(d.t === 'hello' && !duel.host){ duel.oppName = d.name || tx('opp'); duel.connected = true; if(duel.onHello) duel.onHello(); }
   else if(d.t === 'go' && !duel.host){ duel.oppName = d.name || duel.oppName; $('trophy').dataset.done = ''; startRace(d.mode, d.seed); }
   else if(d.t === 'p' && duel.opp){ Object.assign(duel.opp, { dist: d.d, x: d.x, speed: d.s, yaw: d.y, rollA: d.r, lift: d.l }); }
+  else if(d.t === 'name'){ duel.oppName = d.name || tx('opp'); if(duel.opp) duel.opp.name = duel.oppName; if(duel.connected) $('duelBanner').textContent = '🎮 ' + myName() + ' vs. ' + duel.oppName; if(resultsShown) renderResults(); }
   else if(d.t === 'fin' && duel.opp){ duel.opp.fin = d.time; if(resultsShown) renderResults(); }
 }
 function wire(client, code, host){
@@ -625,7 +638,17 @@ $('btnJoin').onclick = async () => {
 $('joinGo').onclick = () => { const j = parseJoin($('joinCode').value); if(j){ stopScan(); joinDuel(j[0], j[1]); } };
 $('joinBack').onclick = () => { stopScan(); showUI('menu'); };
 $('lobbyBack').onclick = () => { leaveDuel(); showUI('menu'); };
+// Name: ein Feld im Menü, eins in der Duell-Lobby, eins im Ergebnis – alle synchron; der Gegner erfährt jede Änderung
+export function setName(v, from){
+  v = String(v).slice(0, 18); for(const id of ['pname', 'lname', 'resName']) if(id !== from) $(id).value = v;
+  try{ localStorage.setItem('mamrally_name', v); }catch(e){}
+  if(duel && duel.connected){ send({ t: 'name', name: myName() }); $('duelBanner').textContent = '🎮 ' + myName() + ' vs. ' + duel.oppName; }
+  if(resultsShown){
+    try{ const k = 'mamrally_best_' + mode, b = JSON.parse(localStorage.getItem(k) || '[]'); for(const e of b) if(Math.abs(e.t - P.fin) < .001) e.n = myName(); localStorage.setItem(k, JSON.stringify(b)); }catch(e){}
+    $('trophy').dataset.done = 'quiet'; renderResults(); }
+}
+for(const id of ['pname', 'lname', 'resName']) $(id).addEventListener('input', () => setName($(id).value, id));
 
 /* ---------- Start ---------- */
-export function openMenu(){ showUI('menu'); const j = Q.get('join'); if(j && !duel) joinDuel(j, Q.get('b')); }
+export function openMenu(){ const j = Q.get('join'); if(j && !duel){ showUI('lobby'); joinDuel(j, Q.get('b')); } else startRace('dtm', (Math.random()*1e9)|0); }
 window.__rally = { startRace, tick, results, get P(){ return P; }, get state(){ return state; }, get trackLen(){ return trackLen; }, get cars(){ return cars; }, shift, curve: () => findSeg(P.dist + PLAYERZ).curve, get duel(){ return duel; } };

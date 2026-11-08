@@ -87,6 +87,8 @@
 <!-- Duell-Lobby -->
 <div class="ov" id="lobby">
   <h1 data-t="duel" style="font-size:28px"></h1>
+  <label for="lname" data-t="nameHint" style="font-weight:700;color:#ffd166"></label>
+  <input id="lname" maxlength="18" autocomplete="off">
   <p id="lobbyText">…</p>
   <div id="qr"></div>
   <div id="code"></div>
@@ -109,27 +111,29 @@
   <h1 data-t="pause"></h1>
   <button class="btn" id="pResume" data-t="resume"></button>
   <button class="btn alt" id="pRestart" data-t="restart"></button>
-  <button class="btn ghost" id="pMenu" data-t="menu"></button>
+  <button class="btn ghost" id="pMenu" data-t="menuMore"></button>
 </div>
 
 <!-- Ergebnis -->
 <div class="ov" id="res">
   <h1 id="resTitle"></h1>
   <canvas id="trophy"></canvas>
+  <label for="resName" data-t="nameHint" style="font-size:13px;opacity:.85"></label>
+  <input id="resName" maxlength="18" autocomplete="off">
   <div id="resList"></div>
   <button class="btn" id="again" data-t="again"></button>
-  <button class="btn ghost" id="tomenu" data-t="menu"></button>
+  <button class="btn ghost" id="tomenu" data-t="menuMore"></button>
 </div>
 
 <script type="module">
-import { tx, LANG } from './text.js?v=3';
-import { openMenu } from './game.js?v=3';
+import { tx, LANG } from './text.js?v=4';
+import { openMenu } from './game.js?v=4';
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search), FIRMA = (Q.get('firma') || '').trim();
 document.documentElement.lang = LANG; document.title = tx('title');
 document.querySelectorAll('[data-t]').forEach(e => e.textContent = tx(e.dataset.t));
-$('pname').placeholder = tx('yourName');
-try{ $('pname').value = localStorage.getItem('mamrally_name') || Q.get('name') || ''; }catch(e){}
+for(const id of ['pname', 'lname', 'resName']) $(id).placeholder = tx('yourName');
+try{ const n = localStorage.getItem('mamrally_name') || Q.get('name') || ''; for(const id of ['pname', 'lname', 'resName']) $(id).value = n; }catch(e){}
 $('pname').addEventListener('change', () => { try{ localStorage.setItem('mamrally_name', $('pname').value); }catch(e){} });
 if(FIRMA) $('firmaTag').textContent = tx('merry') + ' · ' + FIRMA;
 const go = () => { $('start').style.display = 'none'; openMenu(); };
