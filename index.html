@@ -94,6 +94,7 @@ const K = [
  ['gluecksrad', '?preise=Kino|Pizza|Massage|Ausflug|Fr%C3%BChst%C3%BCck|Wunsch%20frei', [['preise','preise']], v => ({ name: v.N, preise: v.preise })],
  ['zeitung', '?name=Oma%20Gerda', [['meldung','meldung',1]], v => ({ name: v.N, text: v.meldung }), [.82, .965]],
  ['hochzeit', '?namen=Anna%20%26%20Tom&datum=12.%20Juni%202026', [['datum','datum']], v => ({ namen: v.N, datum: v.datum })],
+ ['partyturm', '?name=Anna', [], v => ({ name: v.N })],
  ['rennen', '?firma=Muster%20Fuhrpark%20GmbH', [['firma','firma']], v => ({ firma: v.firma }), [.15, .2]],   // nur QR-Sticker für eine vorhandene Karte
 ];
 const $ = id => document.getElementById(id);

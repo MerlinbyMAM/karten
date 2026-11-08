@@ -10,6 +10,7 @@ de: {
   F: { firma: ['Firma (auf Banner und Pokal)', 'z. B. Muster Fuhrpark GmbH'], datumMax: ['Datum (steht unten auf dem Krug)', 'z. B. 7.11.2026'], text2: ['Das Geschenk unter dem Rubbelfeld', 'z. B. Ein Wellness-Wochenende!'], nachricht: ['Botschaft', 'z. B. Danke für alles!'], von: ['Von', 'z. B. Deine Tochter'],
        datum: ['Datum', 'z. B. 12. Juni 2026'], geburt: ['Geburtsdatum', 'z. B. 3. März 2026'], gewicht: ['Gewicht', 'z. B. 3250 g'], groesse: ['Größe', 'z. B. 51 cm'], gruss: ['Gruß', 'z. B. Frohes neues Jahr'], preise: ['Preise (bis 8, mit | trennen)', 'Kino|Pizza|Massage|Ausflug'], meldung: ['Die Meldung', 'Augenzeugen berichten von Kuchen, Kerzen …'] },
   CARDS: {
+    partyturm: ['Geburtstag / Lustig', 'Partyturm', 'Geschenke stapeln, bis die Torte obendrauf landet – Waschbär und Dackel kommentieren jeden Wackler.'],
     kaetzchen: ['Für dich / Allgemein', 'Kätzchen mit Ball', 'Das Kätzchen schießt den Ball aus der Karte – zurückwerfen und es spielt glücklich weiter.'],
     max: ['Geburtstag / Bayern', 'Ois Guade – Wiesn-Spiel', 'Mit dem Maßkrug Brezn, Bier und Herzerl fangen – das Lebkuchenherz trägt den eigenen Namen.'],
     torte: ['Geburtstag', 'Puste die Kerzen aus', 'Die Torte dreht sich – alle Kerzen auspusten, bevor die Zeit abläuft. Dann Konfetti und „Happy Birthday“.'],
@@ -37,6 +38,7 @@ en: {
   F: { firma: ['Company (on banners and trophy)', 'e.g. Sample Fleet Ltd'], datumMax: ['Date (shown on the stein)', 'e.g. 7.11.2026'], text2: ['The gift under the scratch field', 'e.g. A spa weekend!'], nachricht: ['Message', 'e.g. Thank you for everything!'], von: ['From', 'e.g. Your daughter'],
        datum: ['Date', 'e.g. 12 June 2026'], geburt: ['Date of birth', 'e.g. 3 March 2026'], gewicht: ['Weight', 'e.g. 3250 g'], groesse: ['Length', 'e.g. 51 cm'], gruss: ['Greeting', 'e.g. Happy New Year'], preise: ['Prizes (up to 8, separated by |)', 'Cinema|Pizza|Massage|Day trip'], meldung: ['The news story', 'Eyewitnesses report cake, candles …'] },
   CARDS: {
+    partyturm: ['Birthday / Funny', 'Party Tower', 'Stack presents until the cake lands on top – a raccoon and a dachshund comment on every wobble.'],
     kaetzchen: ['For you / General', 'Kitten with ball', 'The kitten kicks the ball out of the card – throw it back and it happily plays on.'],
     max: ['Birthday / Bavaria', 'Oktoberfest game', 'Catch pretzels, beer and hearts with your stein – the gingerbread heart carries your own name.'],
     torte: ['Birthday', 'Blow out the candles', 'The cake spins – blow out all the candles before time runs out. Then confetti and “Happy Birthday”.'],
@@ -64,6 +66,7 @@ fr: {
   F: { firma: ['Entreprise (sur les banderoles et le trophée)', 'p. ex. Flotte Exemple SARL'], datumMax: ['Date (sur la chope)', 'p. ex. 7.11.2026'], text2: ['Le cadeau sous la case à gratter', 'p. ex. Un week-end bien-être !'], nachricht: ['Message', 'p. ex. Merci pour tout !'], von: ['De la part de', 'p. ex. Ta fille'],
        datum: ['Date', 'p. ex. 12 juin 2026'], geburt: ['Date de naissance', 'p. ex. 3 mars 2026'], gewicht: ['Poids', 'p. ex. 3250 g'], groesse: ['Taille', 'p. ex. 51 cm'], gruss: ['Vœux', 'p. ex. Bonne année'], preise: ['Lots (jusqu\'à 8, séparés par |)', 'Cinéma|Pizza|Massage|Excursion'], meldung: ['La nouvelle', 'Des témoins parlent de gâteau, de bougies …'] },
   CARDS: {
+    partyturm: ['Anniversaire / Drôle', 'La tour de fête', 'Empile les cadeaux jusqu\'à ce que le gâteau atterrisse au sommet – un raton laveur et un teckel commentent chaque vacillement.'],
     kaetzchen: ['Pour toi / Général', 'Chaton et balle', 'Le chaton envoie la balle hors de la carte – renvoie-la et il continue à jouer, tout content.'],
     max: ['Anniversaire / Bavière', 'Jeu de l\'Oktoberfest', 'Attrape bretzels, bière et cœurs avec ta chope – le cœur en pain d\'épices porte ton prénom.'],
     torte: ['Anniversaire', 'Souffle les bougies', 'Le gâteau tourne – souffle toutes les bougies avant la fin du temps. Puis confettis et « Joyeux anniversaire ».'],
@@ -91,6 +94,7 @@ it: {
   F: { firma: ['Azienda (su striscioni e coppa)', 'es. Flotta Esempio srl'], datumMax: ['Data (sul boccale)', 'es. 7.11.2026'], text2: ['Il regalo sotto il campo da grattare', 'es. Un weekend benessere!'], nachricht: ['Messaggio', 'es. Grazie di tutto!'], von: ['Da', 'es. Tua figlia'],
        datum: ['Data', 'es. 12 giugno 2026'], geburt: ['Data di nascita', 'es. 3 marzo 2026'], gewicht: ['Peso', 'es. 3250 g'], groesse: ['Lunghezza', 'es. 51 cm'], gruss: ['Augurio', 'es. Buon anno'], preise: ['Premi (fino a 8, separati da |)', 'Cinema|Pizza|Massaggio|Gita'], meldung: ['La notizia', 'Testimoni parlano di torta, candeline …'] },
   CARDS: {
+    partyturm: ['Compleanno / Divertente', 'Torre della festa', 'Impila i regali finché la torta atterra in cima – un procione e un bassotto commentano ogni traballio.'],
     kaetzchen: ['Per te / Generale', 'Gattino con palla', 'Il gattino lancia la palla fuori dal biglietto – rilanciala e continua a giocare felice.'],
     max: ['Compleanno / Baviera', 'Gioco dell\'Oktoberfest', 'Prendi brezel, birra e cuori con il boccale – il cuore di pan di zenzero porta il tuo nome.'],
     torte: ['Compleanno', 'Spegni le candeline', 'La torta gira – spegni tutte le candeline prima che scada il tempo. Poi coriandoli e «Buon compleanno».'],
@@ -118,6 +122,7 @@ es: {
   F: { firma: ['Empresa (en pancartas y trofeo)', 'p. ej. Flota Ejemplo S.L.'], datumMax: ['Fecha (en la jarra)', 'p. ej. 7.11.2026'], text2: ['El regalo bajo la casilla', 'p. ej. ¡Un fin de semana de spa!'], nachricht: ['Mensaje', 'p. ej. ¡Gracias por todo!'], von: ['De', 'p. ej. Tu hija'],
        datum: ['Fecha', 'p. ej. 12 de junio de 2026'], geburt: ['Fecha de nacimiento', 'p. ej. 3 de marzo de 2026'], gewicht: ['Peso', 'p. ej. 3250 g'], groesse: ['Talla', 'p. ej. 51 cm'], gruss: ['Saludo', 'p. ej. Feliz Año Nuevo'], preise: ['Premios (hasta 8, separados por |)', 'Cine|Pizza|Masaje|Excursión'], meldung: ['La noticia', 'Testigos hablan de tarta, velas …'] },
   CARDS: {
+    partyturm: ['Cumpleaños / Divertido', 'Torre de fiesta', 'Apila regalos hasta que la tarta aterrice arriba – un mapache y un teckel comentan cada tambaleo.'],
     kaetzchen: ['Para ti / General', 'Gatito con pelota', 'El gatito lanza la pelota fuera de la tarjeta – devuélvesela y sigue jugando feliz.'],
     max: ['Cumpleaños / Baviera', 'Juego del Oktoberfest', 'Atrapa pretzels, cerveza y corazones con tu jarra – el corazón de jengibre lleva tu nombre.'],
     torte: ['Cumpleaños', 'Apaga las velas', 'La tarta gira – apaga todas las velas antes de que se acabe el tiempo. Luego confeti y «Feliz cumpleaños».'],
@@ -145,6 +150,7 @@ nl: {
   F: { firma: ['Bedrijf (op spandoeken en beker)', 'bijv. Voorbeeld Wagenpark BV'], datumMax: ['Datum (op de bierpul)', 'bijv. 7.11.2026'], text2: ['Het cadeau onder het kraslot', 'bijv. Een wellnessweekend!'], nachricht: ['Boodschap', 'bijv. Bedankt voor alles!'], von: ['Van', 'bijv. Je dochter'],
        datum: ['Datum', 'bijv. 12 juni 2026'], geburt: ['Geboortedatum', 'bijv. 3 maart 2026'], gewicht: ['Gewicht', 'bijv. 3250 g'], groesse: ['Lengte', 'bijv. 51 cm'], gruss: ['Groet', 'bijv. Gelukkig nieuwjaar'], preise: ['Prijzen (max. 8, gescheiden door |)', 'Bioscoop|Pizza|Massage|Uitstapje'], meldung: ['Het bericht', 'Ooggetuigen melden taart, kaarsjes …'] },
   CARDS: {
+    partyturm: ['Verjaardag / Grappig', 'Feesttoren', 'Stapel cadeaus tot de taart bovenop landt – een wasbeer en een teckel becommentariëren elke wiebel.'],
     kaetzchen: ['Voor jou / Algemeen', 'Kitten met bal', 'Het kitten schiet de bal uit de kaart – gooi hem terug en het speelt vrolijk verder.'],
     max: ['Verjaardag / Beieren', 'Oktoberfest-spel', 'Vang pretzels, bier en hartjes met je bierpul – het peperkoekhart draagt je eigen naam.'],
     torte: ['Verjaardag', 'Blaas de kaarsjes uit', 'De taart draait – blaas alle kaarsjes uit voordat de tijd om is. Dan confetti en „Gefeliciteerd”.'],
@@ -172,6 +178,7 @@ pl: {
   F: { firma: ['Firma (na banerach i pucharze)', 'np. Przykładowa Flota sp. z o.o.'], datumMax: ['Data (na kuflu)', 'np. 7.11.2026'], text2: ['Prezent pod zdrapką', 'np. Weekend w spa!'], nachricht: ['Wiadomość', 'np. Dziękuję za wszystko!'], von: ['Od', 'np. Twoja córka'],
        datum: ['Data', 'np. 12 czerwca 2026'], geburt: ['Data urodzenia', 'np. 3 marca 2026'], gewicht: ['Waga', 'np. 3250 g'], groesse: ['Wzrost', 'np. 51 cm'], gruss: ['Życzenia', 'np. Szczęśliwego Nowego Roku'], preise: ['Nagrody (do 8, oddzielone |)', 'Kino|Pizza|Masaż|Wycieczka'], meldung: ['Wiadomość dnia', 'Świadkowie donoszą o torcie, świeczkach …'] },
   CARDS: {
+    partyturm: ['Urodziny / Zabawne', 'Imprezowa wieża', 'Układaj prezenty, aż tort wyląduje na szczycie – szop i jamnik komentują każde zachwianie.'],
     kaetzchen: ['Dla ciebie / Ogólne', 'Kotek z piłką', 'Kotek wybija piłkę z kartki – odrzuć ją, a dalej będzie się wesoło bawić.'],
     max: ['Urodziny / Bawaria', 'Gra Oktoberfest', 'Łap kuflem precle, piwo i serduszka – piernikowe serce nosi twoje imię.'],
     torte: ['Urodziny', 'Zdmuchnij świeczki', 'Tort się kręci – zdmuchnij wszystkie świeczki, zanim skończy się czas. Potem konfetti i „Sto lat”.'],
@@ -199,6 +206,7 @@ tr: {
   F: { firma: ['Şirket (afişlerde ve kupada)', 'ör. Örnek Filo A.Ş.'], datumMax: ['Tarih (bardağın üzerinde)', 'ör. 7.11.2026'], text2: ['Kazı alanının altındaki hediye', 'ör. Bir spa hafta sonu!'], nachricht: ['Mesaj', 'ör. Her şey için teşekkürler!'], von: ['Gönderen', 'ör. Kızın'],
        datum: ['Tarih', 'ör. 12 Haziran 2026'], geburt: ['Doğum tarihi', 'ör. 3 Mart 2026'], gewicht: ['Kilo', 'ör. 3250 g'], groesse: ['Boy', 'ör. 51 cm'], gruss: ['Tebrik', 'ör. Mutlu yıllar'], preise: ['Ödüller (en fazla 8, | ile ayır)', 'Sinema|Pizza|Masaj|Gezi'], meldung: ['Haber', 'Görgü tanıkları pastadan, mumlardan …'] },
   CARDS: {
+    partyturm: ['Doğum günü / Eğlenceli', 'Parti Kulesi', 'Pasta en üste konana kadar hediyeleri diz – bir rakun ve bir dakhund her sallanmayı yorumluyor.'],
     kaetzchen: ['Senin için / Genel', 'Toplu kedi yavrusu', 'Kedi yavrusu topu karttan dışarı atar – geri at, mutlu mutlu oynamaya devam etsin.'],
     max: ['Doğum günü / Bavyera', 'Oktoberfest oyunu', 'Bira bardağınla simit, bira ve kalpleri yakala – zencefilli kalpte senin ismin yazar.'],
     torte: ['Doğum günü', 'Mumları üfle', 'Pasta dönüyor – süre bitmeden tüm mumları söndür. Sonra konfeti ve „İyi ki doğdun”.'],
