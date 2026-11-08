@@ -62,6 +62,8 @@ import { t } from '../core/i18n.js';
   document.querySelector('#start h2').textContent = t('kaetzchen.sub'); document.getElementById('btnAR').textContent = t('ui.ar'); document.querySelector('#start .small').textContent = t('ui.arHint'); document.getElementById('btnFlat').textContent = t('ui.flat');
   document.getElementById('loadText').textContent = t('ui.loading'); document.getElementById('hint').textContent = t('ui.cam'); document.getElementById('again').textContent = t('ui.again'); }
 const $ = id => document.getElementById(id);
+const KN = (new URLSearchParams(location.search).get('name') || '').trim();
+const withName = s => KN ? s.replace(/[!.\s]+$/, '') + ', ' + KN + '!' : s;   // "Danke fürs Spielen!" -> "Danke fürs Spielen, Anna!"
 const BALL = { x: 569/1152 - .5, y: .75 - 1328/1728*1.5, d: 142/1152 };   // Kugel-Position auf der Karte (Kartenbreite = 1)
 
 /* ---------- Ablauf ----------
@@ -132,11 +134,18 @@ function update(dt){
 function drawOverlay(){
   og.clearRect(0,0,600,900);
   og.textAlign = 'center'; og.textBaseline = 'middle';
+  if(KN && phase !== 'idle'){                     // Name in Goldschrift unter dem Schriftzug der Karte
+    let f = 58; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(KN).width > 420 && f > 22);
+    og.lineJoin = 'round'; og.lineWidth = 7; og.strokeStyle = 'rgba(255,250,240,.95)'; og.strokeText(KN, 300, 238);
+    const gg = og.createLinearGradient(0, 210, 0, 266); gg.addColorStop(0, '#e9c46a'); gg.addColorStop(.5, '#b8862e'); gg.addColorStop(1, '#8a5a12');
+    og.fillStyle = gg; og.fillText(KN, 300, 238);
+  }
   if(phase === 'wait'){
     og.fillStyle = 'rgba(40,20,30,.35)'; og.fillRect(0,0,600,900);
     og.fillStyle = '#fff'; og.strokeStyle = 'rgba(120,40,70,.9)'; og.lineWidth = 8;
-    { let f = 48; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(t('kaetzchen.throw')).width > 560 && f > 20); }
-    og.strokeText(t('kaetzchen.throw'), 300, 300); og.fillText(t('kaetzchen.throw'), 300, 300);
+    { let f = 48; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(withName(t('kaetzchen.throw'))).width > 560 && f > 20); }
+    og.fillStyle = '#fff'; og.strokeStyle = 'rgba(120,40,70,.9)'; og.lineWidth = 8;
+    og.strokeText(withName(t('kaetzchen.throw')), 300, 320); og.fillText(withName(t('kaetzchen.throw')), 300, 320);
     if(phaseT > 1.2){
       const frac = (phaseT - 1.2) % 1, sc = 1.4 - frac*.5;
       og.save(); og.translate(300, 470); og.scale(sc, sc); og.globalAlpha = 1 - frac*.6;
@@ -149,8 +158,8 @@ function drawOverlay(){
   }
   if(phase === 'end'){
     for(const h of hearts){ og.save(); og.translate(h.x + Math.sin(h.w)*12, h.y); og.font = h.s+'px serif'; og.globalAlpha = .9; og.fillText('💗', 0, 0); og.restore(); }
-    { let f = 54; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(t('kaetzchen.thanks')).width > 560 && f > 20); } og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
-    og.strokeText(t('kaetzchen.thanks'), 300, 820); og.fillText(t('kaetzchen.thanks'), 300, 820);
+    { let f = 54; do{ og.font = 'italic bold ' + f + 'px Georgia'; f--; } while(og.measureText(withName(t('kaetzchen.thanks'))).width > 560 && f > 20); } og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
+    og.strokeText(withName(t('kaetzchen.thanks')), 300, 820); og.fillText(withName(t('kaetzchen.thanks')), 300, 820);
   }
   if(ovTex) ovTex.needsUpdate = true;
   if(mode === 'flat'){ const fc = $('fov').getContext('2d'); fc.clearRect(0,0,600,900); fc.drawImage(ov,0,0); }

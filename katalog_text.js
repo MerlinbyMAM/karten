@@ -23,7 +23,7 @@ de: {
     blume: ['Danke / Muttertag / Trost', 'Die Rose erblüht', 'Knospe antippen – die Rose blüht auf, Schmetterlinge und eine Botschaft.'],
     gluecksrad: ['Gutschein / Geburtstag', 'Glücksrad', 'Am Rad drehen – die Preise bestimmt der Schenkende selbst.'],
     zeitung: ['Geburtstag / Abschied / Spaß', 'Der Tagesbote', 'Die Zeitung erwacht: Geister gratulieren im großen Bild, die Feder schreibt die persönliche Meldung.'],
-    hochzeit: ['Hochzeit / Jahrestag', 'Ringe zusammenführen', 'Die Ringe vereinen – Glocken, Tauben, Blütenregen, Namen und Datum.'],
+    hochzeit: ['Hochzeit / Jahrestag', 'Ringwurf', 'Goldene Ringe auf die wandernde Sektflasche werfen – danach Glocken, Tauben, Blütenregen, Namen und Datum.'],
   }
 },
 en: {
@@ -49,7 +49,7 @@ en: {
     blume: ['Thank you / Mother\'s Day / Comfort', 'The rose blooms', 'Tap the bud – the rose blooms, butterflies and a message.'],
     gluecksrad: ['Voucher / Birthday', 'Wheel of fortune', 'Spin the wheel – the giver chooses the prizes.'],
     zeitung: ['Birthday / Farewell / Fun', 'The Daily Herald', 'The newspaper comes alive: ghosts congratulate in the big picture, a quill writes the personal news.'],
-    hochzeit: ['Wedding / Anniversary', 'Join the rings', 'Unite the rings – bells, doves, a shower of petals, names and date.'],
+    hochzeit: ['Wedding / Anniversary', 'Ring toss', 'Toss golden rings onto the moving champagne bottle – then bells, doves, a shower of petals, names and date.'],
   }
 },
 fr: {
@@ -75,7 +75,7 @@ fr: {
     blume: ['Merci / Fête des mères / Réconfort', 'La rose éclot', 'Touche le bouton – la rose s\'ouvre, des papillons et un message.'],
     gluecksrad: ['Bon cadeau / Anniversaire', 'Roue de la fortune', 'Fais tourner la roue – c\'est celui qui offre qui choisit les lots.'],
     zeitung: ['Anniversaire / Départ / Humour', 'Le Messager du Jour', 'Le journal prend vie : des fantômes félicitent dans la grande image, une plume écrit la nouvelle.'],
-    hochzeit: ['Mariage / Anniversaire de mariage', 'Unis les alliances', 'Réunis les alliances – cloches, colombes, pluie de pétales, prénoms et date.'],
+    hochzeit: ['Mariage / Anniversaire de mariage', 'Lancer d\'anneaux', 'Lance des alliances dorées sur la bouteille de champagne qui bouge – puis cloches, colombes, pluie de pétales, prénoms et date.'],
   }
 },
 it: {
@@ -101,7 +101,7 @@ it: {
     blume: ['Grazie / Festa della mamma / Conforto', 'La rosa sboccia', 'Tocca il bocciolo – la rosa sboccia, farfalle e un messaggio.'],
     gluecksrad: ['Buono / Compleanno', 'Ruota della fortuna', 'Gira la ruota – i premi li sceglie chi regala.'],
     zeitung: ['Compleanno / Addio / Divertimento', 'Il Messaggero del Giorno', 'Il giornale prende vita: fantasmi fanno gli auguri nella foto grande, una piuma scrive la notizia.'],
-    hochzeit: ['Nozze / Anniversario', 'Unisci gli anelli', 'Unisci gli anelli – campane, colombe, pioggia di petali, nomi e data.'],
+    hochzeit: ['Nozze / Anniversario', 'Lancio degli anelli', 'Lancia anelli d\'oro sulla bottiglia di spumante in movimento – poi campane, colombe, pioggia di petali, nomi e data.'],
   }
 },
 es: {
@@ -127,7 +127,7 @@ es: {
     blume: ['Gracias / Día de la Madre / Consuelo', 'La rosa florece', 'Toca el capullo – la rosa florece, mariposas y un mensaje.'],
     gluecksrad: ['Vale / Cumpleaños', 'Ruleta de la suerte', 'Gira la ruleta – los premios los elige quien regala.'],
     zeitung: ['Cumpleaños / Despedida / Diversión', 'El Heraldo del Día', 'El periódico cobra vida: fantasmas felicitan en la foto grande, una pluma escribe la noticia.'],
-    hochzeit: ['Boda / Aniversario', 'Une los anillos', 'Une los anillos – campanas, palomas, lluvia de pétalos, nombres y fecha.'],
+    hochzeit: ['Boda / Aniversario', 'Lanzamiento de anillos', 'Lanza anillos dorados a la botella de cava que se mueve – luego campanas, palomas, lluvia de pétalos, nombres y fecha.'],
   }
 },
 nl: {
@@ -153,7 +153,7 @@ nl: {
     blume: ['Bedankt / Moederdag / Troost', 'De roos bloeit', 'Tik op de knop – de roos gaat open, vlinders en een boodschap.'],
     gluecksrad: ['Cadeaubon / Verjaardag', 'Rad van fortuin', 'Draai aan het rad – de gever kiest zelf de prijzen.'],
     zeitung: ['Verjaardag / Afscheid / Plezier', 'De Dagbode', 'De krant komt tot leven: geesten feliciteren op de grote foto, een veer schrijft het bericht.'],
-    hochzeit: ['Bruiloft / Jubileum', 'Ringen samenbrengen', 'Breng de ringen samen – klokken, duiven, bloemenregen, namen en datum.'],
+    hochzeit: ['Bruiloft / Jubileum', 'Ringwerpen', 'Gooi gouden ringen op de bewegende champagnefles – daarna klokken, duiven, bloemenregen, namen en datum.'],
   }
 },
 pl: {
@@ -179,7 +179,7 @@ pl: {
     blume: ['Podziękowanie / Dzień Matki / Otucha', 'Róża rozkwita', 'Dotknij pąka – róża rozkwita, motyle i wiadomość.'],
     gluecksrad: ['Bon / Urodziny', 'Koło fortuny', 'Zakręć kołem – nagrody wybiera darczyńca.'],
     zeitung: ['Urodziny / Pożegnanie / Zabawa', 'Kurier Dnia', 'Gazeta ożywa: duchy składają życzenia na dużym zdjęciu, pióro pisze wiadomość.'],
-    hochzeit: ['Ślub / Rocznica', 'Połącz obrączki', 'Połącz obrączki – dzwony, gołębie, deszcz płatków, imiona i data.'],
+    hochzeit: ['Ślub / Rocznica', 'Rzut obrączkami', 'Rzucaj złote obrączki na wędrującą butelkę szampana – potem dzwony, gołębie, deszcz płatków, imiona i data.'],
   }
 },
 tr: {
@@ -205,7 +205,7 @@ tr: {
     blume: ['Teşekkür / Anneler Günü / Teselli', 'Gül açıyor', 'Tomurcuğa dokun – gül açar, kelebekler ve bir mesaj.'],
     gluecksrad: ['Hediye çeki / Doğum günü', 'Şans çarkı', 'Çarkı çevir – ödülleri hediye eden seçer.'],
     zeitung: ['Doğum günü / Veda / Eğlence', 'Günün Habercisi', 'Gazete canlanır: büyük resimde hayaletler tebrik eder, bir tüy kalem haberi yazar.'],
-    hochzeit: ['Düğün / Yıldönümü', 'Yüzükleri birleştir', 'Yüzükleri birleştir – çanlar, güvercinler, çiçek yağmuru, isimler ve tarih.'],
+    hochzeit: ['Düğün / Yıldönümü', 'Yüzük atma', 'Altın yüzükleri hareket eden şampanya şişesine at – ardından çanlar, güvercinler, çiçek yağmuru, isimler ve tarih.'],
   }
 },
 };
