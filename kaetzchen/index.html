@@ -34,8 +34,8 @@ button.alt{background:transparent;font-size:.95em;padding:10px 20px}
 <div id="ar"></div>
 <div id="flat">
   <img class="bg" src="karte.jpg" alt="">
-  <video id="fv1" playsinline preload="auto" src="clip1.mp4"></video>
-  <video id="fv2" playsinline preload="auto" src="clip2.mp4" style="opacity:0"></video>
+  <video id="fv" playsinline preload="auto" src="clip1.mp4"></video>
+  <img id="still" class="bg" src="still.jpg" alt="" style="opacity:0">
   <canvas id="fov" width="600" height="900"></canvas>
   <img id="flatBall" src="ball.png" alt="">
 </div>
@@ -64,52 +64,63 @@ const BALL = { x: 569/1152 - .5, y: .75 - 1328/1728*1.5, d: 142/1152 };   // Kug
    clip1  : Kätzchen stupst die Kugel aus dem Bild, schaut traurig
    wait   : "Wirf den Ball zurück!" + Countdown 3-2-1
    throw  : Kugel fliegt vom Betrachter zurück ins Bild
+   swap   : Standbild (= 1. Bild von Clip 2) deckt den Wechsel ab
    clip2  : Kätzchen spielt glücklich
-   end    : "Für dich ♥" + Nochmal                                         */
-let mode = 'ar', phase = 'idle', visible = false, phaseT = 0, countdownN = 3;
-let v1, v2;                 // aktive Videos (AR oder Ersatzansicht)
-const ov = document.createElement('canvas'); ov.width = 600; ov.height = 900;   // Text-/Effekt-Ebene
+   end    : Herzen + "Danke fürs Spielen!" + Nochmal
+
+   TON: Es gibt genau EIN Video-Element. Es wird beim Antippen des Start-Knopfs
+   mit Ton gestartet und damit vom iPhone freigeschaltet. Clip 2 läuft im SELBEN
+   Element (nur die Quelle wird gewechselt) – deshalb bleibt der Ton auch im
+   zweiten Teil und bei "Nochmal" erhalten. (Ein zweites Video-Element würde das
+   iPhone stumm schalten.)                                                     */
+let mode = 'ar', phase = 'idle', visible = false, phaseT = 0, countdownN = 3, clip = 1;
+let vid = null;
+const ov = document.createElement('canvas'); ov.width = 600; ov.height = 900;
 const og = ov.getContext('2d');
 let hearts = [];
 
-function unlockVideos(vs){
-  // iPhone: Videos mit Ton nur nach Tippen erlaubt -> hier einmal kurz anspielen
-  for(const v of vs){ v.muted = false; const p = v.play(); if(p) p.then(()=>{ v.pause(); v.currentTime = 0; }).catch(()=>{ v.muted = true; }); }
-}
-// Falls das Handy Ton verweigert: stumm weiterspielen statt hängen zu bleiben
-function playSafe(v){ const p = v.play(); if(p) p.catch(()=>{ v.muted = true; v.play().catch(()=>{}); }); }
 function setPhase(p){ phase = p; phaseT = 0; }
+function loadClip(n){ clip = n; vid.src = 'clip' + n + '.mp4'; vid.load(); }
+function playSafe(){ const p = vid.play(); if(p) p.catch(()=>{ vid.muted = true; vid.play().catch(()=>{}); }); }
 
+// muss direkt im Tipp-Handler aufgerufen werden (iPhone-Ton-Freigabe)
 function startSequence(){
   hearts = []; countdownN = 3;
-  v2.pause(); v2.currentTime = 0; setV2Opacity(0); ballVisible(false);
-  v1.currentTime = 0; playSafe(v1);
-  $('again').style.display = 'none';
+  setStill(0); ballVisible(false); $('again').style.display = 'none';
+  vid.muted = false;
+  if(clip !== 1) loadClip(1);
+  vid.currentTime = 0; playSafe();
   setPhase('clip1');
 }
-function onClip1End(){ if(phase === 'clip1') setPhase('wait'); }
-function onClip2End(){ if(phase === 'clip2'){ setPhase('end'); for(let i=0;i<28;i++) hearts.push({x:Math.random()*600, y:900+Math.random()*300, s:14+Math.random()*22, v:60+Math.random()*90, w:Math.random()*6}); $('again').style.display = 'block'; } }
+function onEnded(){
+  if(phase === 'clip1') setPhase('wait');
+  else if(phase === 'clip2'){
+    setPhase('end');
+    for(let i=0;i<28;i++) hearts.push({x:Math.random()*600, y:900+Math.random()*300, s:14+Math.random()*22, v:60+Math.random()*90, w:Math.random()*6});
+    $('again').style.display = 'block';
+  }
+}
 
 function update(dt){
   if(mode === 'ar' && !visible) return;
   phaseT += dt;
   if(phase === 'wait'){
-    // 1,2 s Text, dann 3-2-1
     const t = phaseT - 1.2;
     countdownN = t < 0 ? 3 : 3 - Math.floor(t);
     if(t >= 3){ setPhase('throw'); ballVisible(true); }
   } else if(phase === 'throw'){
     const T = .95, k = Math.min(1, phaseT / T);
     placeBall(k);
+    if(k > .8) setStill((k - .8) / .2);                // Standbild blendet ein, während die Kugel landet
     if(k >= 1 && phaseT > T + .05){
-      // Übergabe: Video 2 startet genau mit der Kugel an dieser Stelle
-      v2.currentTime = 0; playSafe(v2);
-      setPhase('fade');
+      setStill(1); ballVisible(false);
+      loadClip(2); playSafe();                         // gleiches Element -> Ton bleibt freigeschaltet
+      setPhase('swap');
     }
-  } else if(phase === 'fade'){
-    const k = Math.min(1, phaseT / .25);
-    setV2Opacity(k);
-    if(k >= 1){ ballVisible(false); v1.pause(); setPhase('clip2'); }
+  } else if(phase === 'swap'){
+    // Standbild wegblenden, sobald Clip 2 wirklich läuft
+    if(vid.currentTime > .05 && !vid.paused){ const k = Math.min(1, (phaseT - .0) / .25); setStill(1 - k); if(k >= 1) setPhase('clip2'); }
+    else if(phaseT > 4){ setStill(0); setPhase('clip2'); }   // Notfall: nicht hängen bleiben
   }
   for(const h of hearts){ h.y -= h.v*dt; h.w += dt*2; }
 }
@@ -120,7 +131,7 @@ function drawOverlay(){
   if(phase === 'wait'){
     og.fillStyle = 'rgba(40,20,30,.35)'; og.fillRect(0,0,600,900);
     og.fillStyle = '#fff'; og.strokeStyle = 'rgba(120,40,70,.9)'; og.lineWidth = 8;
-    og.font = 'italic bold 52px Georgia';
+    og.font = 'italic bold 48px Georgia';
     og.strokeText('Wirf den Ball zurück!', 300, 300); og.fillText('Wirf den Ball zurück!', 300, 300);
     if(phaseT > 1.2){
       const frac = (phaseT - 1.2) % 1, sc = 1.4 - frac*.5;
@@ -134,48 +145,51 @@ function drawOverlay(){
   }
   if(phase === 'end'){
     for(const h of hearts){ og.save(); og.translate(h.x + Math.sin(h.w)*12, h.y); og.font = h.s+'px serif'; og.globalAlpha = .9; og.fillText('💗', 0, 0); og.restore(); }
-    og.font = 'italic bold 58px Georgia'; og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
+    og.font = 'italic bold 54px Georgia'; og.fillStyle = '#fff'; og.strokeStyle = 'rgba(150,60,90,.85)'; og.lineWidth = 8;
     og.strokeText('Danke fürs Spielen!', 300, 820); og.fillText('Danke fürs Spielen!', 300, 820);
   }
   if(ovTex) ovTex.needsUpdate = true;
   if(mode === 'flat'){ const fc = $('fov').getContext('2d'); fc.clearRect(0,0,600,900); fc.drawImage(ov,0,0); }
 }
 
-/* ---------- Kugel & Überblendung: je nach Ansicht ---------- */
-let ballVisible = ()=>{}, placeBall = ()=>{}, setV2Opacity = ()=>{}, ovTex = null;
-
+let ballVisible = ()=>{}, placeBall = ()=>{}, setStill = ()=>{}, ovTex = null;
 let last = performance.now();
 function loop(now){ const dt = Math.min(.05,(now-last)/1000); last = now; update(dt); drawOverlay(); requestAnimationFrame(loop); }
+
+$('again').onclick = () => { if(vid) startSequence(); };
 
 /* ---------- Ersatzansicht ohne Kamera ---------- */
 function startFlat(msg){
   mode = 'flat';
   $('start').style.display='none'; $('loading').style.display='none';
   $('flat').style.display='block';
-  v1 = $('fv1'); v2 = $('fv2');
+  if(vid && vid !== $('fv')){
+    // schon im Tipp freigeschaltetes Video weiterverwenden (sonst kein Ton)
+    const old = $('fv'); vid.id = 'fv'; vid.className = old.className; old.replaceWith(vid);
+  }
+  vid = $('fv'); vid.onended = onEnded; clip = (vid.src.indexOf('clip2') >= 0) ? 2 : 1;
   const fb = $('flatBall');
   ballVisible = on => { fb.style.display = on ? 'block' : 'none'; };
-  setV2Opacity = a => { v2.style.opacity = a; };
+  setStill = a => { $('still').style.opacity = a; };
   placeBall = k => {
-    // fliegt von "vor dem Bildschirm" (riesig, unten) auf die Kugelstelle
     const e = 1 - Math.pow(1-k, 2.2);
     const sc = 7 - 6*e;
-    const lift = Math.sin(k*Math.PI) * -18;          // kleiner Bogen
-    const dy = (1-e) * 55 + lift;                     // in % der Ballgröße
+    const lift = Math.sin(k*Math.PI) * -18;
+    const dy = (1-e) * 55 + lift;
     fb.style.transform = `translate(0, ${dy}%) scale(${sc}) rotate(${k*540}deg)`;
   };
-  v1.onended = onClip1End; v2.onended = onClip2End;
   if(msg){ const h=$('hint'); h.textContent=msg; h.style.display='block'; setTimeout(()=>h.style.display='none',4000); }
   startSequence();
 }
-$('btnFlat').onclick = () => { unlockVideos([$('fv2')]); startFlat(); };
-$('again').onclick = () => { if(v1){ startSequence(); } };
+$('btnFlat').onclick = () => startFlat();
 
 /* ---------- AR-Ansicht ---------- */
 $('btnAR').onclick = async () => {
-  const av1 = document.createElement('video'), av2 = document.createElement('video');
-  for(const [v,src] of [[av1,'clip1.mp4'],[av2,'clip2.mp4']]){ v.src = src; v.playsInline = true; v.setAttribute('playsinline',''); v.preload = 'auto'; v.crossOrigin = 'anonymous'; }
-  unlockVideos([av1, av2]);
+  // Video sofort im Tipp mit Ton anspielen -> vom iPhone freigeschaltet
+  const v = document.createElement('video');
+  v.src = 'clip1.mp4'; v.playsInline = true; v.setAttribute('playsinline',''); v.preload = 'auto'; v.crossOrigin = 'anonymous'; v.muted = false;
+  const p = v.play(); if(p) p.then(()=>{ if(phase === 'idle'){ v.pause(); v.currentTime = 0; } }).catch(()=>{});
+  vid = v; clip = 1; vid.onended = onEnded;
   $('start').style.display='none'; $('loading').style.display='flex';
   const bar = $('loadBar'), txt = $('loadText');
   try{
@@ -188,7 +202,7 @@ $('btnAR').onclick = async () => {
       const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
       const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
       const c = new Compiler();
-      await c.compileImageTargets([img], p => { bar.style.width = Math.round(p*.8)+'%'; });
+      await c.compileImageTargets([img], pr => { bar.style.width = Math.round(pr*.8)+'%'; });
       url = URL.createObjectURL(new Blob([await c.exportData()]));
     }
     txt.textContent = 'Kamera wird gestartet …'; bar.style.width = '90%';
@@ -198,38 +212,37 @@ $('btnAR').onclick = async () => {
     const { renderer, scene, camera } = mind;
     const anchor = mind.addAnchor(0);
     const H = 1.5;
-    const mkVid = v => { const t = new THREE.VideoTexture(v); t.colorSpace = THREE.SRGBColorSpace; return t; };
-    const m1 = new THREE.Mesh(new THREE.PlaneGeometry(1,H), new THREE.MeshBasicMaterial({ map: mkVid(av1) }));
-    const m2mat = new THREE.MeshBasicMaterial({ map: mkVid(av2), transparent: true, opacity: 0 });
-    const m2 = new THREE.Mesh(new THREE.PlaneGeometry(1,H), m2mat); m2.position.z = .001;
+    const vtex = new THREE.VideoTexture(vid); vtex.colorSpace = THREE.SRGBColorSpace;
+    const mV = new THREE.Mesh(new THREE.PlaneGeometry(1,H), new THREE.MeshBasicMaterial({ map: vtex }));
+    const stillTex = new THREE.TextureLoader().load('still.jpg'); stillTex.colorSpace = THREE.SRGBColorSpace;
+    const stillMat = new THREE.MeshBasicMaterial({ map: stillTex, transparent: true, opacity: 0 });
+    const mS = new THREE.Mesh(new THREE.PlaneGeometry(1,H), stillMat); mS.position.z = .001;
     ovTex = new THREE.CanvasTexture(ov); ovTex.colorSpace = THREE.SRGBColorSpace;
-    const m3 = new THREE.Mesh(new THREE.PlaneGeometry(1,H), new THREE.MeshBasicMaterial({ map: ovTex, transparent: true })); m3.position.z = .002;
-    anchor.group.add(m1, m2, m3);
+    const mO = new THREE.Mesh(new THREE.PlaneGeometry(1,H), new THREE.MeshBasicMaterial({ map: ovTex, transparent: true })); mO.position.z = .002;
+    anchor.group.add(mV, mS, mO);
     const ballTex = new THREE.TextureLoader().load('ball.png'); ballTex.colorSpace = THREE.SRGBColorSpace;
     const ballMat = new THREE.SpriteMaterial({ map: ballTex, transparent: true });
-    const ball = new THREE.Sprite(ballMat); ball.scale.set(BALL.d, BALL.d, 1); ball.visible = false;
+    const ball = new THREE.Sprite(ballMat); ball.scale.set(BALL.d, BALL.d, 1); ball.visible = false; ball.position.z = .01;
     anchor.group.add(ball);
     const target = new THREE.Vector3(BALL.x, BALL.y, .01);
     let startP = null;
-    v1 = av1; v2 = av2;
-    av1.onended = onClip1End; av2.onended = onClip2End;
     ballVisible = on => { ball.visible = on; if(on){ const cw = new THREE.Vector3(); camera.getWorldPosition(cw); startP = anchor.group.worldToLocal(cw.clone()); startP.lerp(target, .12); startP.y -= .25; } };
-    setV2Opacity = a => { m2mat.opacity = a; };
+    setStill = a => { stillMat.opacity = a; };
     placeBall = k => {
       if(!startP) return;
       const e = 1 - Math.pow(1-k, 2.2);
       ball.position.lerpVectors(startP, target, e);
-      ball.position.y += Math.sin(k*Math.PI) * .18;     // Wurfbogen
+      ball.position.y += Math.sin(k*Math.PI) * .18;
       ballMat.rotation = k * 9;
     };
     let started = false;
     anchor.onTargetFound = () => {
       visible = true; $('hint').style.display='none';
-      if(!started){ started = true; startSequence(); }
-      else { if(phase==='clip1') av1.play().catch(()=>{}); if(phase==='clip2') av2.play().catch(()=>{}); }
+      if(!started){ started = true; vid.currentTime = 0; setPhase('clip1'); playSafe(); }
+      else if(phase === 'clip1' || phase === 'clip2' || phase === 'swap') playSafe();
     };
     anchor.onTargetLost = () => {
-      visible = false; av1.pause(); av2.pause();
+      visible = false; vid.pause();
       $('hint').textContent = '📷 Karte wieder ins Bild halten'; $('hint').style.display='block';
     };
     await mind.start();
