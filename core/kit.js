@@ -1,7 +1,7 @@
 // Baukasten für die Lebendigen Karten: gemeinsame Bausteine aller Spiele.
 // Partikel, schwebende Texte, Anzeige-Leiste, Bestwert pro Karte, Finale mit Name und Konfetti,
 // fertige Melodien. Jede Szene nutzt nur, was sie braucht – die Kartenlogik bleibt in core/card.js.
-import { t, confetti, drawConfetti, bigText, rnd } from './card.js';
+import { t, confetti, drawConfetti, bigText, rnd, fitLines } from './card.js';
 
 /* ---------- Gruß aus ?name= / ?text= ---------- */
 export function greeting(card){
@@ -88,7 +88,9 @@ export function makeFinale(){
       const s = 1 + Math.sin(tt*4)*.035;
       g.save(); g.translate(300, 400); g.scale(s, s);
       bigText(g, lines[0], 0, 0, lines[0].length > 16 ? 50 : 62, '#fff', 'rgba(60,20,70,.9)'); g.restore();
-      lines.slice(1).forEach((l, i) => bigText(g, l, 300, 505 + i*52, 36, i ? '#ffffff' : '#ffd34d', 'rgba(60,20,70,.85)'));
+      let cy = 487; g.save(); g.font = 'italic bold 36px Georgia';
+      const ns = lines.slice(1).map(l => Math.min(3, fitLines(g, String(l), 540).length)); g.restore();
+      lines.slice(1).forEach((l, i) => { const h = ns[i]*40; bigText(g, l, 300, cy + h/2, 36, i ? '#ffffff' : '#ffd34d', 'rgba(60,20,70,.85)'); cy += h + 10; });
     }
   };
 }
