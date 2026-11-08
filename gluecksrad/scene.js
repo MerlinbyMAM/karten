@@ -5,6 +5,7 @@ import { startCard, bigText, rnd, confetti, drawConfetti } from '../core/card.js
 import { WHEEL } from './data.js';   // {x,y,r} Mittelpunkt/Radius der leeren Scheibe in 600x900
 
 const P = new URLSearchParams(location.search);
+const NAME = P.get('name');
 const PRIZES = (P.get('preise') || 'Kinoabend|Frühstück ans Bett|Wellness-Tag|Pizza-Abend|Ausflug|Ein Wunsch frei|Eis essen|Überraschung').split('|').slice(0, 8);
 const COLS = ['#e63946','#f4a261','#2a9d8f','#e9c46a','#457b9d','#f28482','#8ab17d','#b56576'];
 
@@ -76,7 +77,7 @@ const scene = {
       if(conf) drawConfetti(g, conf, 1/60);
       g.fillStyle = 'rgba(255,248,230,.94)'; g.fillRect(40, WHEEL.y - 70, 520, 140);
       g.strokeStyle = '#c1121f'; g.lineWidth = 5; g.strokeRect(46, WHEEL.y - 64, 508, 128);
-      bigText(g, 'Gewonnen:', 300, WHEEL.y - 30, 34, '#c1121f', 'rgba(255,255,255,.9)');
+      bigText(g, NAME ? NAME + ', gewonnen:' : 'Gewonnen:', 300, WHEEL.y - 30, NAME && NAME.length > 14 ? 26 : 34, '#c1121f', 'rgba(255,255,255,.9)');
       bigText(g, result, 300, WHEEL.y + 26, result.length > 16 ? 36 : 48, '#370617', 'rgba(255,255,255,.9)');
     }
   }

@@ -57,6 +57,7 @@ button.alt{background:transparent;font-size:.95em;padding:10px 20px}
 </div>
 
 <script type="module">
+{ const n = new URLSearchParams(location.search).get('name'); if(n){ document.querySelector('#start h1').textContent = 'Für dich, ' + n + '!'; document.title = 'Für dich, ' + n + '!'; } }
 const $ = id => document.getElementById(id);
 const BALL = { x: 569/1152 - .5, y: .75 - 1328/1728*1.5, d: 142/1152 };   // Kugel-Position auf der Karte (Kartenbreite = 1)
 
