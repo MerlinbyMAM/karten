@@ -8,7 +8,7 @@ const TEXT = P.get('text') || 'Schön, dass es dich gibt.';
 const VON = P.get('von');
 
 let phase, t0, petals, flies;
-const VIDEO = false;
+const VIDEO = true;
 const BUD = { x: 300, y: 317 };
 
 function drawRose(g, x, y, k, t){
