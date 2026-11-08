@@ -128,6 +128,10 @@ const K = [
  ['schwester', '?name=Lisa', [['alter','alter']], v => ({ name: v.N, alter: v.alter }), [.5, .975]],
  ['ehemann', '?name=Thomas', [], v => ({ name: v.N }), [.5, .975]],
  ['ehefrau', '?name=Julia', [], v => ({ name: v.N }), [.5, .975]],
+ ['kicker', '?name=Ben', [['alter','alter']], v => ({ name: v.N, alter: v.alter }), [.84, .955]],
+ ['gamer', '?name=Nico', [['alter','alter']], v => ({ name: v.N, alter: v.alter }), [.5, .975]],
+ ['babyparty', '?name=Sarah%20%26%20Jan', [], v => ({ name: v.N }), [.5, .975]],
+ ['lehrer', '?name=Frau%20M%C3%BCller', [], v => ({ name: v.N }), [.5, .975]],
  ['rennen', '?firma=Muster%20Fuhrpark%20GmbH', [['firma','firma']], v => ({ firma: v.firma }), [.15, .2]],   // nur QR-Sticker für eine vorhandene Karte
 ];
 const $ = id => document.getElementById(id);
