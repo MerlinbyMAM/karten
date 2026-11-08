@@ -9,6 +9,9 @@ const NAMEN = P.get('namen') || P.get('name') || t('hochzeit.msg');
 const DATUM = P.get('datum');
 const RINGS = 10, START = { x: 300, y: 820 };
 const NECK_TOP = 352, NECK_BOT = 432, BASE_Y = 612;
+// Flasche wird um BS verkleinert gezeichnet; NT/NB = sichtbarer Hals (für Treffer und Stapel)
+const BS = .68, NT = BASE_Y - (BASE_Y - NECK_TOP)*BS, NB = BASE_Y - (BASE_Y - NECK_BOT)*BS;
+const RING = 38;                                      // Ringradius auf dem Hals (vorher 26)
 
 let bottle, flying, stacked, left, hits, popups, doves, petals, sparks, done, doneT, aim, ready, tt;
 
@@ -24,7 +27,7 @@ function ringPath(g, x, y, r, sq, part){            // part: 0 ganz, 1 hintere H
   if(part !== 1){ g.fillStyle = 'rgba(255,255,255,.8)'; g.beginPath(); g.arc(x - r*.5, y + r*sq*.6, Math.max(1.5, r*.07), 0, 7); g.fill(); }
 }
 function drawBottle(g, x){
-  g.save(); g.translate(x, 0);
+  g.save(); g.translate(x, BASE_Y); g.scale(BS, BS); g.translate(0, -BASE_Y);
   g.fillStyle = 'rgba(80,60,40,.25)'; g.beginPath(); g.ellipse(0, BASE_Y + 4, 46, 9, 0, 0, 7); g.fill();
   const gl = g.createLinearGradient(-36, 0, 36, 0);
   gl.addColorStop(0, '#0d3b24'); gl.addColorStop(.35, '#1f6b45'); gl.addColorStop(.55, '#2f8a5c'); gl.addColorStop(1, '#0b2e1c');
@@ -47,7 +50,7 @@ const scene = {
   accent: '#f1e3c6', button: '#9c6644', bg: '#4a3b30',
   init(ctx){ this.restart(ctx); },
   restart(ctx){
-    bottle = { x: 300, ph: 0, sp: .9, amp: 70 }; flying = null; stacked = []; left = RINGS; hits = 0;
+    bottle = { x: 300, ph: 0, sp: .6, amp: 55 }; flying = null; stacked = []; left = RINGS; hits = 0;
     popups = []; doves = []; petals = []; sparks = []; done = false; doneT = 0; aim = null; ready = 0; tt = 0;
   },
   throwAt(xt, ctx){
@@ -62,7 +65,7 @@ const scene = {
     if(!aim) return;
     const dx = aim.x - aim.x0, dy = aim.y - aim.y0;
     // Wisch nach oben: Richtung des Wischs bestimmt das Ziel; kurzes Tippen: genau dorthin werfen
-    const xt = (dy < -30) ? START.x + dx/Math.max(1, -dy)*(START.y - NECK_TOP) : aim.x;
+    const xt = (dy < -30) ? START.x + dx/Math.max(1, -dy)*(START.y - NT) : aim.x;
     aim = null; this.throwAt(xt, ctx);
   },
   finish(ctx){
@@ -84,23 +87,25 @@ const scene = {
     const f = flying;
     if(f){
       if(f.state === 'fly'){
-        f.u = Math.min(1, f.u + dt/.75);
-        const u = f.u; f.x = f.x0 + (f.xt - f.x0)*u; f.y = f.y0 + (NECK_TOP - 30 - f.y0)*u - 140*Math.sin(Math.PI*u); f.s = 1 - .5*u;
+        f.u = Math.min(1, f.u + dt/.65);
+        // kleiner Magnet: im letzten Drittel zieht es den Ring bis zu 30 px zur Flasche
+        if(f.u > .6){ const d = bottle.x - f.xt; if(Math.abs(d) < 70) f.xt += Math.sign(d)*Math.min(Math.abs(d), 90*dt); }
+        const u = f.u; f.x = f.x0 + (f.xt - f.x0)*u; f.y = f.y0 + (NT - 24 - f.y0)*u - 140*Math.sin(Math.PI*u); f.s = 1 - (1 - RING/58)*u;
         if(u >= 1){
           const off = f.xt - bottle.x;
-          if(Math.abs(off) < 15){                                     // Treffer
+          if(Math.abs(off) < RING - 12){                                     // Treffer
             f.state = 'slide'; f.v = 0; hits++;
-            bottle.sp += .25; bottle.amp = Math.min(150, bottle.amp + 12);
-            popups.push({ x: bottle.x, y: NECK_TOP - 60, s: t('hochzeit.hit'), life: 1.2, good: 1 });
+            bottle.sp += .12; bottle.amp = Math.min(130, bottle.amp + 8);
+            popups.push({ x: bottle.x, y: NT - 60, s: t('hochzeit.hit'), life: 1.2, good: 1 });
             ctx.tone(1568, 0, .5, 'sine', .07); ctx.tone(2093, .08, .6, 'sine', .05);
-          } else if(Math.abs(off) < 48){                              // klirrt am Hals ab
+          } else if(Math.abs(off) < RING + 14){                              // klirrt am Hals ab
             f.state = 'fall'; f.vx = Math.sign(off || 1)*rnd(120, 200); f.vy = -120;
-            popups.push({ x: f.x, y: NECK_TOP - 60, s: t('hochzeit.miss'), life: 1 });
+            popups.push({ x: f.x, y: NT - 60, s: t('hochzeit.miss'), life: 1 });
             ctx.tone(2637, 0, .15, 'triangle', .05); ctx.tone(1975, .05, .2, 'triangle', .04);
-          } else { f.state = 'fall'; f.vx = (f.xt - f.x0)*.3; f.vy = 40; popups.push({ x: f.x, y: NECK_TOP - 60, s: t('hochzeit.miss'), life: 1 }); }
+          } else { f.state = 'fall'; f.vx = (f.xt - f.x0)*.3; f.vy = 40; popups.push({ x: f.x, y: NT - 60, s: t('hochzeit.miss'), life: 1 }); }
         }
       } else if(f.state === 'slide'){
-        const target = NECK_BOT - 4 - stacked.length*9;
+        const target = Math.max(NT + 8, NB - 4 - stacked.length*6);
         f.v += 900*dt; f.y = Math.min(target, f.y + f.v*dt); f.x = bottle.x;
         if(f.y >= target){ stacked.push({ x: bottle.x, y: target }); flying = null; ready = .25; ctx.tone(1318, 0, .25, 'triangle', .05);
           for(let i=0;i<12;i++){ const a = rnd(0, 6.28); sparks.push({ x: bottle.x, y: target, vx: Math.cos(a)*120, vy: Math.sin(a)*80, life: .7 }); } }
@@ -124,17 +129,17 @@ const scene = {
       g.fillStyle = gr; g.fillRect(40, 180, 520, 480);
     }
     // gestapelte Ringe: hintere Hälfte hinter dem Hals, vordere davor
-    for(const s of stacked) ringPath(g, s.x, s.y, 26, .3, 1);
+    for(const s of stacked) ringPath(g, s.x, s.y, RING, .3, 1);
     drawBottle(g, bottle.x);
-    for(const s of stacked) ringPath(g, s.x, s.y, 26, .3, 2);
+    for(const s of stacked) ringPath(g, s.x, s.y, RING, .3, 2);
     // fliegender Ring
     if(flying){
       const f = flying;
-      if(f.state === 'slide'){ ringPath(g, f.x, f.y, 26, .3, 2); }
-      else ringPath(g, f.x, f.y, 44*f.s, .35 + .25*(1 - f.s), 0);
+      if(f.state === 'slide'){ ringPath(g, f.x, f.y, RING, .3, 2); }
+      else ringPath(g, f.x, f.y, 58*f.s, .3 + .25*(1 - f.s), 0);
     }
     // nächster Ring unten bereit
-    if(!done && !flying && left > 0) ringPath(g, START.x, START.y + Math.sin(tt*3)*3, 44, .45, 0);
+    if(!done && !flying && left > 0) ringPath(g, START.x, START.y + Math.sin(tt*3)*3, 58, .45, 0);
     g.globalCompositeOperation = 'lighter';
     for(const s of sparks){ g.globalAlpha = Math.max(0, s.life); g.fillStyle = '#ffe9a8'; g.beginPath(); g.arc(s.x, s.y, 3, 0, 7); g.fill(); }
     g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
@@ -147,7 +152,7 @@ const scene = {
       g.fillStyle = '#fff'; g.font = 'bold 24px Georgia'; g.textAlign = 'center'; g.textBaseline = 'middle';
       g.fillText(t('hochzeit.rings', {n: left}), 115, 786); g.fillText(t('hochzeit.hits', {n: hits}), 485, 786);
     }
-    if(!done && hits === 0 && left === RINGS && tt > .5){ g.globalAlpha = .6 + .4*Math.sin(tt*3); bigText(g, t('hochzeit.hint'), 300, 268, 30, '#fff', 'rgba(110,80,60,.85)'); g.globalAlpha = 1; }
+    if(!done && hits === 0 && left === RINGS && tt > .5){ g.globalAlpha = .6 + .4*Math.sin(tt*3); bigText(g, t('hochzeit.hint'), 300, 345, 28, '#fff', 'rgba(110,80,60,.85)'); g.globalAlpha = 1; }
     // Finale
     for(const d of doves){
       const w = Math.sin(tt*10 + d.ph);
