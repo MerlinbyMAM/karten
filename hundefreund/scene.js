@@ -2,8 +2,8 @@
 import { startCard, t } from '../core/card.js';
 import { makeFx, makeFinale, hud2, best, peekBest, greeting, hint, MEL } from '../core/kit.js';
 const OB = [
-  { n: 'hund', x: 308, y: 372, w: 292, h: 390, cx: 418.5, cy: 588.5, px: 303, py: 370, pw: 297, ph: 396.5 },
-  { n: 'stock', x: 24, y: 678, w: 314, h: 138, cx: 187.4, cy: 748.7, px: 19.5, py: 674.5, pw: 324.5, ph: 148.5 } ];
+  { n: 'hund', x: 334, y: 428, w: 266, h: 358, cx: 449.1, cy: 624.8, px: 330, py: 423, pw: 270, ph: 372 },
+  { n: 'stock', x: 24, y: 710, w: 228, h: 92, cx: 129.4, cy: 758.9, px: 19, py: 708, pw: 237, ph: 103 } ];
 const IMG = OB.map(b => { const a = new Image(); a.src = b.n + '.png'; const p = new Image(); p.src = b.n + '_platz.png'; return { spr: a, bg: p }; });
 function spr(g, i, x, y, s = 1, r = 0, a = 1, fx = 1){ const b = OB[i]; if(!IMG[i].spr.complete) return; g.save(); g.globalAlpha = a; g.translate(x, y); g.rotate(r); g.scale(s*fx, s); g.drawImage(IMG[i].spr, -b.w/2, -b.h/2, b.w, b.h); g.restore(); }
 function hole(g, i){ const b = OB[i]; if(IMG[i].bg.complete && IMG[i].bg.naturalWidth) g.drawImage(IMG[i].bg, b.px, b.py, b.pw, b.ph); }
