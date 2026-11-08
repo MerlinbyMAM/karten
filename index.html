@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lebendige Karten – die Kollektion</title>
+<style>
+:root{--ink:#2b1d16;--gold:#b8862e;--paper:#fbf6ee}
+*{box-sizing:border-box}
+body{margin:0;font-family:Georgia,'Times New Roman',serif;background:var(--paper);color:var(--ink)}
+header{padding:48px 20px 24px;text-align:center}
+header h1{font-size:2.4em;margin:.1em 0;font-style:italic;color:var(--gold)}
+header p{max-width:620px;margin:.6em auto;line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;max-width:1180px;margin:0 auto;padding:10px 20px 50px}
+.card{background:#fff;border-radius:14px;box-shadow:0 6px 18px #0002;overflow:hidden;display:flex;flex-direction:column}
+.card img{width:100%;aspect-ratio:2/3;object-fit:cover;display:block;background:#eee}
+.card .b{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h2{margin:0;font-size:1.15em}
+.card .t{font-size:.82em;color:#7a6250;text-transform:uppercase;letter-spacing:.06em}
+.card p{margin:0;font-size:.92em;line-height:1.4;flex:1}
+.card a{align-self:flex-start;margin-top:6px;padding:8px 16px;border-radius:20px;background:var(--gold);color:#fff;text-decoration:none;font-size:.9em}
+.card a.alt{background:transparent;color:var(--gold);border:1px solid var(--gold);padding:5px 12px;font-size:.8em}
+footer{text-align:center;padding:30px 20px 50px;font-size:.85em;color:#7a6250}
+</style>
+</head>
+<body>
+<header>
+  <h1>Lebendige Karten</h1>
+  <p>Hochwertig gedruckte Grußkarten mit verstecktem QR-Code: Handy drauf halten – und die Karte erwacht zum Leben, mit Animation, Musik und kleinem Spiel. Persönliche Nachrichten lassen sich direkt im Link mitgeben.</p>
+</header>
+<div class="grid" id="g"></div>
+<footer>© MAM · Munich AI Media · Tipp: „Ohne Kamera ansehen“ zeigt jede Karte auch direkt am Bildschirm.</footer>
+<script>
+const K = [
+ ['kaetzchen','Für dich / Allgemein','Kätzchen mit Ball','Das Kätzchen schießt den Ball aus der Karte – zurückwerfen und es spielt glücklich weiter.',''],
+ ['torte','Geburtstag','Puste die Kerzen aus','Kerzen antippen oder wegwischen – dann Konfetti und „Happy Birthday“.','?name=Anna'],
+ ['ballons','Geburtstag / Kinder','Ballon-Platzen','20 Sekunden Ballons zerplatzen, goldene zählen dreifach.','?text=Alles%20Gute%20Paul!'],
+ ['rubbellos','Gutschein / Geschenk','Rubbellos','Feld freirubbeln – darunter steckt das persönliche Geschenk.','?text=Du%20hast%20gewonnen:&text2=Ein%20Wellness-Wochenende!'],
+ ['weihnacht','Weihnachten','Schneegestöber im Dorf','Antippen lässt es schneien, beim fünften Mal leuchtet der Baum – mit Jingle Bells.','?text=Frohe%20Festtage!'],
+ ['liebe','Liebe / Valentinstag','Der Liebesbrief','Siegel antippen – der Brief öffnet sich, Rosenblätter regnen, die Nachricht schreibt sich.','?text=Ich%20liebe%20dich!&von=Max'],
+ ['baby','Geburt / Taufe','Willkommen, kleiner Schatz','Wolken wegwischen – Name, Datum und Gewicht erscheinen, Wiegenlied.','?name=Lena&datum=3.%20M%C3%A4rz%202026&gewicht=3250%20g'],
+ ['feuerwerk','Silvester / Erfolg / Jubiläum','Feuerwerk zünden','Jeder Tipp eine Rakete, nach acht das große Finale.','?text=Frohes%20neues%20Jahr!'],
+ ['weltraum','Kinder / Geburtstag','Weltraum-Mission','Raumschiff steuern, Meteoriten abschießen, Sterne sammeln.','?name=Leo'],
+ ['blume','Danke / Muttertag / Trost','Die Rose erblüht','Knospe antippen – die Rose blüht auf, Schmetterlinge und eine Botschaft.','?text=Danke%20f%C3%BCr%20alles!&von=Deine%20Tochter'],
+ ['gluecksrad','Gutschein / Geburtstag','Glücksrad','Am Rad drehen – die Preise bestimmt der Schenkende selbst.','?preise=Kino|Pizza|Massage|Ausflug|Fr%C3%BChst%C3%BCck|Wunsch%20frei'],
+ ['zeitung','Geburtstag / Abschied / Spaß','Der Tagesbote','Die Zeitung erwacht: bewegte Bilder, die Feder schreibt die persönliche Meldung.','?name=Oma%20Gerda'],
+ ['hochzeit','Hochzeit / Jahrestag','Ringe zusammenführen','Die Ringe vereinen – Glocken, Tauben, Blütenregen, Namen und Datum.','?namen=Anna%20%26%20Tom&datum=12.%20Juni%202026'],
+];
+document.getElementById('g').innerHTML = K.map(([d,t,h,p,q]) => `
+ <div class="card"><img loading="lazy" src="${d}/karte.jpg" alt="${h}">
+ <div class="b"><div class="t">${t}</div><h2>${h}</h2><p>${p}</p>
+ <a href="${d}/">Karte öffnen</a>${q ? `<a class="alt" href="${d}/${q}">Beispiel mit persönlichem Text</a>` : ''}</div></div>`).join('');
+</script>
+</body>
+</html>
