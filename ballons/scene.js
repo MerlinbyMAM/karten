@@ -9,10 +9,14 @@ let balloons, pops, conf, score, time, state, spawn, endT;
 
 function balloon(){
   const c = COLORS[Math.floor(Math.random()*COLORS.length)];
-  return { x: rnd(70, 530), y: 960, r: rnd(34, 46), c, vy: rnd(70, 120), sw: rnd(0, 6), gold: Math.random() < .12 };
+  // drei Tempo-Klassen, über die Spielzeit immer schneller; kleine und goldene sind die flinksten
+  const k = 1 + (GAME - time)/GAME*.7, roll = Math.random(), gold = Math.random() < .12;
+  const vy = (gold ? rnd(420, 560) : roll < .4 ? rnd(150, 220) : roll < .8 ? rnd(240, 340) : rnd(380, 500)) * k;
+  const r = gold ? rnd(28, 34) : vy > 360 ? rnd(28, 36) : rnd(36, 48);
+  return { x: rnd(70, 530), y: 960, r, c, vy, sw: rnd(0, 6), wob: Math.random() < .35 ? rnd(30, 70) : 10, gold };
 }
 function drawBalloon(g, b, t){
-  const x = b.x + Math.sin(t*1.6 + b.sw)*10, y = b.y;
+  const x = b.x + Math.sin(t*(b.wob > 10 ? 2.6 : 1.6) + b.sw)*b.wob, y = b.y;
   g.strokeStyle = 'rgba(80,80,80,.6)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(x, y + b.r*1.15);
   g.bezierCurveTo(x - 8, y + b.r*1.6, x + 8, y + b.r*2, x, y + b.r*2.6); g.stroke();
   const gr = g.createRadialGradient(x - b.r*.35, y - b.r*.45, b.r*.1, x, y, b.r*1.2);
@@ -50,7 +54,7 @@ const scene = {
     pops = pops.filter(p => p.life > 0);
     if(state === 'play'){
       time -= dt; spawn -= dt;
-      if(spawn <= 0){ spawn = rnd(.35, .7) * (time > 8 ? 1 : .7); balloons.push(balloon()); }
+      if(spawn <= 0){ spawn = rnd(.25, .55) * (time > 8 ? 1 : .7); balloons.push(balloon()); }
       for(const b of balloons) b.y -= b.vy*dt;
       balloons = balloons.filter(b => b.y > -120);
       if(time <= 0){
