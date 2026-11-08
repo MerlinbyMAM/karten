@@ -58,10 +58,10 @@ const scene = {
       for(let i=0;i<14;i++){ const a = i/14*6.28 + ctx.t*.6, rr = 120 + 30*Math.sin(ctx.t*2 + i); g.fillStyle = `rgba(255,240,180,${.7*glow*(.5+.5*Math.sin(ctx.t*5+i))})`; g.beginPath(); g.arc(300 + Math.cos(a)*rr*.6, 600 + Math.sin(a)*rr*.35, 3, 0, 7); g.fill(); }
     }
     for(const f of flakes){ g.fillStyle = 'rgba(255,255,255,.9)'; g.beginPath(); g.arc(f.x, f.y, f.r, 0, 7); g.fill(); }
-    if(ctx.t < 4 && !finished){ g.globalAlpha = Math.min(1, 4 - ctx.t); bigText(g, 'Tipp auf die Karte!', 300, 780, 40, '#fff', 'rgba(20,40,80,.85)'); g.globalAlpha = 1; }
+    if(ctx.t < 4 && !finished){ g.globalAlpha = Math.min(1, 4 - ctx.t); bigText(g, 'Tipp auf die Karte!', 300, 470, 40, '#fff', 'rgba(20,40,80,.85)'); g.globalAlpha = 1; }
     if(finished && glow > .3){
       g.globalAlpha = Math.min(1, (glow - .3)*2);
-      bigText(g, msg || 'Ein frohes Fest!', 300, 790, msg && msg.length > 16 ? 40 : 54, '#fff7d6', 'rgba(20,40,80,.9)');
+      bigText(g, msg || 'Ein frohes Fest!', 300, 460, msg && msg.length > 16 ? 40 : 54, '#fff7d6', 'rgba(20,40,80,.9)');
       g.globalAlpha = 1;
     }
   }
