@@ -5,10 +5,10 @@
 import { startCard, t } from '../core/card.js';
 import { makeFx, makeFinale, hud, best, peekBest, greeting, hint, rnd, MEL } from '../core/kit.js';
 
-const TIME = 45, PLATE = { x: 500, y: 785 }, TH = 25;     // Tellermitte, Wurstdicke (Kartenkoordinaten 600×900)
-// Gedruckte Würstchen: Endpunkte auf dem Kartenbild (vermessen)
-const PRINTED = [[272, 432, 370, 460], [202, 447, 315, 477], [377, 452, 482, 480], [160, 460, 272, 500],
-                 [340, 472, 455, 505], [127, 485, 237, 535], [290, 490, 412, 532], [250, 517, 375, 562]];
+const TIME = 45, PLATE = { x: 430, y: 768 }, TH = 31;     // Tellermitte, Wurstdicke (Kartenkoordinaten 600×900)
+// Gedruckte Würstchen: Endpunkte auf dem Kartenbild (vermessen, deutsche Karte)
+const PRINTED = [[257, 395, 360, 430], [195, 402, 287, 445], [360, 435, 450, 475], [142, 427, 235, 472],
+                 [305, 455, 415, 510], [96, 456, 215, 520], [245, 487, 380, 545]];
 const SL = PRINTED.map(([x1, y1, x2, y2]) => ({ x: (x1 + x2)/2, y: (y1 + y2)/2, a: Math.atan2(y2 - y1, x2 - x1), L: Math.hypot(x2 - x1, y2 - y1) + 6 }));
 
 const img = new Image(); img.src = 'karte.jpg';
@@ -69,7 +69,7 @@ const scene = {
   update(dt, ctx){
     tt += dt; fx.update(dt);
     if(!over){ time -= dt; if(time <= 0){ time = 0; this.finish(ctx); } }
-    if(Math.random() < dt*9) smoke.push({ x: rnd(150, 450), y: rnd(470, 560), r: rnd(8, 16), a: .35, vx: rnd(-8, 8) });
+    if(Math.random() < dt*9) smoke.push({ x: rnd(120, 450), y: rnd(440, 540), r: rnd(8, 16), a: .35, vx: rnd(-8, 8) });
     for(const m of smoke){ m.y -= dt*45; m.x += m.vx*dt + Math.sin(tt + m.y*.02)*dt*10; m.r += dt*9; m.a -= dt*.09; }
     smoke = smoke.filter(m => m.a > 0);
     if(over) return;
@@ -108,7 +108,7 @@ const scene = {
         drawCut(g, k, s, p.x, y, p.a, 1, Math.min(1, u*3)); }
     });
     fx.draw(g); g.restore();
-    if(!fin.on) hud(g, ['🔥 ' + pts, '⏱ ' + Math.ceil(time) + ' s', '🏆 ' + (peekBest('vatertag') ?? '–')], 345);
+    if(!fin.on) hud(g, ['🔥 ' + pts, '⏱ ' + Math.ceil(time) + ' s', '🏆 ' + (peekBest('vatertag') ?? '–')], 292);
     if(!fin.on && served === 0 && pts === 0) hint(g, t('vatertag.hint'), tt, 640, 6);
     fin.draw(g, dt, 'rgba(50,25,10,');
   }
