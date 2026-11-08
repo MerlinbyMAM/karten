@@ -60,7 +60,7 @@ const scene = {
     for(const s of smoke){ g.fillStyle = `rgba(230,230,235,${s.a})`; g.beginPath(); g.arc(s.x, s.y, s.r, 0, 7); g.fill(); }
     if(!done && ctx.t < 6){
       g.save(); g.globalAlpha = Math.min(1, ctx.t*1.5) * Math.min(1, (6-ctx.t));
-      bigText(g, 'Tippe die Kerzen aus!', 300, 820, 40, '#fff', 'rgba(150,60,90,.85)'); g.restore();
+      bigText(g, 'Tippe die Kerzen aus!', 300, 700, 40, '#fff', 'rgba(150,60,90,.85)'); g.restore();
     }
     if(done){
       g.fillStyle = `rgba(40,20,30,${Math.min(.35, doneT*.3)})`; g.fillRect(0,0,600,900);
