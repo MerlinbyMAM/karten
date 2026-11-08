@@ -373,7 +373,7 @@ function render(){
     g.restore();
   }
   // eigenes Auto
-  const cw = W*.34, cxp = W/2 + (P.spin > 0 ? Math.sin(P.yaw*2)*W*.03 : 0), cyp = H*.93 - (pseg.p2.world.y - pseg.p1.world.y)*.0*H;
+  const cw = Math.min(W*.34, H*.3), cxp = W/2 + (P.spin > 0 ? Math.sin(P.yaw*2)*W*.03 : 0), cyp = H*.93 - (pseg.p2.world.y - pseg.p1.world.y)*.0*H;
   if(P.drift > 0 || P.smoke > 0) if(Math.random() < .7) puff(cxp + rr(-cw*.4, cw*.4), cyp - cw*.1, 1, 'rgba(240,240,240,.8)', .6);
   if(Math.abs(P.x) > 1.02 && P.speed > MAXSPEED*.2) puff(cxp + rr(-cw*.4, cw*.4), cyp, 1, 'rgba(255,255,255,.9)', 1);
   for(const p of parts){ g.globalAlpha = Math.max(0, p.life); g.fillStyle = p.c; g.beginPath(); g.arc(p.x, p.y, p.r, 0, 7); g.fill(); }
