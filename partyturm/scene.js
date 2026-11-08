@@ -1,141 +1,95 @@
-// Partyturm (Geburtstag lustig): Ein Geschenk pendelt am Seil über dem Podest. Tippen lässt es fallen.
-// Was übersteht, wird abgeschnitten und purzelt weg – der Turm wird schmaler. Genau getroffen = „Perfekt!“
-// und das Geschenk wächst wieder. 12 Etagen schaffen → die Geburtstagstorte landet obenauf, Finale mit Namen.
-// Waschbär und Dackel auf der Karte kommentieren das Geschehen.
+// Geburtstag lustig: „Hoch sollst du leben!“ – der gedruckte Geschenketurm.
+// Beim Start schweben die sechs gedruckten Pakete an Luftballons davon. Dann kommen sie einzeln zurück, pendeln über dem Tisch;
+// Tippen lässt das Paket fallen. Genau auf seinem Platz gelandet = „Perfekt!“ (rastet ein). Daneben bleibt es schief liegen,
+// zu weit daneben fällt es herunter und kommt nochmal. Ist der Turm komplett, steht die Karte wieder wie gedruckt da.
 import { startCard, t } from '../core/card.js';
-import { makeFx, makeFinale, hud, best, peekBest, greeting, hint, shade, rnd, MEL } from '../core/kit.js';
+import { makeFx, makeFinale, hud2, best, greeting, hint, rnd, MEL } from '../core/kit.js';
 
-const GOAL = 12, BH = 30, BASE_Y = 742, PED = [172, 472];      // Podest-Oberkante auf dem Kartenbild (600 × 900)
-const COLS = ['#ef5b5b', '#2bb3a3', '#f6c431', '#8a63d2', '#ff8a3d', '#3b8fe0', '#e85d9c', '#5cbf5c'];
-const RIB = ['#ffe9a8', '#ffffff', '#c0392b', '#ffd34d'];
-let stack, cur, falling, chips, fx, fin, floors, over, phase, speed, talk, topper, tt, perfectRun;
+const BOX = [
+  { n: 'paket1', x: 172, y: 618, w: 262, h: 134, cx: 302.2, cy: 686.6, px: 173.5, py: 619.5, pw: 257.5, ph: 132.5 },
+  { n: 'paket2', x: 182, y: 548, w: 241, h: 106, cx: 302.6, cy: 605.9, px: 184, py: 548, pw: 237, ph: 108.5 },
+  { n: 'paket3', x: 190, y: 476, w: 224, h: 108, cx: 302.2, cy: 531.8, px: 191.5, py: 476, pw: 221, ph: 110 },
+  { n: 'paket4', x: 199, y: 406, w: 207, h: 103, cx: 301.9, cy: 458.7, px: 200.5, py: 407, pw: 203.5, ph: 102.5 },
+  { n: 'paket5', x: 207, y: 336, w: 191, h: 98, cx: 302.6, cy: 387, px: 209.5, py: 337, pw: 186.5, ph: 99 },
+  { n: 'paket6', x: 217, y: 226, w: 172, h: 133, cx: 303.5, cy: 298.1, px: 219.5, py: 225, pw: 167.5, ph: 136.5 } ];
+const IMG = BOX.map(b => { const a = new Image(); a.src = b.n + '.png'; const p = new Image(); p.src = b.n + '_platz.png'; return { spr: a, bg: p }; });
+const BAL = ['#ff5b7a', '#ffcf3a', '#4aa8ff', '#5cd36b', '#ff9a3c', '#c77dff'];
 
-function newBox(){
-  const last = stack[stack.length - 1];
-  return { x: 300, y: 390, w: last ? last.w : 240, col: COLS[(stack.length) % COLS.length], rib: RIB[stack.length % RIB.length], ph: rnd(0, 6.28) };
+let st, k, sw, fall, pts, perfect, tries, fx, fin, tt, over, intro;
+const ok = i => IMG[i].spr.complete && IMG[i].bg.complete;
+function drawBox(g, i, x, y, rot = 0, sc = 1){
+  const b = BOX[i]; if(!ok(i)) return;
+  g.save(); g.translate(x, y); g.rotate(rot); g.scale(sc, sc); g.drawImage(IMG[i].spr, b.x - b.cx, b.y - b.cy, b.w, b.h); g.restore();
 }
-function topY(){ return BASE_Y - stack.length*BH; }
-function drawGift(g, x, y, w, col, rib, bow, rot = 0){
-  g.save(); g.translate(x, y + BH/2); g.rotate(rot);
-  const gr = g.createLinearGradient(0, -BH/2, 0, BH/2); gr.addColorStop(0, shade(col, 30)); gr.addColorStop(1, shade(col, -35));
-  g.fillStyle = gr; g.beginPath(); g.roundRect(-w/2, -BH/2, w, BH, 5); g.fill();
-  g.strokeStyle = 'rgba(40,20,30,.35)'; g.lineWidth = 2; g.stroke();
-  g.fillStyle = rib; g.fillRect(-6, -BH/2, 12, BH); g.fillRect(-w/2, -4, w, 8);
-  g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(-w/2 + 6, -BH/2 + 4, Math.max(0, w - 12), 4);
-  if(bow){ g.fillStyle = rib; g.beginPath(); g.ellipse(-11, -BH/2 - 6, 11, 7, -.5, 0, 7); g.ellipse(11, -BH/2 - 6, 11, 7, .5, 0, 7); g.fill(); g.beginPath(); g.arc(0, -BH/2 - 5, 5, 0, 7); g.fill(); }
-  g.restore();
+function balloons(g, x, y, i, swingA){
+  for(const [dx, c] of [[-26, BAL[i % 6]], [26, BAL[(i + 2) % 6]]]){
+    const bx = x + dx + Math.sin(tt*2 + dx)*4, by = y - 120 + Math.cos(tt*2.3 + dx)*4;
+    g.strokeStyle = 'rgba(80,80,80,.7)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(x + dx*.5, y); g.quadraticCurveTo(bx + swingA*20, (y + by)/2, bx, by + 30); g.stroke();
+    const gr = g.createRadialGradient(bx - 8, by - 10, 3, bx, by, 32); gr.addColorStop(0, '#ffffffcc'); gr.addColorStop(.3, c); gr.addColorStop(1, c);
+    g.fillStyle = gr; g.beginPath(); g.ellipse(bx, by, 24, 30, 0, 0, 7); g.fill();
+  }
 }
-function drawCake(g, x, y){
-  g.save(); g.translate(x, y);
-  g.fillStyle = '#fff3e0'; g.beginPath(); g.roundRect(-60, -48, 120, 48, 10); g.fill();
-  g.fillStyle = '#ff7aa8'; g.beginPath(); g.moveTo(-60, -40); for(let i=0;i<=12;i++) g.quadraticCurveTo(-55 + i*10, -26 + (i % 2)*8, -50 + i*10, -40); g.lineTo(60, -48); g.lineTo(-60, -48); g.fill();
-  for(const cx of [-30, 0, 30]){ g.fillStyle = '#7ad3ff'; g.fillRect(cx - 4, -78, 8, 30); const f = 1 + Math.sin(tt*18 + cx)*.15; g.fillStyle = '#ffd34d'; g.beginPath(); g.ellipse(cx, -86, 6*f, 11*f, 0, 0, 7); g.fill(); g.fillStyle = '#fff'; g.beginPath(); g.ellipse(cx, -84, 2.5, 5, 0, 0, 7); g.fill(); }
-  g.restore();
-}
-function say(who, key){ talk = { who, txt: t('partyturm.' + key), life: 1.6 }; }
-function bubble(g, x, y, txt){
-  g.save(); g.font = 'bold 24px Georgia'; const w = g.measureText(txt).width + 26;
-  g.fillStyle = '#fff'; g.strokeStyle = '#3a2440'; g.lineWidth = 3; g.beginPath(); g.roundRect(x - w/2, y - 24, w, 44, 14); g.fill(); g.stroke();
-  g.beginPath(); g.moveTo(x - 8, y + 19); g.lineTo(x + 2, y + 34); g.lineTo(x + 10, y + 19); g.fill();
-  g.fillStyle = '#3a2440'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, x, y - 1); g.restore();
-}
+const topY = () => k > 0 ? Math.min(...st.slice(0, k).map((s, i) => BOX[i].cy - BOX[i].h/2)) : 700;
 
 const scene = {
   title: t('partyturm.title'), subtitle: t('partyturm.sub'), emoji: '🎁',
-  accent: '#ffd34d', button: '#e85d9c', bg: '#7a3b62',
+  accent: '#ffe08a', button: '#e2507a', bg: '#1f6f6a',
   init(ctx){ fx = makeFx(); fin = makeFinale(); this.restart(ctx); },
   restart(ctx){
-    stack = []; falling = null; chips = []; floors = 0; over = false; phase = 'swing'; speed = 1.5; talk = null; topper = null; tt = 0; perfectRun = 0;
-    fx.clear(); fin.stop(); cur = newBox();
+    st = BOX.map(() => ({ placed: false, dx: 0, away: 0 })); k = 0; sw = { t: 0 }; fall = null; pts = 0; perfect = 0; tries = 0;
+    tt = 0; over = false; intro = 0; fx.clear(); fin.stop();
   },
   onTap(x, y, ctx){
-    if(phase !== 'swing' || over) return;
-    falling = { x: cur.x, y: cur.y, w: cur.w, col: cur.col, rib: cur.rib, vy: 0 };
-    phase = 'drop'; ctx.tone(660, 0, .08, 'sine', .06);
+    if(over || intro < 2.4 || fall || k >= BOX.length) return;
+    const b = BOX[k], sx = this.swingX();
+    fall = { x: sx, y: this.swingY(), vy: 0, dx: sx - b.cx }; tries++; ctx.tone(520, 0, .08, 'triangle', .08);
   },
+  swingX(){ const amp = 70 + k*14, sp = 1.6 + k*.22; return BOX[k].cx + Math.sin(sw.t*sp)*amp; },
+  swingY(){ return Math.min(topY() - 40, BOX[k].cy - 150) - 0; },
   update(dt, ctx){
-    tt += dt; fx.update(dt); if(talk){ talk.life -= dt; if(talk.life <= 0) talk = null; }
-    const ty = topY();
-    if(phase === 'swing'){
-      cur.ph += dt*speed;
-      cur.x = 300 + Math.sin(cur.ph)*Math.min(210, 150 + floors*6); window.__ptx = cur.x; window.__ptTop = stack.length ? stack[stack.length-1].x : 322;
-      cur.y = Math.min(420, ty - 100) - BH;
-    }
-    if(phase === 'drop' && falling){
-      falling.vy += 2200*dt; falling.y += falling.vy*dt;
-      const land = ty - BH;
-      if(falling.y >= land){
-        falling.y = land;
-        const below = stack.length ? stack[stack.length - 1] : { x: (PED[0] + PED[1])/2, w: PED[1] - PED[0] };
-        const l = Math.max(falling.x - falling.w/2, below.x - below.w/2), r = Math.min(falling.x + falling.w/2, below.x + below.w/2);
-        const ov = r - l, d = falling.x - below.x;
-        if(ov <= 6){                                        // daneben – Geschenk fällt, Spiel vorbei
-          chips.push({ x: falling.x, y: falling.y, w: falling.w, col: falling.col, rib: falling.rib, vx: Math.sign(d || 1)*160, vy: -200, rot: 0, vr: Math.sign(d || 1)*5 });
-          falling = null; over = true; phase = 'over'; say('both', 'oops'); fx.shake(10);
-          ctx.noise(0, .4, .35, 300); ctx.melody(MEL.oops, 120, 'square', .08);
-          setTimeout(() => this.finish(ctx, false), 1300);
-          return;
-        }
-        let nb;
-        if(Math.abs(d) < 7 && stack.length){                // perfekt
-          perfectRun++; nb = { x: below.x, w: Math.min(240, falling.w + (perfectRun > 1 ? 10 : 4)), col: falling.col, rib: falling.rib };
-          fx.pop(below.x, land - 30, t('partyturm.perfect'), '#ffd34d', 40); fx.sparkle(below.x, land, 18);
-          ctx.tone(1047, 0, .12, 'triangle', .1); ctx.tone(1568, .08, .2, 'triangle', .08); say('dog', 'woof');
-        } else {
-          perfectRun = 0; nb = { x: (l + r)/2, w: ov, col: falling.col, rib: falling.rib };
-          const cutW = falling.w - ov;
-          if(cutW > 2){ const cx = d > 0 ? r + cutW/2 : l - cutW/2; chips.push({ x: cx, y: land, w: cutW, col: falling.col, rib: falling.rib, vx: Math.sign(d)*120, vy: -80, rot: 0, vr: Math.sign(d)*4 }); }
-          ctx.tone(330 + stack.length*40, 0, .1, 'square', .06); ctx.noise(0, .08, .15, 1500);
-          if(cutW > 40) say('raccoon', 'giggle');
-        }
-        stack.push(nb); floors = stack.length; falling = null; fx.burst(nb.x, land + BH, 8, [nb.col, '#fff'], 160, 600, 6);
-        speed = 1.5 + floors*.16;
-        if(floors >= GOAL){ phase = 'topper'; topper = { y: 150, vy: 0 }; ctx.tone(784, 0, .2); return; }
-        cur = newBox(); phase = 'swing';
+    tt += dt; intro += dt; fx.update(dt); sw.t += dt;
+    if(intro < 2.4){ st.forEach((s, i) => { s.away = Math.min(1, Math.max(0, (intro - .4 - (BOX.length - 1 - i)*.15)/1.1)); }); return; }
+    if(fall){
+      const b = BOX[k]; fall.vy += 2400*dt; fall.y += fall.vy*dt;
+      if(fall.y >= b.cy){
+        const d = Math.abs(fall.dx);
+        if(d <= 9){ st[k] = { placed: true, dx: 0, away: 0 }; pts += 3; perfect++; fx.pop(b.cx, b.cy - b.h/2 - 20, t('partyturm.perfect'), '#ffd34d', 36); fx.burst(b.cx, b.cy - b.h/2, 18); ctx.tone(880 + k*80, 0, .18, 'triangle', .1); }
+        else if(d < b.w*.32){ st[k] = { placed: true, dx: fall.dx, away: 0 }; pts += 1; fx.pop(b.cx + fall.dx, b.cy - b.h/2 - 20, t(d < 30 ? 'partyturm.giggle' : 'partyturm.oops2'), '#fff', 30); ctx.noise(0, .12, .12, 300); fx.shake(4); }
+        else { fx.pop(b.cx + fall.dx, b.cy - 40, t('partyturm.oops'), '#fff', 34); ctx.tone(200, 0, .25, 'sawtooth', .06); fx.shake(6); fall = { ...fall, off: true, vx: Math.sign(fall.dx)*240, vy: -300 }; this.tumble = fall; fall = null; return; }
+        fall = null; k++;
+        if(k >= BOX.length) this.finish(ctx);
       }
     }
-    if(phase === 'topper' && topper){
-      topper.vy += 1600*dt; topper.y += topper.vy*dt;
-      if(topper.y >= ty){ topper.y = ty; phase = 'won'; fx.burst(300, ty - 40, 40, undefined, 380); fx.shake(6); setTimeout(() => this.finish(ctx, true), 600); }
-    }
-    for(const c of chips){ c.vy += 1800*dt; c.x += c.vx*dt; c.y += c.vy*dt; c.rot += c.vr*dt; }
-    chips = chips.filter(c => c.y < 1000);
+    if(this.tumble){ const f = this.tumble; f.vy += 1800*dt; f.x += f.vx*dt; f.y += f.vy*dt; f.r = (f.r || 0) + dt*5*Math.sign(f.vx); if(f.y > 1000) this.tumble = null; }
   },
-  finish(ctx, won){
-    const b = best('partyturm', floors);
-    const sub = [t('partyturm.floors', { n: floors }) + (b.isNew ? '  ★' : ''), t('partyturm.best', { n: b.best })];
-    fin.start(ctx, greeting('partyturm'), sub, won ? MEL.birthday : MEL.fanfare);
+  finish(ctx){
+    over = true; const b = best('partyturm', pts);
+    fx.burst(300, 300, 50, ['#ffd34d', '#ff7aa8', '#7ad3ff', '#9cf27a', '#fff'], 380, 380, 9);
+    setTimeout(() => fin.start(ctx, greeting('partyturm'), [t('partyturm.floors', { n: pts }) + (b.isNew ? '  ★' : ''), t('partyturm.best', { n: b.best })], MEL.birthday), 600);
   },
   draw(g, ctx){
     const dt = 1/60;
-    if(!fin.on) hud(g, ['🎁 ' + floors + ' / ' + GOAL, '🏆 ' + (peekBest('partyturm') ?? '–')], 262);
+    // leerer Tisch hinter allen Paketen, die nicht (genau) an ihrem Druckplatz stehen
+    st.forEach((s, i) => { const b = BOX[i]; if((!s.placed || s.dx) && (intro > .4 || s.away > 0) && ok(i)) g.drawImage(IMG[i].bg, b.px, b.py, b.pw, b.ph); });
     fx.applyShake(g);
-    // Turm mit leichtem Wackeln, je höher desto mehr
-    const sway = Math.sin(tt*2.2)*Math.min(4, floors*.35);
-    stack.forEach((b, i) => { const k = (i + 1)/Math.max(1, stack.length); drawGift(g, b.x + sway*k, BASE_Y - (i + 1)*BH, b.w, b.col, b.rib, i === stack.length - 1 && phase !== 'won' && phase !== 'topper'); });
-    if(topper) drawCake(g, 300 + sway, topper.y);
-    for(const c of chips) drawGift(g, c.x, c.y, c.w, c.col, c.rib, false, c.rot);
-    if(phase === 'swing' && !over){
-      // zwei Luftballons tragen das Geschenk
-      for(const [dx, col] of [[-16, '#ef5b5b'], [16, '#3b8fe0']]){
-        const bx = cur.x + dx + Math.sin(tt*3 + dx)*3, byy = cur.y - 58;
-        g.strokeStyle = 'rgba(60,40,40,.7)'; g.lineWidth = 1.5; g.beginPath(); g.moveTo(cur.x, cur.y - 10); g.lineTo(bx, byy + 20); g.stroke();
-        const gr = g.createRadialGradient(bx - 6, byy - 8, 2, bx, byy, 22); gr.addColorStop(0, '#fff'); gr.addColorStop(.25, col); gr.addColorStop(1, shade(col, -50));
-        g.fillStyle = gr; g.beginPath(); g.ellipse(bx, byy, 17, 21, 0, 0, 7); g.fill();
-      }
-      drawGift(g, cur.x, cur.y, cur.w, cur.col, cur.rib, true);
-      // Ziel-Hilfe: Schatten auf dem Turm
-      g.fillStyle = 'rgba(60,20,60,.18)'; g.fillRect(cur.x - cur.w/2, topY() - 6, cur.w, 6);
+    // Intro: Pakete schweben an Ballons davon
+    if(intro < 2.4) st.forEach((s, i) => { const b = BOX[i], u = s.away, y = b.cy - u*u*900, x = b.cx + Math.sin(u*6 + i)*30*u;
+      if(u > 0) balloons(g, x, y - b.h/2, i, 0); drawBox(g, i, x, y, Math.sin(u*5 + i)*.15*u); });
+    // platzierte Pakete
+    st.forEach((s, i) => { if(s.placed) drawBox(g, i, BOX[i].cx + s.dx, BOX[i].cy); });
+    // pendelndes Paket an Ballons
+    if(intro >= 2.4 && !over && k < BOX.length){
+      const b = BOX[k];
+      if(fall) drawBox(g, k, fall.x, fall.y);
+      else { const x = this.swingX(), y = this.swingY(), a = Math.cos(sw.t*(1.6 + k*.22))*.08; balloons(g, x, y - b.h/2, k, a); drawBox(g, k, x, y, a);
+        g.save(); g.setLineDash([6, 8]); g.strokeStyle = 'rgba(255,255,255,.55)'; g.lineWidth = 2; g.beginPath(); g.moveTo(b.cx, b.cy - b.h/2 - 6); g.lineTo(b.cx, b.cy + b.h/2); g.stroke(); g.restore(); }
     }
-    if(falling) drawGift(g, falling.x, falling.y, falling.w, falling.col, falling.rib, true);
-    fx.draw(g);
-    g.restore();
-    if(talk){ const a = Math.min(1, talk.life*2); g.globalAlpha = a;
-      if(talk.who !== 'dog') bubble(g, 110, 560, talk.txt);
-      if(talk.who !== 'raccoon') bubble(g, 500, 545, talk.who === 'both' ? t('partyturm.oops2') : talk.txt);
-      g.globalAlpha = 1; }
-    if(!fin.on && floors === 0) hint(g, t('partyturm.hint'), tt, 470, 4);
-    fin.draw(g, dt);
+    if(this.tumble){ const f = this.tumble; drawBox(g, k, f.x, f.y, f.r || 0); }
+    fx.draw(g); g.restore();
+    if(!fin.on) hud2(g, '🎁 ' + k + '/' + BOX.length, '⭐ ' + pts);
+    if(!fin.on && intro >= 2.4 && tries === 0) hint(g, t('partyturm.hint'), tt, 790, 6);
+    fin.draw(g, dt, 'rgba(20,70,66,', .2);
   }
 };
 startCard(scene);
+window.__pt = { BOX, get k(){ return k; }, get pts(){ return pts; }, swingX: () => scene.swingX(), get falling(){ return !!scene.tumble; } };

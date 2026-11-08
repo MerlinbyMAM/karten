@@ -145,3 +145,10 @@ export function hitPiece(p, x, y, pad = 8){
   const dx = x - p.x, dy = y - p.y, a = -(p.a || 0), u = dx*Math.cos(a) - dy*Math.sin(a), v = dx*Math.sin(a) + dy*Math.cos(a);
   return Math.abs(u) <= p.w/2 + pad && Math.abs(v) <= p.h/2 + pad;
 }
+
+/* ---------- kompakte Anzeige: zwei Felder links/rechts (lässt die Mitte, z. B. den QR-Code, frei) ---------- */
+export function hud2(g, left, right, y = 842){
+  g.save(); g.textBaseline = 'middle'; g.font = 'bold 26px Georgia'; g.textAlign = 'center';
+  for(const [txt, x] of [[left, 18], [right, 452]]){ g.fillStyle = 'rgba(20,10,40,.5)'; g.beginPath(); g.roundRect(x, y, 130, 46, 16); g.fill(); g.fillStyle = '#fff'; g.fillText(txt, x + 65, y + 24, 120); }
+  g.restore();
+}
