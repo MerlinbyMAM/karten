@@ -1,86 +1,71 @@
-// Danke: Memory mit sechs Paaren (Blumen, Herz, Geschenk, Stern, Kaffee, Sonne).
-// Zwei Karten aufdecken – gleiche bleiben offen. Gezählt werden die Züge; weniger ist besser.
+// Danke: Der gedruckte Blumenstrauß ist ein Puzzle. Beim Start mischen sich die 9 Kacheln des Druckbilds durcheinander;
+// zwei Kacheln antippen = tauschen. Ist alles wieder an seinem Platz, steht die gedruckte Karte wieder vollständig da.
 import { startCard, t } from '../core/card.js';
-import { makeFx, makeFinale, hud, best, peekBest, greeting, hint, rnd, MEL } from '../core/kit.js';
+import { makeFx, makeFinale, hud, best, peekBest, greeting, hint, MEL, drawPiece, cardImg } from '../core/kit.js';
 
-let GY = 566;                                             // Mitte des Kartenfelds – nach Motiv eingestellt
-const COLS = 4, ROWS = 3, CW = 98, CH = 118, GAP = 12, SYM = ['💐', '💝', '🎁', '⭐', '☕', '🌞'];
-let cards, open, lock, moves, pairs, fx, fin, tt, over;
+const PZ = { x: 75, y: 290, s: 450 }, N = 3, TS = PZ.s/N;     // Puzzlefeld auf dem Druckbild (vermessen)
+const home = i => ({ x: PZ.x + (i % N + .5)*TS, y: PZ.y + (Math.floor(i/N) + .5)*TS });
+const PIECES = Array.from({ length: N*N }, (_, i) => ({ ...home(i), w: TS, h: TS, shape: 'rect' }));
+let slot, sel, moves, anim, fx, fin, tt, over, solvedT, mixT;
 
-const pos = i => ({ x: 300 + ((i % COLS) - (COLS - 1)/2)*(CW + GAP), y: GY + (Math.floor(i/COLS) - (ROWS - 1)/2)*(CH + GAP) });
-
-function deal(){
-  const s = [...SYM, ...SYM];
-  for(let i = s.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i + 1)); [s[i], s[j]] = [s[j], s[i]]; }
-  return s.map(sym => ({ sym, f: 0, want: 0, done: false, glow: 0 }));
+function shuffled(){
+  let a;
+  do { a = [...Array(N*N).keys()]; for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i + 1)); [a[i], a[j]] = [a[j], a[i]]; } }
+  while(a.filter((v, i) => v === i).length > 1);
+  return a;                                   // slot[i] = welches Teil liegt auf Platz i
 }
-
-function drawCard(g, c, p){
-  const k = Math.cos(c.f*Math.PI), w = Math.abs(k)*CW, front = k < 0;
-  g.save(); g.translate(p.x, p.y);
-  g.fillStyle = 'rgba(40,60,60,.25)'; g.beginPath(); g.roundRect(-w/2 + 3, -CH/2 + 5, w, CH, 14); g.fill();
-  if(c.glow > 0){ g.shadowColor = `rgba(255,205,90,${c.glow})`; g.shadowBlur = 26; }
-  if(front){
-    g.fillStyle = '#fffaf0'; g.beginPath(); g.roundRect(-w/2, -CH/2, w, CH, 14); g.fill(); g.shadowBlur = 0;
-    g.strokeStyle = c.done ? '#d9a640' : '#bfd6cf'; g.lineWidth = 4; g.stroke();
-    if(w > 20){ g.save(); g.scale(w/CW, 1); g.font = '56px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(c.sym, 0, 4); g.restore(); }
-  } else {
-    const gr = g.createLinearGradient(0, -CH/2, 0, CH/2); gr.addColorStop(0, '#2f8a86'); gr.addColorStop(1, '#1d625f');
-    g.fillStyle = gr; g.beginPath(); g.roundRect(-w/2, -CH/2, w, CH, 14); g.fill(); g.shadowBlur = 0;
-    g.strokeStyle = '#e8c37a'; g.lineWidth = 3; g.beginPath(); g.roundRect(-w/2 + 7, -CH/2 + 7, Math.max(0, w - 14), CH - 14, 10); g.stroke();
-    if(w > 20){ g.save(); g.scale(w/CW, 1); g.fillStyle = '#e8c37a';
-      g.beginPath(); g.moveTo(0, 14); g.bezierCurveTo(-30, -6, -16, -30, 0, -14); g.bezierCurveTo(16, -30, 30, -6, 0, 14); g.fill(); g.restore(); }
-  }
-  g.restore();
-}
+const isSolved = () => slot.every((v, i) => v === i);
 
 const scene = {
   title: t('danke.title'), subtitle: t('danke.sub'), emoji: '💐',
   accent: '#bfe3da', button: '#2f8a86', bg: '#24413f',
   init(ctx){ fx = makeFx(); fin = makeFinale(); this.restart(ctx); },
-  restart(ctx){ cards = deal(); open = []; lock = 0; moves = 0; pairs = 0; tt = 0; over = false; fx.clear(); fin.stop(); },
+  restart(ctx){ slot = shuffled(); sel = -1; moves = 0; anim = {}; tt = 0; over = false; solvedT = 0; mixT = 0; fx.clear(); fin.stop(); },
   onTap(x, y, ctx){
-    if(over || lock > 0) return;
-    const i = cards.findIndex((c, i) => { const p = pos(i); return Math.abs(x - p.x) < CW/2 + 4 && Math.abs(y - p.y) < CH/2 + 4; });
-    if(i < 0) return;
-    const c = cards[i];
-    if(c.done || c.want || open.includes(i)) return;
-    c.want = 1; open.push(i); ctx.tone(520 + open.length*120, 0, .08, 'triangle', .08);
-    if(open.length === 2){
-      moves++;
-      const [a, b] = open.map(k => cards[k]);
-      if(a.sym === b.sym){
-        lock = .45;
-        setTimeout(() => { a.done = b.done = true; a.glow = b.glow = 1; pairs++; open = [];
-          open.length = 0; [pos(cards.indexOf(a)), pos(cards.indexOf(b))].forEach(p => fx.sparkle(p.x, p.y, 12));
-          const p = pos(cards.indexOf(b)); fx.pop(p.x, p.y - 80, t('danke.pair'), '#ffd34d', 34);
-          ctx.melody([['E5', .25], ['G5', .25], ['C6', .5]], 280, 'triangle', .1);
-          if(pairs === SYM.length) this.finish(ctx);
-        }, 450);
-      } else {
-        lock = 1.05;
-        setTimeout(() => { a.want = b.want = 0; open = []; ctx.tone(300, 0, .12, 'sine', .06); }, 1000);
-      }
-    }
+    if(over || mixT < 1.2) return;
+    const cx = Math.floor((x - PZ.x)/TS), cy = Math.floor((y - PZ.y)/TS);
+    if(cx < 0 || cy < 0 || cx >= N || cy >= N) return;
+    const i = cy*N + cx;
+    if(sel < 0){ sel = i; ctx.tone(660, 0, .07, 'triangle', .07); return; }
+    if(sel === i){ sel = -1; return; }
+    const a = sel, b = i; sel = -1; moves++;
+    [slot[a], slot[b]] = [slot[b], slot[a]];
+    anim[slot[a]] = { from: home(b), t: 0 }; anim[slot[b]] = { from: home(a), t: 0 };
+    ctx.tone(slot[a] === a || slot[b] === b ? 988 : 523, 0, .12, 'triangle', .09);
+    for(const k of [a, b]) if(slot[k] === k){ const h = home(k); fx.sparkle(h.x, h.y, 10); }
+    if(isSolved()){ over = true; setTimeout(() => this.finish(ctx), 900); }
   },
   update(dt, ctx){
-    tt += dt; fx.update(dt); lock = Math.max(0, lock - dt);
-    for(const c of cards){ c.f += ((c.want || c.done ? 1 : 0) - c.f)*Math.min(1, dt*10); c.glow = Math.max(0, c.glow - dt*.8); }
+    tt += dt; mixT += dt; fx.update(dt);
+    for(const k in anim){ anim[k].t += dt*4; if(anim[k].t >= 1) delete anim[k]; }
+    if(over) solvedT += dt;
   },
   finish(ctx){
-    over = true; const b = best('danke', moves, false);
-    fx.burst(300, GY, 40, ['#ffd34d', '#ff8fa3', '#7fd1c1', '#fff'], 360, 380, 9);
-    setTimeout(() => fin.start(ctx, greeting('danke'), [t('danke.score', { n: moves }) + (b.isNew ? '  ★' : ''), t('danke.best', { n: b.best })], MEL.fanfare), 700);
+    const b = best('danke', moves, false);
+    fx.burst(300, PZ.y + PZ.s/2, 40, ['#ffd34d', '#ff8fa3', '#7fd1c1', '#fff'], 360, 380, 9);
+    fin.start(ctx, greeting('danke'), [t('danke.score', { n: moves }) + (b.isNew ? '  ★' : ''), t('danke.best', { n: b.best })], MEL.fanfare);
   },
   draw(g, ctx){
     const dt = 1/60;
-    if(!fin.on) hud(g, ['🃏 ' + moves, '✓ ' + pairs + '/' + SYM.length, '🏆 ' + (peekBest('danke') ?? '–')], 312);
-    fx.applyShake(g);
-    cards.forEach((c, i) => drawCard(g, c, pos(i)));
-    fx.draw(g); g.restore();
-    if(!fin.on && moves === 0 && !open.length) hint(g, t('danke.hint'), tt, GY, 5);
-    fin.draw(g, dt, 'rgba(20,55,52,');
+    if(!cardImg.complete) return;
+    // Mischen am Anfang: Kacheln fliegen von ihrem Druckplatz zu ihrer gemischten Position
+    const mix = Math.min(1, Math.max(0, (mixT - .4)/.8)), em = mix*mix*(3 - 2*mix);
+    const gap = over ? Math.max(0, 1 - solvedT*1.5) : 1;
+    g.save(); g.fillStyle = `rgba(36,65,63,${.9*gap})`; g.fillRect(PZ.x - 3, PZ.y - 3, PZ.s + 6, PZ.s + 6); g.restore();
+    slot.forEach((piece, i) => {
+      const to = home(i), from = home(piece), P = PIECES[piece];
+      let x = from.x + (to.x - from.x)*em, y = from.y + (to.y - from.y)*em;
+      const an = anim[piece]; if(an){ const u = an.t, e = u*u*(3 - 2*u); x = an.from.x + (to.x - an.from.x)*e; y = an.from.y + (to.y - an.from.y)*e - Math.sin(u*Math.PI)*30; }
+      const s = (1 - .03*gap) * (sel === i ? 1.06 : 1);
+      drawPiece(g, P, x, y, 0, s);
+      if(sel === i){ g.save(); g.strokeStyle = '#ffd34d'; g.lineWidth = 5; g.strokeRect(x - TS*s/2, y - TS*s/2, TS*s, TS*s); g.restore(); }
+      else if(piece === i && !over && mix >= 1){ g.save(); g.strokeStyle = 'rgba(255,215,90,.55)'; g.lineWidth = 2; g.strokeRect(x - TS*s/2 + 2, y - TS*s/2 + 2, TS*s - 4, TS*s - 4); g.restore(); }
+    });
+    fx.draw(g);
+    if(!fin.on) hud(g, ['🔀 ' + moves, '✓ ' + slot.filter((v, i) => v === i).length + '/9', '🏆 ' + (peekBest('danke') ?? '–')], PZ.y - 64);
+    if(!fin.on && moves === 0 && mixT > 1.2) hint(g, t('danke.hint'), tt, PZ.y + PZ.s/2, 6);
+    fin.draw(g, dt, 'rgba(20,55,52,', .22);
   }
 };
 startCard(scene);
-window.__dk = { cards: () => cards, pos, get moves(){ return moves; } };
+window.__dk = { slot: () => slot, home, PZ, get moves(){ return moves; } };

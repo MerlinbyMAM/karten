@@ -77,9 +77,9 @@ export function makeFinale(){
       setTimeout(() => ctx.showAgain(true), 1600);
     },
     stop(){ on = false; },
-    draw(g, dt, col = 'rgba(30,20,60,'){
+    draw(g, dt, col = 'rgba(30,20,60,', maxA = .5){
       if(!on) return; tt += dt;
-      g.fillStyle = col + Math.min(.5, tt*.45) + ')'; g.fillRect(0, 0, 600, 900);
+      g.fillStyle = col + Math.min(maxA, tt*.45) + ')'; g.fillRect(0, 0, 600, 900);
       drawConfetti(g, conf, dt);
       const s = 1 + Math.sin(tt*4)*.035;
       g.save(); g.translate(300, 400); g.scale(s, s);
@@ -113,4 +113,35 @@ export function veil(g, a, y0 = 300, y1 = 820, rgb = '20,14,30'){
   gr.addColorStop(0, `rgba(${rgb},0)`); gr.addColorStop(.12, `rgba(${rgb},${.62*a})`);
   gr.addColorStop(.88, `rgba(${rgb},${.62*a})`); gr.addColorStop(1, `rgba(${rgb},0)`);
   g.save(); g.fillStyle = gr; g.fillRect(0, y0, 600, h); g.restore();
+}
+
+/* ---------- Druck-Teile: Objekte deckungsgleich aus dem gedruckten Kartenbild ausschneiden und bewegen ---------- */
+// piece = { x, y (Mitte), w, h, a (Drehung, rad), shape: 'rect'|'round'|'ellipse'|'capsule', r (Eckradius) }
+export const cardImg = new Image(); cardImg.src = 'karte.jpg';
+function piecePath(g, p, grow = 0){
+  const w = p.w + grow*2, h = p.h + grow*2; g.beginPath();
+  if(p.shape === 'ellipse') g.ellipse(0, 0, w/2, h/2, 0, 0, 7);
+  else if(p.shape === 'capsule') g.roundRect(-w/2, -h/2, w, h, Math.min(w, h)/2);
+  else g.roundRect(-w/2, -h/2, w, h, p.shape === 'round' ? (p.r ?? 14) + grow : (p.r ?? 0));
+}
+// Teil an Position x,y mit Drehung rot (zusätzlich zur eigenen), Skalierung s, Deckkraft al zeichnen
+export function drawPiece(g, p, x = p.x, y = p.y, rot = 0, s = 1, al = 1, sx = s){
+  if(!cardImg.complete || !cardImg.naturalWidth) return;
+  g.save(); g.globalAlpha *= al; g.translate(x, y); g.rotate((p.a || 0) + rot); g.scale(sx, s);
+  piecePath(g, p); g.clip(); g.rotate(-(p.a || 0)); g.translate(-p.x, -p.y);
+  g.drawImage(cardImg, 0, 0, 600, 900); g.restore();
+}
+// Loch an der Originalstelle füllen: Bildstück aus der Nachbarschaft (dx,dy versetzt) – z. B. Himmel, Wiese, Wasser
+export function fillHole(g, p, dx = 0, dy = 0, grow = 4){
+  if(!cardImg.complete || !cardImg.naturalWidth) return;
+  g.save(); g.translate(p.x, p.y); g.rotate(p.a || 0); piecePath(g, p, grow); g.clip(); g.rotate(-(p.a || 0)); g.translate(-p.x, -p.y);
+  g.drawImage(cardImg, dx, dy, 600, 900); g.restore();
+}
+// Tönung über ein Teil legen (z. B. „roh“, „verwelkt“, „aus“)
+export function tintPiece(g, p, x, y, rot, s, col){
+  g.save(); g.translate(x, y); g.rotate((p.a || 0) + rot); g.scale(s, s); piecePath(g, p); g.fillStyle = col; g.fill(); g.restore();
+}
+export function hitPiece(p, x, y, pad = 8){
+  const dx = x - p.x, dy = y - p.y, a = -(p.a || 0), u = dx*Math.cos(a) - dy*Math.sin(a), v = dx*Math.sin(a) + dy*Math.cos(a);
+  return Math.abs(u) <= p.w/2 + pad && Math.abs(v) <= p.h/2 + pad;
 }
