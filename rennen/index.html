@@ -122,8 +122,8 @@
 </div>
 
 <script type="module">
-import { tx, LANG } from './text.js';
-import { openMenu } from './game.js';
+import { tx, LANG } from './text.js?v=3';
+import { openMenu } from './game.js?v=3';
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search), FIRMA = (Q.get('firma') || '').trim();
 document.documentElement.lang = LANG; document.title = tx('title');

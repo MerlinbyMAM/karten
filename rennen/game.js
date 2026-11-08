@@ -4,7 +4,7 @@
    3D-Auto: Drift in steilen Kurven, Schleudern neben der Straße, Überschlag wenn man driftend abkommt
    Live-Duell über einen MQTT-Vermittler (funktioniert auch im Mobilfunk) + Geisterauto · Ergebnisliste · Pokal
    ===================================================================== */
-import { tx, LANG } from './text.js';
+import { tx, LANG } from './text.js?v=3';
 
 const Q = new URLSearchParams(location.search);
 const FIRMA = (Q.get('firma') || '').trim();
