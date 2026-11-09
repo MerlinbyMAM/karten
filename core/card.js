@@ -186,7 +186,7 @@ export function startCard(scene){
     if(ctx.vid){ ctx.vid.style.cssText = ''; f.appendChild(ctx.vid); }
     cv.style.cssText = ''; f.appendChild(cv);
     toCard = (x, y) => { const r = cv.getBoundingClientRect(); const cx = (x - r.left)/r.width*W, cy = (y - r.top)/r.height*H; return (cx>=0&&cy>=0&&cx<=W&&cy<=H) ? [cx, cy] : null; };
-    if(msg) ctx.hint(msg, 4000);
+    if(msg) ctx.hint(msg, 15000);
     await preload; begin();
   }
   $('btnFlat').onclick = () => { unlockAudio(); startFlat(); };
@@ -196,11 +196,13 @@ export function startCard(scene){
     unlockAudio();
     $('start').style.display = 'none'; $('loading').style.display = 'flex';
     const bar = $('loadBar'), txt = $('loadText');
+    let stage = 'cam';
     try{
       if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nocam');
       let url = null;
       try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
       if(!url){
+        stage = 'learn';
         txt.textContent = t('ui.learn');
         await karteReady; const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('karte')); i.src = KARTE; }); try{ await Promise.race([im.decode(), new Promise(r => setTimeout(r, 1500))]); }catch(e){}
         const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
@@ -210,9 +212,9 @@ export function startCard(scene){
         url = URL.createObjectURL(new Blob([await c.exportData()]));
       }
       txt.textContent = t('ui.camStart'); bar.style.width = '90%';
-      const THREE = await import('three');
+      stage = 'three'; const THREE = await import('three');
       const { MindARThree } = await import('mindar-image-three');
-      const mind = new MindARThree({ container: $('ar'), imageTargetSrc: url, uiScanning:'no', uiLoading:'no', uiError:'no', filterMinCF:0.0001, filterBeta:0.001 });
+      stage = 'mind'; const mind = new MindARThree({ container: $('ar'), imageTargetSrc: url, uiScanning:'no', uiLoading:'no', uiError:'no', filterMinCF:0.0001, filterBeta:0.001 });
       const { renderer, scene: s3, camera } = mind;
       const anchor = mind.addAnchor(0);
       const PH = 1.5;
@@ -243,13 +245,13 @@ export function startCard(scene){
         ctx.visible = false; ctx.hint(t('ui.camAgain'));
         scene.onLost && scene.onLost(ctx);
       };
-      await preload;
-      await mind.start();
+      stage = 'preload'; await preload;
+      stage = 'start'; await mind.start();
       renderer.setAnimationLoop(() => renderer.render(s3, camera));
       $('loading').style.display = 'none'; ctx.hint(t('ui.cam'));
     }catch(e){
       console.error(e);
-      startFlat(t('ui.noCam') + ' (' + String(e && (e.name || e.message) || e).slice(0, 40) + ')');
+      startFlat(t('ui.noCam') + ' (' + stage + ': ' + String(e && (e.message || e.name) || e).slice(0, 60) + ')');
     }
   };
   requestAnimationFrame(loop);
