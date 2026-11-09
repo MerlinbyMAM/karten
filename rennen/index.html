@@ -150,9 +150,9 @@ $('btnAR').onclick = async () => {
   try{
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('nocam');
     let url = null;
-    try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
+    try{ const r = await fetch('targets.mind?v=2'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
     if(!url){
-      const im = new Image(); im.src = KARTE; await im.decode();
+      const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('karte')); i.src = KARTE; }); try{ await Promise.race([im.decode(), new Promise(r => setTimeout(r, 1500))]); }catch(e){}
       const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
       const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
       const c = new Compiler(); await c.compileImageTargets([im], p => bar.style.width = Math.round(p*.8) + '%');
@@ -188,7 +188,10 @@ $('btnAR').onclick = async () => {
     window.__arStop = () => { renderer.setAnimationLoop(null); try{ mind.stop(); }catch(e){} };
     $('loading').style.display = 'none'; $('arHint').style.display = 'flex'; $('arGo').style.display = 'none';
     $('arHintText').textContent = '📷 ' + tx('ar');
-  }catch(e){ console.error(e); $('loading').style.display = 'none'; $('ar').style.display = 'none'; go(); }
+  }catch(e){ console.error(e); $('loading').style.display = 'none'; $('ar').style.display = 'none';
+    const m = document.createElement('div'); m.textContent = '📷 AR klappt hier nicht (' + String(e && (e.message || e.name) || e).slice(0, 60) + ')';
+    m.style.cssText = 'position:fixed;left:12px;right:12px;bottom:90px;z-index:999;background:rgba(0,0,0,.75);color:#fff;font:15px system-ui;padding:10px 14px;border-radius:12px;text-align:center';
+    document.body.appendChild(m); setTimeout(() => m.remove(), 15000); go(); }
 };
 </script>
 </body>
