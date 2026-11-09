@@ -202,7 +202,7 @@ export function startCard(scene){
       try{ const r = await fetch('targets.mind'); if(r.ok) url = URL.createObjectURL(new Blob([await r.arrayBuffer()])); }catch(e){}
       if(!url){
         txt.textContent = t('ui.learn');
-        await karteReady; const im = new Image(); im.src = KARTE; await im.decode();
+        await karteReady; const im = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('karte')); i.src = KARTE; }); try{ await Promise.race([im.decode(), new Promise(r => setTimeout(r, 1500))]); }catch(e){}
         const lib = await import('https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image.prod.js');
         const Compiler = lib.Compiler || (window.MINDAR && window.MINDAR.IMAGE && window.MINDAR.IMAGE.Compiler);
         const c = new Compiler();
@@ -249,7 +249,7 @@ export function startCard(scene){
       $('loading').style.display = 'none'; ctx.hint(t('ui.cam'));
     }catch(e){
       console.error(e);
-      startFlat(t('ui.noCam'));
+      startFlat(t('ui.noCam') + ' (' + String(e && (e.name || e.message) || e).slice(0, 40) + ')');
     }
   };
   requestAnimationFrame(loop);
