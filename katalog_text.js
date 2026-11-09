@@ -725,7 +725,7 @@ pl: {
     rubbellos: ['Bon / Prezent', 'Zdrapka', 'Zdrap pole – pod spodem kryje się osobisty prezent.'],
     weihnacht: ['Boże Narodzenie', 'Zaśnieżona wioska', 'Dotknięcie sprawia, że pada śnieg, za piątym razem choinka się rozświetla – z Jingle Bells.'],
     liebe: ['Miłość / Walentynki', 'List miłosny', 'Dotknij pieczęci – list się otwiera, padają płatki róż, wiadomość pisze się sama.'],
-    baby: ['Narodziny / Chrzest', 'Witaj, mały skarbie', 'Odsuń chmurki – pojawia się imię, data i waga, z kołysanką.'],
+    baby: ['Narodziny / Chrzest', 'Witaj na świecie!', 'Odsuń chmurki – pojawia się imię, data i waga, z kołysanką.'],
     feuerwerk: ['Sylwester / Sukces / Jubileusz', 'Odpal fajerwerki', 'Każde dotknięcie to rakieta, po ośmiu wielki finał.'],
     weltraum: ['Dzieci / Urodziny', 'Misja kosmiczna', 'Steruj statkiem, zestrzeliwuj meteoryty, zbieraj gwiazdy – każda gwiazda wzmacnia broń. Trzy życia.'],
     blume: ['Podziękowanie / Dzień Matki / Otucha', 'Róża rozkwita', 'Dotknij pąka – róża rozkwita, motyle i wiadomość.'],
@@ -835,7 +835,7 @@ tr: {
     weltraum: ['Çocuklar / Doğum günü', 'Uzay görevi', 'Gemiyi yönet, meteorları vur, yıldız topla – her yıldız silahı güçlendirir. Üç can.'],
     blume: ['Teşekkür / Anneler Günü / Teselli', 'Gül açıyor', 'Tomurcuğa dokun – gül açar, kelebekler ve bir mesaj.'],
     gluecksrad: ['Hediye çeki / Doğum günü', 'Şans çarkı', 'Çarkı çevir – ödülleri hediye eden seçer.'],
-    zeitung: ['Doğum günü / Veda / Eğlence', 'Günün Habercisi', 'Gazete canlanır: büyük resimde hayaletler tebrik eder, bir tüy kalem haberi yazar.'],
+    zeitung: ['Doğum günü / Veda / Eğlence', 'Günlük Haberci', 'Gazete canlanır: büyük resimde hayaletler tebrik eder, bir tüy kalem haberi yazar.'],
     hochzeit: ['Düğün / Yıldönümü', 'Yüzük atma', 'Altın yüzükleri hareket eden şampanya şişesine at – ardından çanlar, güvercinler, çiçek yağmuru, isimler ve tarih.'],
     rennen: ['Şirket Noel partisi / QR etiketi', 'Noel Rallisi', 'Mevcut bir kart için etiket (3 × 3 cm): karda yarış, DTM, ralli ya da drag yarışı – iki telefonla canlı da, kazanana kupa.'],
   }
