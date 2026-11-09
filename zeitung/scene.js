@@ -1,7 +1,8 @@
 // Der Tagesbote: Die Zeitung erwacht – die Bilder bewegen sich (Video in Schleife),
 // unten im freien Feld tippt eine magische Schreibfeder die persönliche
 // Meldung (?name=, ?text=). Antippen = goldene Funken + Glöckchen.
-import { startCard, t, bigText, wrapText, rnd } from '../core/card.js';
+import { startCard, t, bigText, wrapText, rnd, LANG } from '../core/card.js';
+const CLIP = ['en','fr','it','es','nl','pl','tr'].includes(LANG) ? 'clip_' + LANG + '.mp4' : 'clip.mp4';
 import { BOX } from './data.js';   // freies Pergament-Feld unten {x,y,w,h} in 600x900
 
 const P = new URLSearchParams(location.search);
@@ -14,11 +15,11 @@ let t0, sparks, chars, lastTick;
 const scene = {
   title: t('zeitung.title'), subtitle: t('zeitung.sub'), emoji: '📜',
   accent: '#e9c46a', button: '#6b4226', bg: '#3b2a1a',
-  video: true, firstVideo: 'clip.mp4',
+  video: true, firstVideo: CLIP,
   init(ctx){ this.restart(ctx); },
   restart(ctx){
     t0 = ctx.t; sparks = []; chars = 0; lastTick = 0;
-    if(ctx.vid){ ctx.vid.loop = true; ctx.vid.currentTime = 0; ctx.playVideo('clip.mp4'); }
+    if(ctx.vid){ ctx.vid.loop = true; ctx.vid.currentTime = 0; ctx.playVideo(CLIP); }
     ctx.tone(1567, .1, .6, 'sine', .05); ctx.tone(2093, .25, .8, 'sine', .04);
   },
   onFound(ctx){ if(ctx.vid && ctx.vid.paused) ctx.playVideo(); },
