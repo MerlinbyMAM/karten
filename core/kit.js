@@ -153,8 +153,8 @@ export function hitPiece(p, x, y, pad = 8){
 }
 
 /* ---------- kompakte Anzeige: zwei Felder links/rechts (lässt die Mitte, z. B. den QR-Code, frei) ---------- */
-export function hud2(g, left, right, y = 842){
+export function hud2(g, left, right, y = 842, rx = 452){
   g.save(); g.textBaseline = 'middle'; g.font = 'bold 26px Georgia'; g.textAlign = 'center';
-  for(const [txt, x] of [[left, 18], [right, 452]]){ g.fillStyle = 'rgba(20,10,40,.5)'; g.beginPath(); g.roundRect(x, y, 130, 46, 16); g.fill(); g.fillStyle = '#fff'; g.fillText(txt, x + 65, y + 24, 120); }
+  for(const [txt, x] of [[left, 18], [right, rx]]){ g.fillStyle = 'rgba(20,10,40,.5)'; g.beginPath(); g.roundRect(x, y, 130, 46, 16); g.fill(); g.fillStyle = '#fff'; g.fillText(txt, x + 65, y + 24, 120); }
   g.restore();
 }
