@@ -10,8 +10,12 @@ const Q = new URLSearchParams(location.search);
 const FIRMA = (Q.get('firma') || '').trim();
 const $ = id => document.getElementById(id);
 const cv = $('game'), g = cv.getContext('2d');
-let W = 0, H = 0, DPR = 1;
-function resize(){ DPR = Math.min(2, window.devicePixelRatio || 1); W = cv.width = Math.round(innerWidth*DPR); H = cv.height = Math.round(innerHeight*DPR); }
+let W = 0, H = 0, DPR = 1, AR = false;
+// AR: Das Rennen wird in eine Leinwand im Kartenformat gezeichnet und auf die erkannte Karte gelegt
+function resize(){ if(AR){ W = cv.width = 600; H = cv.height = 784; DPR = 600/390; return; }
+  DPR = Math.min(2, window.devicePixelRatio || 1); W = cv.width = Math.round(innerWidth*DPR); H = cv.height = Math.round(innerHeight*DPR); }
+export function setAR(on){ AR = on; resize(); }
+const ex = e => e.clientX/(cv.clientWidth || innerWidth)*W, ey = e => e.clientY/(cv.clientHeight || innerHeight)*H;
 addEventListener('resize', resize); resize();
 
 /* ---------- Zufall mit Startwert (gleiche Strecke für beide Duell-Spieler) ---------- */
@@ -131,14 +135,14 @@ let touchX = null, touchId = null, kbGas = false;
 const brakeZone = (x, y) => x < W*.3 && y > H*.78;
 const gasOn = () => touchId !== null || kbGas;
 cv.addEventListener('pointerdown', e => {
-  audio(); const x = e.clientX*DPR, y = e.clientY*DPR;
+  audio(); const x = ex(e), y = ey(e);
   if(state !== 'race' && state !== 'count') return;
   if(mode === 'drag'){ if(touchId === null){ touchId = e.pointerId; touchX = x; } else if(state === 'race') shift(); return; }
   if(brakeZone(x, y)){ P.brake = true; P.brakeId = e.pointerId; return; }
   if(touchId !== null) return;
   touchX = x; touchId = e.pointerId; P.steerBase = 0;
 });
-cv.addEventListener('pointermove', e => { if(e.pointerId !== touchId || !P || touchX === null || mode === 'drag') return; P.steer = clamp((e.clientX*DPR - touchX)/(W*.22), -1, 1); });
+cv.addEventListener('pointermove', e => { if(e.pointerId !== touchId || !P || touchX === null || mode === 'drag') return; P.steer = clamp((ex(e) - touchX)/(W*.22), -1, 1); });
 const up = e => { if(!P) return; if(e.pointerId === touchId){ touchId = null; touchX = null; P.steer = 0; } if(e.pointerId === P.brakeId){ P.brake = false; P.brakeId = null; } };
 function releaseTouches(){ touchId = null; touchX = null; kbGas = false; if(P){ P.steer = 0; P.brake = false; P.brakeId = null; } }
 cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);

@@ -128,7 +128,7 @@
 
 <script type="module">
 import { tx, LANG } from './text.js?v=4';
-import { openMenu } from './game.js?v=4';
+import { openMenu, setAR } from './game.js?v=5';
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search), FIRMA = (Q.get('firma') || '').trim();
 document.documentElement.lang = LANG; document.title = tx('title');
@@ -178,14 +178,18 @@ $('btnAR').onclick = async () => {
       for(let i=0;i<10;i++){ const x = W*(i + .5)/10, y = H*.06 + Math.sin(i*.9)*H*.015; o.fillStyle = (i + Math.floor(t*3)) % 2 ? 'rgba(255,209,102,.95)' : 'rgba(247,127,0,.9)'; o.beginPath(); o.arc(x, y, 7, 0, 7); o.fill(); }
       o.fillStyle = 'rgba(255,255,255,.9)'; for(const f of flakes){ f.y += .002*f.s; if(f.y > 1) f.y = 0; o.beginPath(); o.arc((f.x + Math.sin(t + f.y*8)*.01)*W, f.y*H, 2*f.s, 0, 7); o.fill(); }
       const glow = .5 + .5*Math.sin(t*4); o.fillStyle = `rgba(255,240,170,${.25 + glow*.35})`; o.beginPath(); o.ellipse(W*.5, H*.62, W*.22, H*.05, 0, 0, 7); o.fill();
-      if(seen){ const n = Math.max(0, 3 - Math.floor(t % 4)); o.fillStyle = 'rgba(11,37,51,.8)'; o.fillRect(W*.36, H*.82, W*.28, H*.07);
+      if(false){ const n = 0; o.fillStyle = 'rgba(11,37,51,.8)'; o.fillRect(W*.36, H*.82, W*.28, H*.07);
         for(let i=0;i<3;i++){ o.fillStyle = i < 3 - n ? (n === 0 ? '#06d6a0' : '#ef233c') : '#333'; o.beginPath(); o.arc(W*(.41 + i*.09), H*.855, H*.022, 0, 7); o.fill(); } }
       tex.needsUpdate = true;
     }
-    anchor.onTargetFound = () => { seen = true; t0 = performance.now(); $('arHintText').textContent = '🎄 ' + tx('merry') + (FIRMA ? ' · ' + FIRMA : '') + ' 🎄'; $('arGo').style.display = 'block'; };
-    anchor.onTargetLost = () => { seen = false; };
+    // Rennen direkt auf der Karte: Spiel-Leinwand im Kartenformat als Textur, unsichtbar darüber für die Finger-Steuerung
+    let racing = false; const gc = $('game'); const gtex = new THREE.CanvasTexture(gc); gtex.colorSpace = THREE.SRGBColorSpace;
+    const startOnCard = () => { if(racing) return; racing = true; setAR(true); gc.style.opacity = '0'; gc.style.zIndex = '4';
+      mesh.material.map = gtex; mesh.material.transparent = false; mesh.material.needsUpdate = true; $('arHint').style.display = 'none'; go(); };
+    anchor.onTargetFound = () => { seen = true; t0 = performance.now(); if(!racing){ $('arHintText').textContent = '🎄 ' + tx('merry') + (FIRMA ? ' · ' + FIRMA : '') + ' 🎄'; setTimeout(startOnCard, 1200); } else $('arHint').style.display = 'none'; };
+    anchor.onTargetLost = () => { seen = false; if(racing){ $('arHintText').textContent = '📷 ' + tx('ar'); $('arHint').style.display = 'flex'; $('arGo').style.display = 'none'; } };
     await mind.start();
-    renderer.setAnimationLoop(() => { paint(); renderer.render(scene, camera); });
+    renderer.setAnimationLoop(() => { if(racing) gtex.needsUpdate = true; else paint(); renderer.render(scene, camera); });
     window.__arStop = () => { renderer.setAnimationLoop(null); try{ mind.stop(); }catch(e){} };
     $('loading').style.display = 'none'; $('arHint').style.display = 'flex'; $('arGo').style.display = 'none';
     $('arHintText').textContent = '📷 ' + tx('ar');
